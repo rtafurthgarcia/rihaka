@@ -5,7 +5,7 @@
     "height": 2000,
     "scrollTop": -189.49998738368396,
     "scrollLeft": -203,
-    "zoomLevel": 0.8,
+    "zoomLevel": 1,
     "show": {
       "tableComment": true,
       "columnComment": true,
@@ -17,7 +17,7 @@
       "columnNotNull": true,
       "relationship": true
     },
-    "database": "Oracle",
+    "database": "PostgreSQL",
     "databaseName": "benutzer",
     "canvasType": "ERD",
     "language": "GraphQL",
@@ -281,7 +281,7 @@
           "active": false,
           "left": 61.9452,
           "top": 244.0517,
-          "zIndex": 84,
+          "zIndex": 1,
           "widthName": 60,
           "widthComment": 60
         },
@@ -504,7 +504,7 @@
           "active": false,
           "left": 941.042,
           "top": 392.9178,
-          "zIndex": 96,
+          "zIndex": 6,
           "widthName": 60,
           "widthComment": 60
         },
@@ -589,7 +589,7 @@
           "active": false,
           "left": 61.944,
           "top": 648.7965,
-          "zIndex": 85,
+          "zIndex": 2,
           "widthName": 62.708984375,
           "widthComment": 120
         },
@@ -674,7 +674,7 @@
           "active": false,
           "left": 981.8289,
           "top": 938.5182,
-          "zIndex": 91,
+          "zIndex": 5,
           "widthName": 60,
           "widthComment": 60
         },
@@ -782,7 +782,7 @@
           "active": false,
           "left": 630.162,
           "top": 12.7082,
-          "zIndex": 89,
+          "zIndex": 4,
           "widthName": 67.01904296875,
           "widthComment": 120
         },
@@ -844,7 +844,7 @@
           "active": false,
           "left": 972.4537,
           "top": 735.1389,
-          "zIndex": 86,
+          "zIndex": 3,
           "widthName": 86.55712890625,
           "widthComment": 60
         },
