@@ -22,12 +22,6 @@ CREATE TABLE bewertung
   PRIMARY KEY (benutzerId, videoId)
 );
 
-COMMENT ON TABLE bewertung IS 'benutzer + video = muss nur ein einzige Bewertung geben pro Benutzer';
-
-COMMENT ON COLUMN bewertung.videoId IS 'Andere Entitäten mit Video u verknüpfen';
-
-COMMENT ON COLUMN bewertung.punktzahl IS 'geht von 1 bis 5';
-
 CREATE TABLE kategorie
 (
   id           NUMBER(6)     NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
@@ -45,10 +39,6 @@ CREATE TABLE kommentar
   PRIMARY KEY (benutzerId, videoId, erstellungsdatum)
 );
 
-COMMENT ON TABLE kommentar IS 'benutzer + video + datum = ein benutzer kann mehrere Kommentare hochladen';
-
-COMMENT ON COLUMN kommentar.videoId IS 'Andere Entitäten mit Video u verknüpfen';
-
 CREATE TABLE video
 (
   id               NUMBER(6)     NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
@@ -63,20 +53,12 @@ CREATE TABLE video
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN video.id IS 'Andere Entitäten mit Video u verknüpfen';
-
-COMMENT ON COLUMN video.sekundaerId IS 'Benutzer mit video zu verknüpfen';
-
-COMMENT ON COLUMN video.video IS 'Video wird ausserhalb der DB gespeichert';
-
 CREATE TABLE videokategorie
 (
   videoId     NUMBER(6) NOT NULL,
   kategorieId NUMBER(6) NOT NULL,
   PRIMARY KEY (videoId, kategorieId)
 );
-
-COMMENT ON COLUMN videokategorie.videoId IS 'Andere Entitäten mit Video u verknüpfen';
 
 ALTER TABLE video
   ADD CONSTRAINT FK_benutzer_TO_video
@@ -119,3 +101,26 @@ ALTER TABLE videokategorie
     FOREIGN KEY (kategorieId)
     REFERENCES kategorie (id)
     ON DELETE CASCADE;
+
+CREATE UNIQUE INDEX benutzername_benutzer_idx ON benutzer (benutzername);
+CREATE UNIQUE INDEX email_benutzer_idx ON benutzer (email);
+CREATE UNIQUE INDEX aktivierungslink_benutzer_idx ON benutzer (aktivierungslink);
+
+CREATE INDEX benutzerId_bewertung_idx ON bewertung (benutzerId); 
+CREATE INDEX videoId_bewertung_idx ON bewertung (videoId);
+
+CREATE UNIQUE INDEX sekundaerId_video_idx ON video (sekundaerId);
+CREATE UNIQUE INDEX beschreibung_video_idx ON video (beschreibung);
+CREATE UNIQUE INDEX titel_video_idx ON video (titel);
+
+CREATE INDEX benutzerId_video_idx ON video (benutzerId);
+CREATE INDEX erstellungsdatum_video_idx ON video (erstellungsdatum);
+
+CREATE UNIQUE INDEX name_kategorie_idx ON kategorie (name);
+
+CREATE INDEX videoId_videokategorie_idx ON videokategorie (videoId);
+CREATE INDEX kategorieId_videokategorie_idx ON videokategorie (kategorie);
+
+CREATE INDEX benutzerId_kommentar_idx ON kommentar (benutzerId);
+CREATE INDEX videoId_kommentar_idx ON kommentar (videoId);
+CREATE INDEX erstellungsdatum_kommentar_idx ON kommentar (erstellungsdatum);
