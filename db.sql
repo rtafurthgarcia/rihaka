@@ -124,3 +124,11 @@ CREATE INDEX kategorieId_videokategorie_idx ON videokategorie (kategorie);
 CREATE INDEX benutzerId_kommentar_idx ON kommentar (benutzerId);
 CREATE INDEX videoId_kommentar_idx ON kommentar (videoId);
 CREATE INDEX erstellungsdatum_kommentar_idx ON kommentar (erstellungsdatum);
+
+-- Can only be 0 or 1, since it represents a boolean value
+ALTER TABLE video
+  ADD CONSTRAINT CHK_istPrivat CHECK (istPrivat IN (0, 1));
+
+-- Can only be 0 or 1, since it represents a boolean value
+ALTER TABLE video
+  ADD CONSTRAINT CHK_istKommentierbar CHECK (istKommentierbar IN (0, 1));
