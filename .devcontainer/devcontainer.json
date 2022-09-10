@@ -24,7 +24,8 @@
 		"xdebug.php-pack",
 		"DEVSENSE.phptools-vscode",
 		"sruby-slim.tmbundle",
-		"ckolkman.vscode-postgres"
+		"mtxr.sqltools-driver-pg",
+		"mtxr.sqltools"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
