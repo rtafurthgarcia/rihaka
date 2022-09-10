@@ -2,16 +2,14 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.195.0/containers/php
 {
 	"name": "PHP",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": { 
-			// Update VARIANT to pick a PHP version: 8, 8.0, 7, 7.4, 7.3
-			// Append -bullseye or -buster to pin to an OS version.
-			// Use -bullseye variants on local on arm64/Apple Silicon.
-			"VARIANT": "8-bullseye",
-			"NODE_VERSION": "lts/*"
-		}
-	},
+	
+	"dockerComposeFile": ["../docker-compose.yml", "../docker-compose.extend.yml"],
+
+	"workspaceFolder": "/workspace",
+
+	"shutdownAction": "stopCompose",
+	
+	"service": "php-dev-env",
 	
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
@@ -25,7 +23,8 @@
 		"mrmlnc.vscode-apache",
 		"xdebug.php-pack",
 		"DEVSENSE.phptools-vscode",
-		"sruby-slim.tmbundle"
+		"sruby-slim.tmbundle",
+		"ckolkman.vscode-postgres"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

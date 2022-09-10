@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: nicepassword
+      POSTGRES_USER: rihaka_user_dev
+      POSTGRES_DB: rihaka_db
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+      - .:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres-dev-data:
+    driver: local

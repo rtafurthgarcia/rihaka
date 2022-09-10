@@ -11,14 +11,3 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 RUN apt-get update -y && export DEBIAN_FRONTEND=noninteractive
 COPY --from=composer/composer /usr/bin/composer /usr/bin/composer
-
-FROM postgres
-
-#RUN adduser rihaka_user --system
-#RUN sudo -u postgres createuser rihaka_user
-#RUN sudo -u postgres createdb rihaka_dev
-#RUN sudo -u postgres alter user rihaka_dev with encrypted password 'fakeasspw';
-#RUN sudo -u postgres psql -d rihaka_dev -U rihaka_user -f db.sql
-
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
