@@ -1,62 +1,63 @@
-
 CREATE TABLE benutzer
 (
-  id               NUMBER(6)    NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
-  benutzername     VARCHAR2(30) NOT NULL UNIQUE,
-  name             VARCHAR2(50) NOT NULL,
-  vorname          VARCHAR2(50) NOT NULL,
-  passwort         VARCHAR2(64) NOT NULL,
-  isModerator      NUMBER(1)    NOT NULL DEFAULT 0,
-  email            VARCHAR2(50) NOT NULL UNIQUE,
-  aktivierungslink VARCHAR2(64) NOT NULL UNIQUE,
-  isActivated      NUMBER(1)    DEFAULT 0,
-  erstellungsdatum DATETIME     NOT NULL,
+  id               INT          NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+  benutzername     VARCHAR(30)  NOT NULL UNIQUE,
+  name             VARCHAR(50)  NOT NULL,
+  vorname          VARCHAR(50)  NOT NULL,
+  passwort         VARCHAR(64)  NOT NULL,
+  isModerator      BOOLEAN      NOT NULL DEFAULT FALSE,
+  email            VARCHAR(50)  NOT NULL UNIQUE,
+  aktivierungslink VARCHAR(64)  NOT NULL UNIQUE,
+  isActivated      BOOLEAN      DEFAULT FALSE,
+  erstellungsdatum TIMESTAMP    NOT NULL,
+  letzteverbindungsdatum        TIMESTAMP,
+  ipAddresse       INET,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE bewertung
 (
-  benutzerId NUMBER(6) NOT NULL,
-  videoId    NUMBER(6) NOT NULL,
-  punktzahl  NUMBER(1) NOT NULL DEFAULT 0,
+  benutzerId INT NOT NULL,
+  videoId    INT NOT NULL,
+  punktzahl  BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (benutzerId, videoId)
 );
 
 CREATE TABLE kategorie
 (
-  id           NUMBER(6)     NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
-  name         VARCHAR2(50)  NOT NULL UNIQUE,
-  beschreibung VARCHAR2(300) NOT NULL,
+  id           INT          NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+  name         VARCHAR(50)  NOT NULL UNIQUE,
+  beschreibung VARCHAR(300) NOT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE kommentar
 (
-  benutzerId       NUMBER(6)     NOT NULL,
-  videoId          NUMBER(6)     NOT NULL,
-  erstellungsdatum DATETIME      NOT NULL,
-  inhalt           VARCHAR2(300) NOT NULL,
+  benutzerId       INT            NOT NULL,
+  videoId          INT            NOT NULL,
+  erstellungsdatum TIMESTAMP      NOT NULL,
+  inhalt           VARCHAR(300)   NOT NULL,
   PRIMARY KEY (benutzerId, videoId, erstellungsdatum)
 );
 
 CREATE TABLE video
 (
-  id               NUMBER(6)     NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
-  sekundaerId      NUMBER(6)     NOT NULL UNIQUE,
-  video            VARCHAR2(300) NOT NULL UNIQUE,
-  titel            VARCHAR2(50)  NOT NULL,
-  beschreibung     VARCHAR2(300),
-  benutzerId       NUMBER(6)     NOT NULL,
-  istPrivat        NUMBER(1)     NOT NULL DEFAULT 0,
-  istKommentierbar NUMMBER(1)    NOT NULL DEFAULT 1,
-  erstellungsdatum DATETIME      NOT NULL,
+  id               INT            NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+  sekundaerId      INT            NOT NULL UNIQUE,
+  video            VARCHAR(300)   NOT NULL UNIQUE,
+  titel            VARCHAR(50)    NOT NULL,
+  beschreibung     VARCHAR(300),
+  benutzerId       INT            NOT NULL,
+  istPrivat        BOOLEAN        NOT NULL DEFAULT FALSE,
+  istKommentierbar BOOLEAN        NOT NULL DEFAULT TRUE,
+  erstellungsdatum TIMESTAMP      NOT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE videokategorie
 (
-  videoId     NUMBER(6) NOT NULL,
-  kategorieId NUMBER(6) NOT NULL,
+  videoId     INT NOT NULL,
+  kategorieId INT NOT NULL,
   PRIMARY KEY (videoId, kategorieId)
 );
 
@@ -119,16 +120,8 @@ CREATE INDEX erstellungsdatum_video_idx ON video (erstellungsdatum);
 CREATE UNIQUE INDEX name_kategorie_idx ON kategorie (name);
 
 CREATE INDEX videoId_videokategorie_idx ON videokategorie (videoId);
-CREATE INDEX kategorieId_videokategorie_idx ON videokategorie (kategorie);
+CREATE INDEX kategorieId_videokategorie_idx ON videokategorie (kategorieId);
 
 CREATE INDEX benutzerId_kommentar_idx ON kommentar (benutzerId);
 CREATE INDEX videoId_kommentar_idx ON kommentar (videoId);
 CREATE INDEX erstellungsdatum_kommentar_idx ON kommentar (erstellungsdatum);
-
--- Can only be 0 or 1, since it represents a boolean value
-ALTER TABLE video
-  ADD CONSTRAINT CHK_istPrivat CHECK (istPrivat IN (0, 1));
-
--- Can only be 0 or 1, since it represents a boolean value
-ALTER TABLE video
-  ADD CONSTRAINT CHK_istKommentierbar CHECK (istKommentierbar IN (0, 1));

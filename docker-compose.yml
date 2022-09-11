@@ -3,11 +3,11 @@ services:
     image: postgres
     restart: always
     env_file:
-    - config/Database.env
-    - config/App.env
+    - ./config/Database.env
+    - ./config/App.env
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - .:/docker-entrypoint-initdb.d
+      - ./database:/docker-entrypoint-initdb.d
     
 
 volumes:

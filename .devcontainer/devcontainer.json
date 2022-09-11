@@ -19,8 +19,7 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"devsense.phptools-vscode",
-		"felixfbecker.php-debug",
-		"bmewburn.vscode-intelephense-client",
+		"dineug.vuerd-vscode",
 		"mrmlnc.vscode-apache",
 		"mehedidracula.php-namespace-resolver",
 		"mtxr.sqltools-driver-pg",
