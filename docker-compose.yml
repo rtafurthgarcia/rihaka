@@ -2,14 +2,14 @@ services:
   db:
     image: postgres
     restart: always
-    environment:
-      POSTGRES_PASSWORD: nicepassword
-      POSTGRES_USER: rihaka_user_dev
-      POSTGRES_DB: rihaka_db
+    env_file:
+    - config/Database.env
+    - config/App.env
     volumes:
-      - postgres-dev-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
       - .:/docker-entrypoint-initdb.d
+    
 
 volumes:
-  postgres-dev-data:
+  postgres-data:
     driver: local

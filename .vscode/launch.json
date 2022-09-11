@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Built-in web server",
+            "name": "Run RIHAKA in Debug mode",
             "type": "php",
             "request": "launch",
             "runtimeArgs": [
@@ -12,7 +12,7 @@
                 "localhost:0"
             ],
             "program": "",
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/public",
             "port": 8080,
             "serverReadyAction": {
                 "pattern": "Development Server \\(http://localhost:([0-9]+)\\) started",
