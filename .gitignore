@@ -1,2 +1,3 @@
 config/Database.env
 vendor/
+honeypot/etc/conwrie.cfg
