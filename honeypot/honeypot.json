@@ -1,0 +1,116 @@
+{
+   "CapAdd" : [],
+   "CapDrop" : [
+      "AUDIT_WRITE",
+      "CHOWN",
+      "DAC_OVERRIDE",
+      "FOWNER",
+      "FSETID",
+      "KILL",
+      "MKNOD",
+      "NET_BIND_SERVICE",
+      "NET_RAW",
+      "SETFCAP",
+      "SETGID",
+      "SETPCAP",
+      "SETUID",
+      "SYS_CHROOT"
+   ],
+   "cmd" : "/cowrie/cowrie-env/bin/twistd -n --umask\\=0022 --pidfile\\= cowrie",
+   "cpu_priority" : 10,
+   "enable_publish_all_ports" : false,
+   "enable_restart_policy" : true,
+   "enable_service_portal" : null,
+   "enabled" : true,
+   "env_variables" : [
+      {
+         "key" : "LANG",
+         "value" : "C.UTF-8"
+      },
+      {
+         "key" : "PATH",
+         "value" : "/cowrie/cowrie-env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      },
+      {
+         "key" : "SSL_CERT_FILE",
+         "value" : "/etc/ssl/certs/ca-certificates.crt"
+      },
+      {
+         "key" : "COWRIE_GROUP",
+         "value" : "cowrie"
+      },
+      {
+         "key" : "COWRIE_USER",
+         "value" : "cowrie"
+      },
+      {
+         "key" : "COWRIE_HOME",
+         "value" : "/cowrie"
+      },
+      {
+         "key" : "PYTHONPATH",
+         "value" : "/cowrie/cowrie-git/src"
+      },
+      {
+         "key" : "PYTHONUNBUFFERED",
+         "value" : "1"
+      }
+   ],
+   "exporting" : false,
+   "id" : "2c9094d7917fa8abb98fbde5663fe11c1417a14049362ac73adbdf601b3bc6a5",
+   "image" : "cowrie/cowrie:latest",
+   "is_ddsm" : false,
+   "is_package" : false,
+   "links" : [],
+   "memory_limit" : 268435456,
+   "name" : "honeypot",
+   "network" : [
+      {
+         "driver" : "bridge",
+         "name" : "bridge"
+      }
+   ],
+   "network_mode" : "bridge",
+   "port_bindings" : [
+      {
+         "container_port" : 2222,
+         "host_port" : 2222,
+         "type" : "tcp"
+      }
+   ],
+   "privileged" : false,
+   "shortcut" : {
+      "enable_shortcut" : false,
+      "enable_status_page" : false,
+      "enable_web_page" : false,
+      "web_page_url" : ""
+   },
+   "use_host_network" : false,
+   "volume_bindings" : [
+      {
+         "host_volume_file" : "/docker/honeypot/etc",
+         "mount_point" : "/cowrie/cowrie-git/etc",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/honeypot/honeyfs",
+         "mount_point" : "/cowrie/cowrie-git/honeyfs",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/honeypot/share/fs.pickle",
+         "mount_point" : "/cowrie/cowrie-git/share/cowrie/fs.pickle",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/honeypot/logs",
+         "mount_point" : "/cowrie/cowrie-git/var/lib/cowrie/tty/",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/honeypot/downloads",
+         "mount_point" : "/cowrie/cowrie-git/var/lib/cowrie/downloads",
+         "type" : "rw"
+      }
+   ]
+}
