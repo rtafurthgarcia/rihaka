@@ -8,5 +8,7 @@ use App\Controllers\HomeController;
 
 class Router {
     public static function defineRoutes(App &$app) {
-        $app->get('/', HomeController::class . ':home');    } 
+        $app->get('/', HomeController::class . ':home');    
+    
+    } 
 }
