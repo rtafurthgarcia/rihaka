@@ -14,10 +14,13 @@ class HomeController
     public function __construct()
     {
         $this->_renderer = new PhpRenderer(__DIR__ . '/../Views');
+        $this->_renderer->setLayout("./Base/Layout.php");
     }
 
-    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    public function home(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {        
-        return $this->_renderer->render($response, "Home.php", $args);
+        return $this->_renderer->render($response, "Home.php", [
+            "page_title" => "RIHAKA - honeypot records database"
+        ]);
     }
 }
