@@ -23,7 +23,8 @@
 		"mrmlnc.vscode-apache",
 		"mehedidracula.php-namespace-resolver",
 		"mtxr.sqltools-driver-pg",
-		"mtxr.sqltools"
+		"mtxr.sqltools",
+		"anbuselvanrocky.bootstrap5-vscode"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
