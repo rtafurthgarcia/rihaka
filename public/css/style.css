@@ -1,0 +1,22 @@
+.console-header {
+    height: 8%;
+    background-color: #FEFEFE;
+}
+
+.console-header i {
+    color: black;
+    font-size: 0.8rem;
+}
+
+#demo {
+    background-color: #121314;
+    height: 240px;
+}
+
+@media (min-width: 768px) { 
+    #demo {
+        background-color: #121314;
+        height: 360px;
+    }
+}
+
