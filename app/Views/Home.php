@@ -30,7 +30,7 @@
             </div>
             <div>
                 <h2>Record 'em</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                <p>Trapping attackers has never been this easy. And therefore never been this instructive, mostly thanks to Cowrie, an easily deployable SSH honeypot that's used as RIHAKA's main records source.</p>
             </div>
         </div>
         <div class="col d-flex align-items-start">
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <h2>Share 'em</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                <p>Scriptkiddies are incredibly entertaining, so its no fun if you keep 'em for yourself. After you collected a few gems, feel free to share them around on RIHAKA.</p>
             </div>
         </div>
         <div class="col d-flex align-items-start">
@@ -48,7 +48,7 @@
             </div>
             <div>
                 <h2>Learn from 'em?</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                <p>Every now and then you may stumble on more than your average Mirai bot or poorly written dropper. Anything that may enlighten your fellow hackers is worth being shown here.</p>
             </div>
         </div>
     </div>
