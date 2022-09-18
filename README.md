@@ -43,3 +43,13 @@ It's very convenient and its quick to setup. All you need to do is to click "Add
 ## 6. Debug and run 
 Normally in the meanwhile VScode should have already installed all extensions, PHP-related ones included. 
 In order to test if the project works correctly, just press `F5` and let yourself be surprised :)
+
+# Frameworks 
+
+We use 4 main building blocks for our project:
+ - [Slim PHP v4](https://www.slimframework.com/docs/v4/), to manage routing, exceptions, template generation and upload management
+ - [Bootstrap v5](https://getbootstrap.com/docs/5.2/getting-started/introduction/), to quickly generate good-looking webpages through "class-styling"
+ - [PostgreSQL v14](https://www.postgresql.org/docs/14/index.html), for the Database 
+ - [asciinema-player v3](https://github.com/asciinema/asciinema-player), to play our SSH session recordings 
+
+All links directly forward to their respective documentations, for quick access.
