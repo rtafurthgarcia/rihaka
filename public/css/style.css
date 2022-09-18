@@ -16,36 +16,39 @@
     background-color: #121314;
     height: 240px;
 }
-
-.nav-item {
-    background:
-        linear-gradient(
-            to bottom,
-            var(--mainColor) 0%,
-            var(--mainColor) 100%
-        );
-        background-position: 0 100%;
-        background-repeat: repeat-x;
-        background-size: 4px 4px;
-    color: #212529;
-    text-decoration: none;
-    transition: background-size .2s;
-    border-radius: 6px 6px 0 0;
+ 
+.nav-link:hover {
+    color: #9b9d9e;
 }
 
-.nav-item:hover {
-    background-size: 4px 50px;
-    border-radius: 6px 6px 0 0;
-}
-
-.nav-item a:hover {
-    color: #212529 !important;
-}
-  
 @media (min-width: 768px) { 
     #demo {
         background-color: #121314;
         height: 360px;
     }
-}
 
+    .nav-item a:hover {
+        color: #212529 !important;
+    }
+
+    .nav-item {
+        background:
+            linear-gradient(
+                to bottom,
+                var(--mainColor) 0%,
+                var(--mainColor) 100%
+            );
+            background-position: 0 100%;
+            background-repeat: repeat-x;
+            background-size: 4px 4px;
+        color: #212529;
+        text-decoration: none;
+        transition: background-size .2s;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .nav-item:hover {
+        background-size: 4px 50px;
+        border-radius: 6px 6px 0 0;
+    }
+}
