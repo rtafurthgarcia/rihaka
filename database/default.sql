@@ -1,4 +1,4 @@
-)INSERT INTO benutzer (
+INSERT INTO benutzer (
     benutzername,
     name,
     vorname,
