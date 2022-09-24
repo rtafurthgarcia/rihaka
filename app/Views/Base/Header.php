@@ -1,4 +1,4 @@
-<header class="p-3 text-bg-dark">
+<header class="p-3 p-md-0 text-bg-dark">
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <div class="container">
       <a href="#" class="navbar-brand fs-2">RIHAKA</a>

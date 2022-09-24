@@ -4,7 +4,7 @@
             <div class="col-12 col-lg-6 pb-4">
                 <h1 class="display-4 fw-normal">Kinkshame your local scriptkiddie</h1>
                 <p class="lead fw-normal">Why fear them when you can laugh at them?</p>
-                <p class="lead fw-normal">Or maybe actually they can teach you something valuable?</p>
+                <p class="lead fw-normal">Or even purhaps learn something valuable from them?</p>
                 <a class="btn btn-outline-secondary" href="#">Plz I wanna setup my own honeypot now</a>
             </div>
             <div class="col-12 col-lg-5 container p-0 m-0 pb-md-5">
