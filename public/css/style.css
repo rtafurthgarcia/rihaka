@@ -21,6 +21,10 @@
     color: #9b9d9e;
 }
 
+#r-brand {
+    line-height: 0.8;
+}
+
 @media (min-width: 768px) { 
     #demo {
         background-color: #121314;

@@ -1,30 +1,41 @@
-<div class="container pt-5">
+<div class="container pt-3">
+    <nav class="mb-3 row">
+        <div class="nav nav-tabs col-6" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info" aria-selected="true">1. Fill-in</button>
+            <button class="nav-link" id="nav-confirm-tab" data-bs-toggle="tab" data-bs-target="#nav-confirm" type="button" role="tab" aria-controls="nav-confirm" aria-selected="false" disabled>2. Confirm</button>
+            <button class="nav-link" id="nav-confirm-tab" data-bs-toggle="tab" data-bs-target="#nav-validate" type="button" role="tab" aria-controls="nav-validate" aria-selected="false" disabled>3. Activate</button>
+        </div>
+    </nav>
     <div class="row align-items-start">
         <div class="signup-form col-12 col-md-6">
-            <h2>Sign-up</h2>
-            <p>By having a RIHAKA account, you can vote, comment and post all your sweet sweet honeypot sessions logs. Sign up in just seconds.</p>
-            <form action="" method="post">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="johndoe@protonmail.com">
-                    <label for="floatingInput">Email address</label>
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">@</span>
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="floatingInputGroup1" placeholder="Username">
-                        <label for="floatingInputGroup1">Username</label>
+            <div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab" tabindex="0">
+                <h2>Sign-up</h2>
+                <p>By having a RIHAKA account, you can vote, comment and post all your sweet sweet honeypot sessions logs. Sign up in just seconds.</p>
+                <form action="" method="post">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInput" placeholder="johndoe@protonmail.com">
+                        <label for="floatingInput">Email address</label>
                     </div>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">Password</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">Password confirmation</label>
-                </div>
-                <button type="submit" class="btn btn-primary mb-3">Next</button>
-            </form>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">@</span>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingInputGroup1" placeholder="Username">
+                            <label for="floatingInputGroup1">Username</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Password confirmation</label>
+                    </div>
+                    <button type="button" data-bs-toggle="tab" data-bs-target="#nav-confirm" class="btn btn-primary mb-3">Next</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-confirm" role="tabpanel" aria-labelledby="nav-confirm-tab" tabindex="1">...</div>
+            <div class="tab-pane fade" id="nav-validate" role="tabpanel" aria-labelledby="nav-validate-tab" tabindex="2">...</div>
         </div>
         <div class="signup-title col-12 col-md-6">
             <p class="display-1 font-monospace d-none d-md-block" id="r-brand">
