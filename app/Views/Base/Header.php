@@ -1,7 +1,7 @@
 <header class="p-3 p-md-0 text-bg-dark">
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <div class="container">
-      <a href="#" class="navbar-brand fs-2">RIHAKA</a>
+      <a href="#" class="navbar-brand fs-2 font-monospace">RIHAKA</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,10 +13,12 @@
           <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md">Setup</a></li>
           <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md">Community</a></li>
         </ul>
-        <div class="ms-auto text-end col-6 gap-2 row justify-content-end">
-          <button type="button" class="btn btn-outline-light col-12 col-md-3">Login</button>
-          <button type="button" class="btn btn-warning col-12 col-md-3">Sign up</button>
-        </div>
+        <? if(! $hide_login_panel): ?>
+          <div class="ms-auto text-end col-6 gap-2 row justify-content-end">
+            <a href="/login" class="btn btn-outline-light col-12 col-md-3" role="button">Login</a>
+            <a href="/register" class="btn btn-warning col-12 col-md-3" role="button">Sign up</a>
+          </div>
+        <? endif; ?>
       </div>
     </div>
   </nav>

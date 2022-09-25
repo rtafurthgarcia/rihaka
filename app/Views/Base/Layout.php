@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
   </head>
   <body>
-    <?=$this->fetch('./Base/Header.php', [])?>
+    <?=$this->fetch('./Base/Header.php', ["hide_login_panel" => (isset($hide_login_panel)) ? true : false ])?>
     <main>
       <?=$content?>
     </main>
