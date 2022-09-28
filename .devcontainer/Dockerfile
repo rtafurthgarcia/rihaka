@@ -1,6 +1,7 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.195.0/containers/php/.devcontainer/base.Dockerfile
 # [Choice] PHP version (use -bullseye variants on local arm64/Apple Silicon): 8, 8.0, 7, 7.4, 7.3, 8-bullseye, 8.0-bullseye, 7-bullseye, 7.4-bullseye, 7.3-bullseye, 8-buster, 8.0-buster, 7-buster, 7.4-buster, 7.3-buster
-FROM php
+ARG VARIANT=8-bullseye
+FROM mcr.microsoft.com/vscode/devcontainers/php:0-${VARIANT}
 RUN apt-get update && apt-get install -y \
 		libfreetype6-dev \
 		libjpeg62-turbo-dev \
@@ -22,7 +23,6 @@ RUN apt-get update -y && export DEBIAN_FRONTEND=noninteractive
 COPY --from=composer/composer /usr/bin/composer /usr/bin/composer
 
 ARG USERNAME=vscode
-RUN adduser $USERNAME 
 RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
         /home/$USERNAME/.vscode-server-insiders/extensions \
     && chown -R $USERNAME \
