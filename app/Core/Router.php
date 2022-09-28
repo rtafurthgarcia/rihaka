@@ -11,5 +11,6 @@ class Router {
     public static function defineRoutes(App &$app) {
         $app->get('/', HomeController::class . ':home');
         $app->get('/register', UserController::class . ':registration');
+        $app->post('/register', UserController::class . ':registrationFormUpload');
     } 
 }

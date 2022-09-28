@@ -4,7 +4,8 @@
         "slim/psr7": "^1.5",
         "slim/php-view": "^3.2",
         "selective/basepath": "^2.1",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "ramsey/uuid": "^4.5"
     },
     "autoload": {
         "psr-4": {

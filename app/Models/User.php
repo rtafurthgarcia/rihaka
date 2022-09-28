@@ -5,6 +5,11 @@ namespace App\Models;
 use App\Core\AbstractModel;
 use DateTime;
 use DateTimeInterface;
+use ErrorException;
+use LengthException;
+use PDO;
+use Ramsey\Uuid\Uuid;
+//use parent;se parent;
 
 class User extends AbstractModel {
     
@@ -24,13 +29,10 @@ class User extends AbstractModel {
 	 */
     public function __construct() {
         parent::__construct();
-
-        $this->_creationDate = new DateTime();
-        $this->_lastConnectionDate = New DateTime();
 	}
 
     public function get($primaryKey) {
-        foreach (parent::$_connection->query("SELECT * FROM user") as $record) {
+        foreach ($this->_connection->query("SELECT * FROM user") as $record) {
             $this->_primaryKey = $primaryKey;
             $this->_userName = $record["benutzername"];
             $this->_lastName = $record["name"];
@@ -60,7 +62,15 @@ class User extends AbstractModel {
     }
 
     private function _insert() {
-        $addSupporter = parent::$_connection->prepare(
+		$this->_firstName = '';
+		$this->_lastName = '';
+		$this->_isModerator = false;
+		$this->_isActivated = false;
+        $this->_creationDate = time();
+        $this->_lastConnectionDate = time();
+		$this->_activationLink = Uuid::uuid4()->toString();
+
+        $addSupporter = $this->_connection->prepare(
             "INSERT INTO benutzer (
                 benutzername, 
                 name, 
@@ -83,8 +93,8 @@ class User extends AbstractModel {
                 :_email,
                 :_activationLink,
                 :_isActivated,
-                :_creationDate,
-                :_lastConnectionDate,
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP,
                 :_ipAddress
             )"
         );
@@ -92,21 +102,21 @@ class User extends AbstractModel {
         $addSupporter->bindParam(":_userName", $this->_userName);
         $addSupporter->bindParam(":_lastName", $this->_lastName);
         $addSupporter->bindParam(":_firstName", $this->_firstName);
+		$addSupporter->bindParam(":_password", $this->_password);
         $addSupporter->bindParam(":_email", $this->_email);
         $addSupporter->bindParam(":_activationLink", $this->_activationLink);
-        $addSupporter->bindParam(":_isActivated", $this->_isActivated);
-        $addSupporter->bindParam(":_creationDate", $this->_creationDate);
-        $addSupporter->bindParam(":_lastConnectionDate", $this->_lastConnectionDate);
+        $addSupporter->bindParam(":_isActivated", var_export($this->_isActivated, true));
+		$addSupporter->bindParam(":_isModerator", var_export($this->_isModerator, true));
         $addSupporter->bindParam(":_ipAddress", $this->_ipAddress);
 
         $execution_result = $addSupporter->execute();
         if($execution_result) {
-            $this->_primaryKey = parent::$_connection->lastInsertId();
+            $this->_primaryKey = $this->_connection->lastInsertId();
         }
     }
 
     private function _update() {
-        $addSupporter = parent::$_connection->prepare(
+        $addSupporter = $this->_connection->prepare(
             "UDPATE benutzer SET
                 benutzername = :_userName, 
                 name = :_lastName, 
@@ -142,7 +152,7 @@ class User extends AbstractModel {
      * @return mixed
      */
     public function delete() {
-        $addSupporter = parent::$_connection->prepare(
+        $addSupporter = $this->_connection->prepare(
             "DELETE FROM benutzer WHERE id = :_primaryKey"
         );
 
@@ -206,8 +216,17 @@ class User extends AbstractModel {
 	 * @param mixed $_password 
 	 * @return User
 	 */
-	function setpassword($_password): self {
+	function setpassword($_password, $_confirmation): self {
+		if ( strcmp($_password, $_confirmation)) {
+			throw new ErrorException("Password and password confirmation are different.", 1);
+		}
+
+		if (strlen($_password) < 10) {
+			throw new LengthException("Password length wasnt matching the requirements.", 2);
+		}
+			
 		$this->_password = $_password;
+		
 		return $this;
 	}
 	/**
@@ -237,8 +256,12 @@ class User extends AbstractModel {
 	 * @return User
 	 */
 	function setemail($_email): self {
-		$this->_email = filter_var($_email, FILTER_VALIDATE_EMAIL);
+		if (!filter_var($_email, FILTER_VALIDATE_EMAIL)) {
+			throw new \InvalidArgumentException("E-Mail doesnt match a proper E-Mail pattern.");
+		}
         //if(! $this->_email) raise 
+		$this->_email = filter_var($_email, FILTER_VALIDATE_EMAIL);
+
 		return $this;
 	}
 	/**
