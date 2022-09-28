@@ -23,6 +23,6 @@ abstract class AbstractModel {
 
     public abstract function save();
     public abstract function delete();
-
     public abstract function get($primaryKey);
+    public abstract function verify();
 }

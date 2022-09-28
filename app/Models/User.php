@@ -99,14 +99,17 @@ class User extends AbstractModel {
             )"
         );
 
+		$isActivated = var_export($this->_isActivated, true);
+		$isModerator = var_export($this->_isModerator, true);
+
         $addSupporter->bindParam(":_userName", $this->_userName);
         $addSupporter->bindParam(":_lastName", $this->_lastName);
         $addSupporter->bindParam(":_firstName", $this->_firstName);
 		$addSupporter->bindParam(":_password", $this->_password);
         $addSupporter->bindParam(":_email", $this->_email);
         $addSupporter->bindParam(":_activationLink", $this->_activationLink);
-        $addSupporter->bindParam(":_isActivated", var_export($this->_isActivated, true));
-		$addSupporter->bindParam(":_isModerator", var_export($this->_isModerator, true));
+        $addSupporter->bindParam(":_isActivated", $isActivated);
+		$addSupporter->bindParam(":_isModerator", $isModerator);
         $addSupporter->bindParam(":_ipAddress", $this->_ipAddress);
 
         $execution_result = $addSupporter->execute();
@@ -338,5 +341,9 @@ class User extends AbstractModel {
 	function setipAddress($_ipAddress): self {
 		$this->_ipAddress = $_ipAddress;
 		return $this;
+	}
+
+	function verify() {
+
 	}
 }
