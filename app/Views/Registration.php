@@ -26,46 +26,40 @@
             <? endif; ?>
                 <h2>Sign-up</h2>
                 <p>By having a RIHAKA account, you can vote, comment and post all your sweet sweet honeypot sessions logs. Sign up in just seconds.</p>
-                <form id="registration-form" method="post">
+                <form id="registration-form" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation" novalidate>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" name="email" id="floating-email" placeholder="johndoe@hftm.ch" required>
+                        <input type="email" class="form-control <?=(isset($errors["email"])) ? "is-invalid" : "" ?>" name="email" id="floating-email" placeholder="johndoe@hftm.ch" required>
                         <label for="floating-email">Email address</label>
+                        <div class="invalid-feedback">
+                            <?=(isset($errors["email"])) ? $errors["email"] : "E-Mail doesnt match a proper E-Mail pattern." ?>
+                        </div>
                         <div class="form-text">
                             We won't share your e-mail address with anybody. 
                         </div>
-                        <? if(isset($errors["email"])): ?>
-                            <div class="invalid-feedback">
-                                <?=$errors["email"] ?>
-                            </div>
-                        <? endif; ?>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">@</span>
                         <div class="form-floating">
-                            <input type="text" class="form-control" name="username" id="floating-user" placeholder="Username" minlength="3" maxlength="30" required>
+                            <input type="text" class="form-control <?=(isset($errors["username"])) ? "is-invalid" : "" ?>" name="username" id="floating-user" placeholder="Username" minlength="3" maxlength="30" required>
                             <label for="floating-user">Username</label>
-                            <? if(isset($errors["username"])): ?>
-                                <div class="invalid-feedback">
-                                    <?=$errors["username"] ?>
-                                </div>
-                            <? endif; ?>
+                        </div>
+                        <div class="invalid-feedback">
+                            <?=(isset($errors["username"])) ? $errors["username"] : "Your username's length has to be between 3 and 30 characters." ?>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control" name="password" id="floating-password" minlength="10" placeholder="Password" required>
+                        <input type="password" class="form-control <?=(isset($errors["password"])) ? "is-invalid" : "" ?>" name="password" id="floating-password" minlength="10" placeholder="Password" onChange="onPasswordChange()" required>
                         <label for="floating-password">Password</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control <?=(isset($errors["password"])) ? "is-invalid" : "" ?>" name="password-confirmation" id="floating-password-2" minlength="10" placeholder="Password"  onChange="onPasswordChange()" required>
+                        <label for="floating-password-2">Password confirmation</label>
+                        <div class="invalid-feedback">
+                            <?=(isset($errors["password"])) ? $errors["password"] : "Passwords either do not meet length requirements or do not match." ?>
+                        </div>
                         <div class="form-text">
                             Your password must be at least 10 characters long to fit our minimal requirements.
                         </div>
-                        <? if(isset($errors["password"])): ?>
-                            <div class="invalid-feedback">
-                                <?=$errors["password"] ?>
-                            </div>
-                        <? endif; ?>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" name="password-confirmation" id="floating-password-2" minlength="10" placeholder="Password" required>
-                        <label for="floating-password-2">Password confirmation</label>
                     </div>
                     <button id="submit-button" type="submit" class="btn btn-secondary mb-3">Submit</button>
                 </form>

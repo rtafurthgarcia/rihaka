@@ -49,11 +49,11 @@ class UserController
 
         $newUser->setipAddress(NetworkHelper::getIPAddress());
     
-        $newUser->save();
-
         $isSuccessful = true;
         if (count($errors) > 0) {
             $isSuccessful = false;
+        } else {
+            $newUser->save();
         }
 
         return $this->_renderer->render($response, "Registration.php", [

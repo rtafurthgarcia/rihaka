@@ -1,37 +1,24 @@
-function goNextTab() {
-    let tabs = document.getElementById("nav-tab").children;
-    let isNext = false;
-    //tabs.forEach((tab) => {
-    for(i = 0; i < tabs.length -1; i++) {
-        let tab = tabs[i];
-        if (tab.classList.contains("active")) {
-            tab.classList.remove("active");
-            tab.attributes.getNamedItem("aria-selected").value = "false";
-            isNext = true;
-
-            if (tab.id.match("nav-info")) {
-                let isFormValid = validateForm();
-                if (isFormValid) {
-                    document.getElementById("submit-button").hidden = false;
-                    document.getElementById("next-button").hidden = false;
-                }
-            }
-        } else if (isNext) {
-            tab.classList.add("active");
-            tab.attributes.getNamedItem("aria-selected").value = "true";
-            tab.disabled = false;
-            break;
+function onPasswordChange() {
+    const password = document.querySelector('input[name=password]')
+    const confirm = document.querySelector('input[name=password-confirmation]')
+    
+    const passwordFields = document.querySelectorAll('input[type=password]')
+    Array.from(passwordFields).forEach(passwordField => {
+        if (confirm.value === password.value && confirm.value.length >= 10) {
+            passwordField.classList.remove('is-invalid');
+        } else {
+            passwordField.classList.add('is-invalid');
         }
-    };
+    })
 }
 
+function onFormSubmitted(event) {
+    const form = document.getElementById("registration-form")
 
-
-function validateForm() {
-    let isFormValid = document.forms["registration-form"].checkValidty();
-    if (! isFormValid) {
-        document.forms["registration-form"].reportValidty();
+    if (!form.checkValidity()) {
+        console.log(event);
+        event.preventDefault()
+        event.stopPropagation()
     }
-
-    return isFormValid;
-  } 
+    form.classList.add('was-validated')
+}

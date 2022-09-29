@@ -221,11 +221,11 @@ class User extends AbstractModel {
 	 */
 	function setpassword($_password, $_confirmation): self {
 		if ( strcmp($_password, $_confirmation)) {
-			throw new ErrorException("Password and password confirmation are different.", 1);
+			throw new ErrorException("Passwords do not match.", 1);
 		}
 
 		if (strlen($_password) < 10) {
-			throw new LengthException("Password length wasnt matching the requirements.", 2);
+			throw new LengthException("Password doesnt meet length requirements.", 2);
 		}
 			
 		$this->_password = $_password;
