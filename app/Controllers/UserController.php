@@ -34,9 +34,15 @@ class UserController
         $formData = $request->getParsedBody();
         $errors = array();
         
-        $newUser->setuserName($formData['username']);
+        try {
+            $newUser->setuserName($formData['username']);
+            $newUser->verifyUsername();
+        } catch (\Exception $error) {
+            $errors["username"] = $error->getMessage();
+        }
         try {
             $newUser->setemail($formData['email']);
+            $newUser->verifyEmail();
         } catch (\Exception $error) {
             $errors["email"] = $error->getMessage();
         }
@@ -59,6 +65,7 @@ class UserController
         return $this->_renderer->render($response, "Registration.php", [
             "page_title" => "RIHAKA - registration",
             "hide_login_panel" => true,
+            "user" => $newUser,
             "successful" => $isSuccessful,
             "errors" => $errors
         ]);

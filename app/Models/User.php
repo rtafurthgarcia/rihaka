@@ -175,7 +175,7 @@ class User extends AbstractModel {
 	 * @return User
 	 */
 	function setuserName($_userName): self {
-		$this->_userName = $_userName;
+		$this->_userName = trim($_userName);
 		return $this;
 	}
 	/**
@@ -343,7 +343,35 @@ class User extends AbstractModel {
 		return $this;
 	}
 
-	function verify() {
+	function verifyUsername() {
+		$addSupporter = $this->_connection->prepare(
+            "SELECT id FROM benutzer WHERE email = :_email"
+        );
 
+        $addSupporter->bindParam(":_email", $this->_email);
+
+        $addSupporter->execute();
+		$rows = $addSupporter->fetchAll(PDO::FETCH_COLUMN, 0);
+		if (count($rows)) {
+			throw new ErrorException("E-Mail address already in use. Sorry~~");
+		}
+
+		return true;
+	}
+
+	function verifyEmail() {
+		$addSupporter = $this->_connection->prepare(
+            "SELECT id FROM benutzer WHERE benutzername = :_userName"
+        );
+
+        $addSupporter->bindParam(":_userName", $this->_userName);
+
+        $addSupporter->execute();
+		$rows = $addSupporter->fetchAll(PDO::FETCH_COLUMN, 0);
+		if (count($rows)) {
+			throw new ErrorException("Username already in use. Sorry~~");
+		}
+
+		return true;
 	}
 }

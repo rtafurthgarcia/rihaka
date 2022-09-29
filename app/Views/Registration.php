@@ -28,7 +28,7 @@
                 <p>By having a RIHAKA account, you can vote, comment and post all your sweet sweet honeypot sessions logs. Sign up in just seconds.</p>
                 <form id="registration-form" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation" novalidate>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control <?=(isset($errors["email"])) ? "is-invalid" : "" ?>" name="email" id="floating-email" placeholder="johndoe@hftm.ch" required>
+                        <input type="email" class="form-control <?=(isset($errors["email"])) ? "is-invalid" : "" ?>" name="email" id="floating-email" placeholder="johndoe@hftm.ch" value="<?=$user->getemail()?>" required>
                         <label for="floating-email">Email address</label>
                         <div class="invalid-feedback">
                             <?=(isset($errors["email"])) ? $errors["email"] : "E-Mail doesnt match a proper E-Mail pattern." ?>
@@ -40,7 +40,7 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text">@</span>
                         <div class="form-floating">
-                            <input type="text" class="form-control <?=(isset($errors["username"])) ? "is-invalid" : "" ?>" name="username" id="floating-user" placeholder="Username" minlength="3" maxlength="30" required>
+                            <input type="text" class="form-control <?=(isset($errors["username"])) ? "is-invalid" : "" ?>" name="username" id="floating-user" placeholder="Username" minlength="3" maxlength="30" value="<?=$user->getuserName()?>" required>
                             <label for="floating-user">Username</label>
                         </div>
                         <div class="invalid-feedback">
@@ -71,10 +71,10 @@
             <? endif; ?>
             <h3>
                 Activation link sent!
-                <small class="text-muted">Just one last step ahead!</small>
+                <small class="text-muted">Just one last step ahead</small>
             </h3>
             <p class="lead">
-                We've send an activation e-mail to your inbox. Please make sure to click on the link before trying to log-in or going any further.
+                We just sent an activation e-mail to <a href="mailto:<?=$user->getemail()?>"><?=$user->getemail()?></a>. Please make sure to click on the link before trying to log-in or going any further.
             </p>
             </div>
         </div>
@@ -87,12 +87,6 @@
                 K&nbsp;&nbsp;&nbsp;K<br>
                 A&nbsp;&nbsp;&nbsp;&nbsp;A<br>
             </p>
-            <!--<div class="row"><p class="col-7 fs-1 font-monospace">RIHAKA</p></div>
-            <div class="row"><p class="col-1 fs-1 font-monospace">I</p></div>
-            <div class="row"><p class="col-1 fs-1 font-monospace">H</p></div>
-            <div class="row"><p class="col-1 fs-1 font-monospace">A</p></div>
-            <div class="row"><p class="col-1 fs-1 font-monospace">K</p></div>
-            <div class="row"><p class="col-1 fs-1 font-monospace">A</p></div>-->
         </div>
     </div>
 </div>
