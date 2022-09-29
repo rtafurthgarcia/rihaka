@@ -65,7 +65,10 @@ class User extends AbstractModel {
 		$this->_firstName = '';
 		$this->_lastName = '';
 		$this->_isModerator = false;
-		$this->_isActivated = false;
+
+		// Account enabled by default when on dev mode
+		$this->_isActivated = false; //filter_var($_ENV["DEBUG_MODE"], FILTER_VALIDATE_BOOLEAN);
+
         $this->_creationDate = time();
         $this->_lastConnectionDate = time();
 		$this->_activationLink = Uuid::uuid4()->toString();
@@ -343,7 +346,7 @@ class User extends AbstractModel {
 		return $this;
 	}
 
-	function verifyUsername() {
+	function verifyEmail() {
 		$addSupporter = $this->_connection->prepare(
             "SELECT id FROM benutzer WHERE email = :_email"
         );
@@ -359,7 +362,7 @@ class User extends AbstractModel {
 		return true;
 	}
 
-	function verifyEmail() {
+	function verifyUsername() {
 		$addSupporter = $this->_connection->prepare(
             "SELECT id FROM benutzer WHERE benutzername = :_userName"
         );
