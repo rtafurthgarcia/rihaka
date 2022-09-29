@@ -1,6 +1,6 @@
 <div class="container pt-3">
     <nav class="mb-3 row">
-        <div class="nav nav-tabs col-6" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs col-12 col-md-6" id="nav-tab" role="tablist">
             <? if((isset($successful) && ! $successful) || ! isset($successful)): ?>
                 <button class="nav-link active" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info" aria-selected="true">
             <? else: ?>
