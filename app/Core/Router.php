@@ -12,5 +12,6 @@ class Router {
         $app->get('/', HomeController::class . ':home');
         $app->get('/register', UserController::class . ':registration');
         $app->post('/register', UserController::class . ':registrationFormUpload');
+        $app->get('/login', UserController::class . ':login');
     } 
 }

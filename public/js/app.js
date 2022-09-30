@@ -13,7 +13,7 @@ function onPasswordChange() {
 }
 
 function onFormSubmitted(event) {
-    const form = document.getElementById("registration-form")
+    const form = document.querySelector('form.needs-validation')
 
     if (!form.checkValidity()) {
         console.log(event);

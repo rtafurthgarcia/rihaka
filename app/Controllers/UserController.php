@@ -35,25 +35,25 @@ class UserController
         $errors = array();
         
         try {
-            $newUser->setuserName($formData['username']);
+            $newUser->setUserName($formData['username']);
             $newUser->verifyUsername();
         } catch (\Exception $error) {
             $errors["username"] = $error->getMessage();
         }
         try {
-            $newUser->setemail($formData['email']);
+            $newUser->setEmail($formData['email']);
             $newUser->verifyEmail();
         } catch (\Exception $error) {
             $errors["email"] = $error->getMessage();
         }
 
         try {
-            $newUser->setpassword($formData['password'], $formData['password-confirmation']);
+            $newUser->setPassword($formData['password'], $formData['password-confirmation']);
         } catch (\Exception $error) {
             $errors["password"] = $error->getMessage();
         }
 
-        $newUser->setipAddress(NetworkHelper::getIPAddress());
+        $newUser->setIpAddress(NetworkHelper::getIPAddress());
     
         $isSuccessful = true;
         if (count($errors) > 0) {
@@ -61,13 +61,20 @@ class UserController
         } else {
             $newUser->save();
         }
-
+        //$response->withStatus()
         return $this->_renderer->render($response, "Registration.php", [
             "page_title" => "RIHAKA - registration",
             "hide_login_panel" => true,
             "user" => $newUser,
             "successful" => $isSuccessful,
             "errors" => $errors
+        ]);
+    }
+
+    public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        return $this->_renderer->render($response, "Login.php", [
+            "page_title" => "RIHAKA - log-in",
+            "hide_login_panel" => true
         ]);
     }
 }
