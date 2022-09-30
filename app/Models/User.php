@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use App\Core\AbstractModel;
-use DateTime;
-use DateTimeInterface;
 use ErrorException;
 use LengthException;
 use PDO;
 use Ramsey\Uuid\Uuid;
+use App\Core\NetworkHelper;
 //use parent;se parent;
 
 class User extends AbstractModel {
@@ -24,29 +23,50 @@ class User extends AbstractModel {
     private $_creationDate = null;    
     private $_lastConnectionDate = null;
     private $_ipAddress = null;
-
     /**
 	 */
     public function __construct() {
         parent::__construct();
 	}
 
-    public function get($primaryKey) {
-        foreach ($this->_connection->query("SELECT * FROM user") as $record) {
-            $this->_primaryKey = $primaryKey;
-            $this->_userName = $record["benutzername"];
-            $this->_lastName = $record["name"];
-            $this->_firstName = $record["vorname"];
-            $this->_password = $record["passwort"];
-            $this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
-            $this->_email = $record["email"];
-            $this->_activationLink = $record["aktivierungslink"];
-            $this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
-            $this->_creationDate->setTimestamp((int) $record["erstellungsdatum"]);
-            $this->_lastConnectionDate->setTimestamp((int) $record["letzteverbindungsdatum"]);
-            $this->_ipAddress = filter_var($record["ipaddresse"], FILTER_VALIDATE_IP);
-        }
-    }
+	public function login($email, $username, $password) {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT * FROM benutzer WHERE (benutzername = :_userName OR email = :_email)"
+        );
+		
+        $addSupporter->bindParam(":_userName", $username);
+		$addSupporter->bindParam(":_email", $email);
+		
+        $addSupporter->execute();
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		if (count($rows)) {
+			$record = $rows[0];
+
+			if (!password_verify($password, $record["passwort"])) {
+				throw new ErrorException("Wrong password.", 1);
+			}
+
+			$this->_primaryKey = $record["id"];
+			$this->_userName = $record["benutzername"];
+			$this->_lastName = $record["name"];
+			$this->_firstName = $record["vorname"];
+			$this->_password = $record["passwort"];
+			$this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
+			$this->_email = $record["email"];
+			$this->_activationLink = $record["aktivierungslink"];
+			$this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
+			$this->_creationDate->setTimestamp((int) $record["erstellungsdatum"]);
+			
+			$this->_lastConnectionDate = time();
+			$this->_ipAddress = NetworkHelper::getIPAddress();
+
+			$this->save();
+
+			SessionHelper::regenerateSessionId();
+		} else {
+			throw new ErrorException("No account found with such username or e-mail address.", 1);
+		}
+	}
     
 
     /**
@@ -169,7 +189,7 @@ class User extends AbstractModel {
 	/**
 	 * @return mixed
 	 */
-	function getuserName() {
+	function getUserName() {
 		return $this->_userName;
 	}
 	
@@ -177,14 +197,14 @@ class User extends AbstractModel {
 	 * @param mixed $_userName 
 	 * @return User
 	 */
-	function setuserName($_userName): self {
-		$this->_userName = trim($_userName);
+	function setUserName($userName): self {
+		$this->_userName = trim($userName);
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getlastName() {
+	function getLastName() {
 		return $this->_lastName;
 	}
 	
@@ -192,14 +212,14 @@ class User extends AbstractModel {
 	 * @param mixed $_lastName 
 	 * @return User
 	 */
-	function setlastName($_lastName): self {
-		$this->_lastName = $_lastName;
+	function setLastName($lastName): self {
+		$this->_lastName = $lastName;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getfirstName() {
+	function getFirstName() {
 		return $this->_firstName;
 	}
 	
@@ -207,14 +227,14 @@ class User extends AbstractModel {
 	 * @param mixed $_firstName 
 	 * @return User
 	 */
-	function setfirstName($_firstName): self {
-		$this->_firstName = $_firstName;
+	function setFirstName($firstName): self {
+		$this->_firstName = $firstName;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getpassword() {
+	function getPassword() {
 		return $this->_password;
 	}
 	
@@ -222,23 +242,23 @@ class User extends AbstractModel {
 	 * @param mixed $_password 
 	 * @return User
 	 */
-	function setpassword($_password, $_confirmation): self {
-		if ( strcmp($_password, $_confirmation)) {
+	function setPassword($password, $confirmation): self {
+		if ( strcmp($password, $confirmation)) {
 			throw new ErrorException("Passwords do not match.", 1);
 		}
 
-		if (strlen($_password) < 10) {
+		if (strlen($password) < 10) {
 			throw new LengthException("Password doesnt meet length requirements.", 2);
 		}
 			
-		$this->_password = $_password;
+		$this->_password = password_hash($password, PASSWORD_DEFAULT);
 		
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getisModerator() {
+	function getIsModerator() {
 		return $this->_isModerator;
 	}
 	
@@ -246,14 +266,14 @@ class User extends AbstractModel {
 	 * @param mixed $_isModerator 
 	 * @return User
 	 */
-	function setisModerator($_isModerator): self {
-		$this->_isModerator = $_isModerator;
+	function setIsModerator($isModerator): self {
+		$this->_isModerator = $isModerator;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getemail() {
+	function getEmail() {
 		return $this->_email;
 	}
 	
@@ -261,19 +281,19 @@ class User extends AbstractModel {
 	 * @param mixed $_email 
 	 * @return User
 	 */
-	function setemail($_email): self {
-		if (!filter_var($_email, FILTER_VALIDATE_EMAIL)) {
+	function setEmail($email): self {
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			throw new \InvalidArgumentException("E-Mail doesnt match a proper E-Mail pattern.");
 		}
         //if(! $this->_email) raise 
-		$this->_email = filter_var($_email, FILTER_VALIDATE_EMAIL);
+		$this->_email = filter_var($email, FILTER_VALIDATE_EMAIL);
 
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getactivationLink() {
+	function getActivationLink() {
 		return $this->_activationLink;
 	}
 	
@@ -281,14 +301,14 @@ class User extends AbstractModel {
 	 * @param mixed $_activationLink 
 	 * @return User
 	 */
-	function setactivationLink($_activationLink): self {
-		$this->_activationLink = $_activationLink;
+	function setActivationLink($activationLink): self {
+		$this->_activationLink = $activationLink;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getisActivated() {
+	function getIsActivated() {
 		return $this->_isActivated;
 	}
 	
@@ -296,14 +316,14 @@ class User extends AbstractModel {
 	 * @param mixed $_isActivated 
 	 * @return User
 	 */
-	function setisActivated($_isActivated): self {
-		$this->_isActivated = $_isActivated;
+	function setIsActivated($isActivated): self {
+		$this->_isActivated = $isActivated;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getcreationDate() {
+	function getCreationDate() {
 		return $this->_creationDate;
 	}
 	
@@ -311,14 +331,14 @@ class User extends AbstractModel {
 	 * @param mixed $_creationDate 
 	 * @return User
 	 */
-	function setcreationDate($_creationDate): self {
-		$this->_creationDate = $_creationDate;
+	function setCreationDate($creationDate): self {
+		$this->_creationDate = $creationDate;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getlastConnectionDate() {
+	function getLastConnectionDate() {
 		return $this->_lastConnectionDate;
 	}
 	
@@ -326,14 +346,14 @@ class User extends AbstractModel {
 	 * @param mixed $_lastConnectionDate 
 	 * @return User
 	 */
-	function setlastConnectionDate($_lastConnectionDate): self {
-		$this->_lastConnectionDate = $_lastConnectionDate;
+	function setLastConnectionDate($lastConnectionDate): self {
+		$this->_lastConnectionDate = $lastConnectionDate;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getipAddress() {
+	function getIpAddress() {
 		return $this->_ipAddress;
 	}
 	
@@ -341,8 +361,8 @@ class User extends AbstractModel {
 	 * @param mixed $_ipAddress 
 	 * @return User
 	 */
-	function setipAddress($_ipAddress): self {
-		$this->_ipAddress = $_ipAddress;
+	function setIpAddress($ipAddress): self {
+		$this->_ipAddress = $ipAddress;
 		return $this;
 	}
 
@@ -376,5 +396,9 @@ class User extends AbstractModel {
 		}
 
 		return true;
+	}
+
+	function verifyPassword() {
+
 	}
 }

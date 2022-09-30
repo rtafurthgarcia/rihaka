@@ -6,7 +6,7 @@ CREATE TABLE benutzer
   vorname          VARCHAR(50)  NOT NULL,
   passwort         VARCHAR(64)  NOT NULL,
   isModerator      BOOLEAN      NOT NULL DEFAULT FALSE,
-  email            VARCHAR(50)  NOT NULL UNIQUE,
+  email            VARCHAR(254) NOT NULL UNIQUE,
   aktivierungslink VARCHAR(64)  NOT NULL UNIQUE,
   isActivated      BOOLEAN      DEFAULT FALSE,
   erstellungsdatum TIMESTAMP    NOT NULL,
