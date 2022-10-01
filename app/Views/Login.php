@@ -21,7 +21,14 @@
                         <?=(isset($errors["password"])) ? $errors["password"] : "Passwords either do not meet length requirements or do not match." ?>
                     </div>
                 </div>
-                <button id="submit-button" type="submit" class="btn btn-secondary mb-3">Log-in</button>
+                <div class="row">
+                    <div class="col">
+                        <button id="submit-button" type="submit" class="btn btn-secondary mb-3">Log-in</button>
+                    </div>
+                    <div class="col">
+                        <a href="/register" class="btn btn-warning float-end" role="button">No account?</a>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="signup-title col-12 col-md-6">

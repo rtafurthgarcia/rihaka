@@ -1,7 +1,7 @@
 <header class="p-3 p-md-0 text-bg-dark">
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <div class="container">
-      <a href="#" class="navbar-brand fs-2 font-monospace">RIHAKA</a>
+      <a href="/" class="navbar-brand fs-2 font-monospace">RIHAKA</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
         <span class="navbar-toggler-icon"></span>
       </button>
