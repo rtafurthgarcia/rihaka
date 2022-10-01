@@ -53,3 +53,28 @@ We use 4 main building blocks for our project:
  - [asciinema-player v3](https://github.com/asciinema/asciinema-player), to play our SSH session recordings 
 
 All links directly forward to their respective documentations, for quick access.
+
+# Project structure
+```
+ app -> where you will find most of the code 
+│   ├── Controllers
+│   ├── Core -> parent classes and helper classes 
+│   ├── Models
+│   └── Views
+│       └── Base -> everything templates and components you will reuse
+├── config -> your .env configuration files
+├── database -> the different sql script being run at the creation of the PostgreSQL docker
+├── doc -> all of our official doc
+├── honeypot -> the honeypot that collects all the ssh sessions from dumb hackers
+│   ├── etc
+│   ├── honeyfs
+│   │   ├── etc
+│   │   └── proc
+│   │       └── net
+│   └── share
+├── public -> all our static files, ssh records included.
+│   ├── css
+│   ├── js
+│   └── videos
+└── vendor -> not commited, but basically all the libraries and framework files we use in the project
+```
