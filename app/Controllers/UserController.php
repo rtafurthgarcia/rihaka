@@ -87,6 +87,7 @@ class UserController
             $newUser->login($formData['email'], $formData['password']);
         } catch (\Exception $error) {
             $errors["email"] = $error->getMessage();
+            $response->withStatus(301);
         }
 
         if (count($errors) > 0) {
@@ -97,7 +98,7 @@ class UserController
             ]);
         } else {
             //$newUser->save();
-            return $response->withHeader('Location', "/user/" . $_SESSION['username'])->withStatus(200);
+            return $response->withHeader('Location', "/user/" . $_SESSION['username'])->withStatus(303);
         }
     }
 
@@ -105,7 +106,7 @@ class UserController
         $user = new User();
 
         if ($_SESSION["authenticated"]) {
-            $user->get($_SESSION['id']);
+            $user->getById($_SESSION['id']);
 
             return $this->_renderer->render($response, "UserAccount.php", [
                 "page_title" => "RIHAKA - log-in",
@@ -114,7 +115,7 @@ class UserController
             ]);
         } else {
             try {
-                $user->get($args['username']);
+                $user->getByUsername($args['username']);
     
                 return $this->_renderer->render($response, "UserAccount.php", [
                     "page_title" => "RIHAKA - log-in",
@@ -126,10 +127,10 @@ class UserController
         }
     } 
 
-    public function logoutOfAccount(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+    public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         session_unset();
         session_destroy();
 
-        return $response->withHeader('Location', "/")->withStatus(200);
+        return $response->withHeader('Location', '/')->withStatus(303); // 303 -> see other -> perfect after post or operation
     }
 }
