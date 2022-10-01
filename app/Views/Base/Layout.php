@@ -10,8 +10,11 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <script src="/js/app.js"></script>
   </head>
-  <body>
-    <?=$this->fetch('./Base/Header.php', ["hide_login_panel" => (isset($hide_login_panel)) ? true : false ])?>
+  <body class="d-flex flex-column min-vh-100">
+    <?=$this->fetch('./Base/Header.php', [
+      "hide_login" => (isset($hide_login)) ? true : false,
+      "hide_signup" => (isset($hide_signup)) ? true : false,
+      ])?>
     <main>
       <?=$content?>
     </main>

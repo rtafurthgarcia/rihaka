@@ -1,8 +1,6 @@
 <div class="container pt-3">
     <div class="row align-items-start">
-        <div class="signup-form col-12 col-md-5 me-md-5">
-            <h2>Wassup <?= (isset($user)) ? $user->getUserName() : 'wtf' ?></h2>
-        </div>
+        <?=$this->fetch('./Base/Sidebar.php', [])?>
         <div class="signup-title col-12 col-md-6">
             <p class="display-1 font-monospace d-none d-md-block" id="r-brand">
                 RIHAKA<br>

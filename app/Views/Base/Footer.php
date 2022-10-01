@@ -1,4 +1,4 @@
-<footer class="container d-flex flex-wrap justify-content-between align-items-center py-3 my-6 border-top">
+<footer class="container d-flex flex-wrap justify-content-between align-items-center py-3 my-6 border-top mt-auto">
   <div class="col-12 col-md-6 mb-0 text-muted text-md-start text-center">
     2022 RIHAKA, a lovely school project from the <a href="https://www.hftm.ch/de" class="link-warning">HFTM</a>, for the <a href="https://www.hftm.ch/de" class="link-warning">HFTM</a>
     by <a href="https://github.com/rtafurthgarcia/rihaka" class="link-warning">HFTM students.</a></div>

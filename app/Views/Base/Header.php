@@ -14,14 +14,14 @@
           <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md">Community</a></li>
         </ul>
         <div class="ms-auto text-end col-6 gap-2 row justify-content-end">
-          <? if(! isset($hide_login)): ?>
+          <? if(! $hide_login): ?>
             <? if($_SESSION['authenticated']): ?>
               <a href="/logout" class="btn btn-outline-light col-12 col-md-3" role="button">Logout</a>
             <? else: ?>
               <a href="/login" class="btn btn-outline-light col-12 col-md-3" role="button">Login</a>
             <? endif; ?>
           <? endif; ?>
-          <? if(! isset($hide_signup)) : ?>
+          <? if(! $hide_signup) : ?>
             <a href="/register" class="btn btn-warning col-12 col-md-3" role="button">Sign up</a>
           <? endif; ?>
           </div>
