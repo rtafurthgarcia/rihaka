@@ -13,5 +13,8 @@ class Router {
         $app->get('/register', UserController::class . ':registration');
         $app->post('/register', UserController::class . ':registrationFormUpload');
         $app->get('/login', UserController::class . ':login');
+        $app->post('/login', UserController::class . ':loginFormUpload');
+        $app->get('/user/{username}', UserController::class . 'userAccount');
+        $app->get('/logout', UserController::class . 'logoutOfAccount');
     } 
 }

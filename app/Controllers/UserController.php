@@ -24,7 +24,7 @@ class UserController
     {        
         return $this->_renderer->render($response, "Registration.php", [
             "page_title" => "RIHAKA - registration",
-            "hide_login_panel" => true
+            "hide_signup" => true
         ]);
     }
 
@@ -64,7 +64,7 @@ class UserController
         //$response->withStatus()
         return $this->_renderer->render($response, "Registration.php", [
             "page_title" => "RIHAKA - registration",
-            "hide_login_panel" => true,
+            "hide_signup" => true,
             "user" => $newUser,
             "successful" => $isSuccessful,
             "errors" => $errors
@@ -74,7 +74,62 @@ class UserController
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         return $this->_renderer->render($response, "Login.php", [
             "page_title" => "RIHAKA - log-in",
-            "hide_login_panel" => true
+            "hide_login" => true
         ]);
+    }
+
+    public function loginFormUpload(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        $newUser = New User();
+        $formData = $request->getParsedBody();
+        $errors = array();
+
+        try {
+            $newUser->login($formData['email'], $formData['password']);
+        } catch (\Exception $error) {
+            $errors["email"] = $error->getMessage();
+        }
+
+        if (count($errors) > 0) {
+            return $this->_renderer->render($response, "Login.php", [
+                "page_title" => "RIHAKA - log-in",
+                "hide_login" => true,
+                "errors" => $errors
+            ]);
+        } else {
+            //$newUser->save();
+            return $response->withHeader('Location', "/user/" . $_SESSION['username'])->withStatus(200);
+        }
+    }
+
+    public function userAccount(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        $user = new User();
+
+        if ($_SESSION["authenticated"]) {
+            $user->get($_SESSION['id']);
+
+            return $this->_renderer->render($response, "UserAccount.php", [
+                "page_title" => "RIHAKA - log-in",
+                "hide_signup" => true,
+                "user" => $user
+            ]);
+        } else {
+            try {
+                $user->get($args['username']);
+    
+                return $this->_renderer->render($response, "UserAccount.php", [
+                    "page_title" => "RIHAKA - log-in",
+                    "user" => $user
+                ]);
+            } catch (\Throwable $th) {
+                //return 
+            }
+        }
+    } 
+
+    public function logoutOfAccount(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        session_unset();
+        session_destroy();
+
+        return $response->withHeader('Location', "/")->withStatus(200);
     }
 }

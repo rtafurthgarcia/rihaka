@@ -13,6 +13,10 @@ class SessionHelper {
             session_destroy();
             session_start();
         }
+
+        if (!isset($_SESSION['authenticated'])) {
+            $_SESSION['authenticated'] = false;
+        }
     }
 
     // My session regenerate id function

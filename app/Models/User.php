@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Core\AbstractModel;
+use App\Core\SessionHelper;
+use DateTime;
 use ErrorException;
 use LengthException;
 use PDO;
 use Ramsey\Uuid\Uuid;
 use App\Core\NetworkHelper;
-//use parent;se parent;
 
 class User extends AbstractModel {
     
@@ -27,15 +28,83 @@ class User extends AbstractModel {
 	 */
     public function __construct() {
         parent::__construct();
+
+		$this->_firstName = '';
+		$this->_lastName = '';
+		$this->_isModerator = false;
+
+		// Account enabled by default when on dev mode
+		$this->_isActivated = false; //filter_var($_ENV["DEBUG_MODE"], FILTER_VALIDATE_BOOLEAN);
+
+        $this->_creationDate = (New DateTime())->setTimestamp(time());
+        $this->_lastConnectionDate = (New DateTime())->setTimestamp(time());
 	}
 
-	public function login($email, $username, $password) {
+	public function getById($primaryKey) {
 		$addSupporter = $this->_connection->prepare(
-			"SELECT * FROM benutzer WHERE (benutzername = :_userName OR email = :_email)"
+			"SELECT * FROM benutzer WHERE id = :_primaryKey"
         );
 		
-        $addSupporter->bindParam(":_userName", $username);
-		$addSupporter->bindParam(":_email", $email);
+        $addSupporter->bindValue(":_primaryKey", $primaryKey);
+        $addSupporter->execute();
+
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		if (count($rows)) {
+			$record = $rows[0];
+
+			$this->_primaryKey = (int)$record["id"];
+			$this->_userName = $record["benutzername"];
+			$this->_lastName = $record["name"];
+			$this->_firstName = $record["vorname"];
+			$this->_password = $record["passwort"];
+			$this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
+			$this->_email = $record["email"];
+			$this->_activationLink = $record["aktivierungslink"];
+			$this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
+			$this->_creationDate = new DateTime($record["erstellungsdatum"]);
+			$this->_lastConnectionDate = new DateTime($record["letzteverbindungsdatum"]);
+			$this->_ipAddress = $record["ipaddresse"];
+		} else {
+			throw new ErrorException("No user with such primary key.", 1);
+		}
+	}
+
+	public function getByUsername($username) {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT * FROM benutzer WHERE benutzername = :_userName"
+        );
+		
+        $addSupporter->bindValue(":_userName", $this->_userName);
+        $addSupporter->execute();
+
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		if (count($rows)) {
+			$record = $rows[0];
+
+			$this->_primaryKey = (int)$record["id"];
+			$this->_userName = $record["benutzername"];
+			$this->_lastName = $record["name"];
+			$this->_firstName = $record["vorname"];
+			$this->_password = $record["passwort"];
+			$this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
+			$this->_email = $record["email"];
+			$this->_activationLink = $record["aktivierungslink"];
+			$this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
+			$this->_creationDate->setTimestamp((int) $record["erstellungsdatum"]);
+			$this->_lastConnectionDate->setTimestamp((int) $record["letzteverbindungsdatum"]);
+			$this->_ipAddress = $record["ipaddresse"];
+		} else {
+			throw new ErrorException("No user with such username.", 1);
+		}
+	}
+
+	public function login($identifier, $password) {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT id, passwort FROM benutzer WHERE (benutzername = :_userName OR email = :_email) AND isactivated = true"
+        );
+		
+        $addSupporter->bindValue(":_userName", $identifier);
+		$addSupporter->bindValue(":_email", $identifier);
 		
         $addSupporter->execute();
 		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
@@ -46,23 +115,17 @@ class User extends AbstractModel {
 				throw new ErrorException("Wrong password.", 1);
 			}
 
-			$this->_primaryKey = $record["id"];
-			$this->_userName = $record["benutzername"];
-			$this->_lastName = $record["name"];
-			$this->_firstName = $record["vorname"];
-			$this->_password = $record["passwort"];
-			$this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
-			$this->_email = $record["email"];
-			$this->_activationLink = $record["aktivierungslink"];
-			$this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
-			$this->_creationDate->setTimestamp((int) $record["erstellungsdatum"]);
+			$this->getById($record["id"]);
 			
-			$this->_lastConnectionDate = time();
+			$this->_lastConnectionDate->setTimestamp(time());
 			$this->_ipAddress = NetworkHelper::getIPAddress();
 
 			$this->save();
 
 			SessionHelper::regenerateSessionId();
+			$_SESSION['authenticated'] = true;
+			$_SESSION['id'] = $this->_primaryKey;
+			$_SESSION['username'] = $this->_userName;
 		} else {
 			throw new ErrorException("No account found with such username or e-mail address.", 1);
 		}
@@ -82,15 +145,6 @@ class User extends AbstractModel {
     }
 
     private function _insert() {
-		$this->_firstName = '';
-		$this->_lastName = '';
-		$this->_isModerator = false;
-
-		// Account enabled by default when on dev mode
-		$this->_isActivated = false; //filter_var($_ENV["DEBUG_MODE"], FILTER_VALIDATE_BOOLEAN);
-
-        $this->_creationDate = time();
-        $this->_lastConnectionDate = time();
 		$this->_activationLink = Uuid::uuid4()->toString();
 
         $addSupporter = $this->_connection->prepare(
@@ -125,15 +179,15 @@ class User extends AbstractModel {
 		$isActivated = var_export($this->_isActivated, true);
 		$isModerator = var_export($this->_isModerator, true);
 
-        $addSupporter->bindParam(":_userName", $this->_userName);
-        $addSupporter->bindParam(":_lastName", $this->_lastName);
-        $addSupporter->bindParam(":_firstName", $this->_firstName);
-		$addSupporter->bindParam(":_password", $this->_password);
-        $addSupporter->bindParam(":_email", $this->_email);
-        $addSupporter->bindParam(":_activationLink", $this->_activationLink);
-        $addSupporter->bindParam(":_isActivated", $isActivated);
-		$addSupporter->bindParam(":_isModerator", $isModerator);
-        $addSupporter->bindParam(":_ipAddress", $this->_ipAddress);
+        $addSupporter->bindValue(":_userName", $this->_userName);
+        $addSupporter->bindValue(":_lastName", $this->_lastName);
+        $addSupporter->bindValue(":_firstName", $this->_firstName);
+		$addSupporter->bindValue(":_password", $this->_password);
+        $addSupporter->bindValue(":_email", $this->_email);
+        $addSupporter->bindValue(":_activationLink", $this->_activationLink);
+        $addSupporter->bindValue(":_isActivated", $isActivated);
+		$addSupporter->bindValue(":_isModerator", $isModerator);
+        $addSupporter->bindValue(":_ipAddress", $this->_ipAddress);
 
         $execution_result = $addSupporter->execute();
         if($execution_result) {
@@ -143,7 +197,7 @@ class User extends AbstractModel {
 
     private function _update() {
         $addSupporter = $this->_connection->prepare(
-            "UDPATE benutzer SET
+            "UPDATE benutzer SET
                 benutzername = :_userName, 
                 name = :_lastName, 
                 vorname = :_firstName, 
@@ -152,23 +206,25 @@ class User extends AbstractModel {
                 email = :_email, 
                 aktivierungslink = :_activationLink, 
                 isactivated = :_isActivated, 
-                erstellungsdatum = :_creationDate, 
                 letzteverbindungsdatum = :_lastConnectionDate, 
                 ipaddresse = :_ipAddress
             WHERE id = :_primaryKey"
         );
 
-        $addSupporter->bindParam(":_userName", $this->_userName);
-        $addSupporter->bindParam(":_lastName", $this->_lastName);
-        $addSupporter->bindParam(":_firstName", $this->_firstName);
-        $addSupporter->bindParam(":_email", $this->_email);
-        $addSupporter->bindParam(":_activationLink", $this->_activationLink);
-        $addSupporter->bindParam(":_isActivated", $this->_isActivated);
-        $addSupporter->bindParam(":_creationDate", $this->_creationDate);
-        $addSupporter->bindParam(":_lastConnectionDate", $this->_lastConnectionDate);
-        $addSupporter->bindParam(":_ipAddress", $this->_ipAddress);
+		$isActivated = var_export($this->_isActivated, true);
+		$isModerator = var_export($this->_isModerator, true);
 
-        $addSupporter->bindParam(":_primaryKey", $this->_primaryKey);
+        $addSupporter->bindValue(":_userName", $this->_userName);
+        $addSupporter->bindValue(":_lastName", $this->_lastName);
+        $addSupporter->bindValue(":_firstName", $this->_firstName);
+		$addSupporter->bindValue(":_password", $this->_password);
+		$addSupporter->bindValue(":_isModerator", $isModerator);
+        $addSupporter->bindValue(":_email", $this->_email);
+        $addSupporter->bindValue(":_activationLink", $this->_activationLink);
+        $addSupporter->bindValue(":_isActivated", $isActivated);
+        $addSupporter->bindValue(":_lastConnectionDate", $this->_lastConnectionDate->format('Y-m-d H:i:s'));
+        $addSupporter->bindValue(":_ipAddress", $this->_ipAddress);
+        $addSupporter->bindValue(":_primaryKey", $this->_primaryKey);
 
         $addSupporter->execute();
     }
@@ -182,7 +238,7 @@ class User extends AbstractModel {
             "DELETE FROM benutzer WHERE id = :_primaryKey"
         );
 
-        $addSupporter->bindParam(":_primaryKey", $this->_primaryKey);
+        $addSupporter->bindValue(":_primaryKey", (int) $this->_primaryKey);
 
         $addSupporter->execute();    
     }
@@ -371,7 +427,7 @@ class User extends AbstractModel {
             "SELECT id FROM benutzer WHERE email = :_email"
         );
 
-        $addSupporter->bindParam(":_email", $this->_email);
+        $addSupporter->bindValue(":_email", $this->_email);
 
         $addSupporter->execute();
 		$rows = $addSupporter->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -387,7 +443,7 @@ class User extends AbstractModel {
             "SELECT id FROM benutzer WHERE benutzername = :_userName"
         );
 
-        $addSupporter->bindParam(":_userName", $this->_userName);
+        $addSupporter->bindValue(":_userName", $this->_userName);
 
         $addSupporter->execute();
 		$rows = $addSupporter->fetchAll(PDO::FETCH_COLUMN, 0);
