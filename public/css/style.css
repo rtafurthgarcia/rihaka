@@ -1,6 +1,6 @@
 :root {
     --mainColor: #ffc107;
-  }
+}
 
 .console-header {
     height: 8%;
@@ -26,11 +26,23 @@
 }
 
 .btn-toggle-nav a {
-	display: inline-flex;
 	padding: .1875rem .5rem;
 	margin-top: .125rem;
-	margin-left: 1.25rem;
-	text-decoration: none;
+	margin-left: 2em;
+    transition: background-size .2s;
+    background-size: 4px 0px;
+}
+
+.btn-toggle-nav a:hover {
+    background:
+    linear-gradient(
+        to bottom,
+        var(--mainColor) 0%,
+        var(--mainColor) 100%
+    );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 4px;
 }
 
 .btn-toggle::before {
