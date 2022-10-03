@@ -1,21 +1,23 @@
-CREATE TABLE benutzer
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS benutzer
 (
   id               INT          NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
   benutzername     VARCHAR(30)  NOT NULL UNIQUE,
-  name             VARCHAR(50)  NOT NULL,
-  vorname          VARCHAR(50)  NOT NULL,
   passwort         VARCHAR(64)  NOT NULL,
-  isModerator      BOOLEAN      NOT NULL DEFAULT FALSE,
+  biografie        VARCHAR(300) NOT NULL DEFAULT '',
+  foto             VARCHAR(300) ,    
+  istModerator     BOOLEAN      NOT NULL DEFAULT FALSE,
   email            VARCHAR(254) NOT NULL UNIQUE,
   aktivierungslink VARCHAR(64)  NOT NULL UNIQUE,
-  isActivated      BOOLEAN      DEFAULT FALSE,
+  istAktiviert     BOOLEAN      DEFAULT FALSE,
   erstellungsdatum TIMESTAMP    NOT NULL,
   letzteverbindungsdatum        TIMESTAMP,
   ipAddresse       INET,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE bewertung
+CREATE TABLE IF NOT EXISTS bewertung
 (
   benutzerId INT NOT NULL,
   videoId    INT NOT NULL,
@@ -23,7 +25,7 @@ CREATE TABLE bewertung
   PRIMARY KEY (benutzerId, videoId)
 );
 
-CREATE TABLE kategorie
+CREATE TABLE IF NOT EXISTS kategorie
 (
   id           INT          NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
   name         VARCHAR(50)  NOT NULL UNIQUE,
@@ -31,7 +33,7 @@ CREATE TABLE kategorie
   PRIMARY KEY (id)
 );
 
-CREATE TABLE kommentar
+CREATE TABLE IF NOT EXISTS kommentar
 (
   benutzerId       INT            NOT NULL,
   videoId          INT            NOT NULL,
@@ -40,7 +42,7 @@ CREATE TABLE kommentar
   PRIMARY KEY (benutzerId, videoId, erstellungsdatum)
 );
 
-CREATE TABLE video
+CREATE TABLE IF NOT EXISTS video
 (
   id               INT            NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
   sekundaerId      INT            NOT NULL UNIQUE,
@@ -54,77 +56,84 @@ CREATE TABLE video
   PRIMARY KEY (id)
 );
 
-CREATE TABLE videokategorie
+CREATE TABLE IF NOT EXISTS videokategorie
 (
   videoId     INT NOT NULL,
   kategorieId INT NOT NULL,
   PRIMARY KEY (videoId, kategorieId)
 );
 
+ALTER TABLE video DROP CONSTRAINT IF EXISTS FK_benutzer_TO_video;
 ALTER TABLE video
   ADD CONSTRAINT FK_benutzer_TO_video
     FOREIGN KEY (benutzerId)
     REFERENCES benutzer (id)
     ON DELETE CASCADE;
 
+ALTER TABLE bewertung DROP CONSTRAINT IF EXISTS FK_benutzer_TO_bewertung;
 ALTER TABLE bewertung
   ADD CONSTRAINT FK_benutzer_TO_bewertung
     FOREIGN KEY (benutzerId)
     REFERENCES benutzer (id)
     ON DELETE CASCADE;
 
+ALTER TABLE bewertung DROP CONSTRAINT IF EXISTS FK_video_TO_bewertung;
 ALTER TABLE bewertung
   ADD CONSTRAINT FK_video_TO_bewertung
     FOREIGN KEY (videoId)
     REFERENCES video (id)
     ON DELETE CASCADE;
 
+ALTER TABLE kommentar DROP CONSTRAINT IF EXISTS FK_benutzer_TO_kommentar;
 ALTER TABLE kommentar
   ADD CONSTRAINT FK_benutzer_TO_kommentar
     FOREIGN KEY (benutzerId)
     REFERENCES benutzer (id)
     ON DELETE CASCADE;
 
+ALTER TABLE kommentar DROP CONSTRAINT IF EXISTS FK_video_TO_kommentar;
 ALTER TABLE kommentar
   ADD CONSTRAINT FK_video_TO_kommentar
     FOREIGN KEY (videoId)
     REFERENCES video (id)
     ON DELETE CASCADE;
 
+ALTER TABLE videokategorie DROP CONSTRAINT IF EXISTS FK_video_TO_videokategorie;
 ALTER TABLE videokategorie
   ADD CONSTRAINT FK_video_TO_videokategorie
     FOREIGN KEY (videoId)
     REFERENCES video (id)
     ON DELETE CASCADE;
 
+ALTER TABLE videokategorie DROP CONSTRAINT IF EXISTS FK_kategorie_TO_videokategorie;
 ALTER TABLE videokategorie
   ADD CONSTRAINT FK_kategorie_TO_videokategorie
     FOREIGN KEY (kategorieId)
     REFERENCES kategorie (id)
     ON DELETE CASCADE;
 
-CREATE UNIQUE INDEX benutzername_benutzer_idx ON benutzer (benutzername);
-CREATE UNIQUE INDEX email_benutzer_idx ON benutzer (email);
-CREATE UNIQUE INDEX aktivierungslink_benutzer_idx ON benutzer (aktivierungslink);
+CREATE UNIQUE INDEX IF NOT EXISTS benutzername_benutzer_idx ON benutzer (benutzername);
+CREATE UNIQUE INDEX IF NOT EXISTS email_benutzer_idx ON benutzer (email);
+CREATE UNIQUE INDEX IF NOT EXISTS aktivierungslink_benutzer_idx ON benutzer (aktivierungslink);
 
-CREATE INDEX benutzerId_bewertung_idx ON bewertung (benutzerId); 
-CREATE INDEX videoId_bewertung_idx ON bewertung (videoId);
+CREATE INDEX IF NOT EXISTS benutzerId_bewertung_idx ON bewertung (benutzerId); 
+CREATE INDEX IF NOT EXISTS videoId_bewertung_idx ON bewertung (videoId);
 
-CREATE UNIQUE INDEX sekundaerId_video_idx ON video (sekundaerId);
-CREATE UNIQUE INDEX beschreibung_video_idx ON video (beschreibung);
-CREATE UNIQUE INDEX titel_video_idx ON video (titel);
+CREATE UNIQUE INDEX IF NOT EXISTS sekundaerId_video_idx ON video (sekundaerId);
+CREATE UNIQUE INDEX IF NOT EXISTS beschreibung_video_idx ON video (beschreibung);
+CREATE UNIQUE INDEX IF NOT EXISTS titel_video_idx ON video (titel);
 
-CREATE INDEX benutzerId_video_idx ON video (benutzerId);
-CREATE INDEX erstellungsdatum_video_idx ON video (erstellungsdatum);
+CREATE INDEX IF NOT EXISTS benutzerId_video_idx ON video (benutzerId);
+CREATE INDEX IF NOT EXISTS erstellungsdatum_video_idx ON video (erstellungsdatum);
 
-CREATE UNIQUE INDEX name_kategorie_idx ON kategorie (name);
+CREATE UNIQUE INDEX IF NOT EXISTS name_kategorie_idx ON kategorie (name);
 
-CREATE INDEX videoId_videokategorie_idx ON videokategorie (videoId);
-CREATE INDEX kategorieId_videokategorie_idx ON videokategorie (kategorieId);
+CREATE INDEX IF NOT EXISTS videoId_videokategorie_idx ON videokategorie (videoId);
+CREATE INDEX IF NOT EXISTS kategorieId_videokategorie_idx ON videokategorie (kategorieId);
 
-CREATE INDEX benutzerId_kommentar_idx ON kommentar (benutzerId);
-CREATE INDEX videoId_kommentar_idx ON kommentar (videoId);
-CREATE INDEX erstellungsdatum_kommentar_idx ON kommentar (erstellungsdatum);
+CREATE INDEX IF NOT EXISTS benutzerId_kommentar_idx ON kommentar (benutzerId);
+CREATE INDEX IF NOT EXISTS videoId_kommentar_idx ON kommentar (videoId);
+CREATE INDEX IF NOT EXISTS erstellungsdatum_kommentar_idx ON kommentar (erstellungsdatum);
 
 CREATE OR REPLACE FUNCTION generateSecondaryVideoId()
    RETURNS INT AS
@@ -133,3 +142,5 @@ BEGIN
    RETURN floor(random()* (999999999-100000000 + 1) + 100000000);
 END;
 $$ language 'plpgsql' STRICT;
+
+COMMIT TRANSACTION;

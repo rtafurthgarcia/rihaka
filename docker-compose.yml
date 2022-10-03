@@ -11,9 +11,4 @@ services:
       - ./config/Database.env
       - ./config/App.env
     volumes:
-      - postgres-data:/var/lib/postgresql/data
       - ./database:/docker-entrypoint-initdb.d
-    
-volumes:
-  postgres-data:
-    driver: local

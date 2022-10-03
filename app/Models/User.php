@@ -14,8 +14,8 @@ use App\Core\NetworkHelper;
 class User extends AbstractModel {
     
     private $_userName = null;
-    private $_lastName = null;
-    private $_firstName = null;
+    private $_biography = null;
+    private $_foto = null;
     private $_password = null;
     private $_isModerator = null;
     private $_email = null;
@@ -29,12 +29,12 @@ class User extends AbstractModel {
     public function __construct() {
         parent::__construct();
 
-		$this->_firstName = '';
-		$this->_lastName = '';
+		$this->_foto = '';
+		$this->_biography = '';
 		$this->_isModerator = false;
 
 		// Account enabled by default when on dev mode
-		$this->_isActivated = false; //filter_var($_ENV["DEBUG_MODE"], FILTER_VALIDATE_BOOLEAN);
+		$this->_isActivated = true; //filter_var($_ENV["DEBUG_MODE"], FILTER_VALIDATE_BOOLEAN);
 
         $this->_creationDate = (New DateTime())->setTimestamp(time());
         $this->_lastConnectionDate = (New DateTime())->setTimestamp(time());
@@ -54,13 +54,13 @@ class User extends AbstractModel {
 
 			$this->_primaryKey = (int)$record["id"];
 			$this->_userName = $record["benutzername"];
-			$this->_lastName = $record["name"];
-			$this->_firstName = $record["vorname"];
+			$this->_biography = $record["biografie"];
+			$this->_foto = $record["foto"];
 			$this->_password = $record["passwort"];
-			$this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
+			$this->_isModerator = filter_var($record["istmoderator"], FILTER_VALIDATE_BOOLEAN);
 			$this->_email = $record["email"];
 			$this->_activationLink = $record["aktivierungslink"];
-			$this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
+			$this->_isActivated = filter_var($record["istaktiviert"], FILTER_VALIDATE_BOOLEAN);
 			$this->_creationDate = new DateTime($record["erstellungsdatum"]);
 			$this->_lastConnectionDate = new DateTime($record["letzteverbindungsdatum"]);
 			$this->_ipAddress = $record["ipaddresse"];
@@ -83,13 +83,13 @@ class User extends AbstractModel {
 
 			$this->_primaryKey = (int)$record["id"];
 			$this->_userName = $record["benutzername"];
-			$this->_lastName = $record["name"];
-			$this->_firstName = $record["vorname"];
+			$this->_biography = $record["biography"];
+			$this->_foto = $record["foto"];
 			$this->_password = $record["passwort"];
-			$this->_isModerator = filter_var($record["ismoderator"], FILTER_VALIDATE_BOOLEAN);
+			$this->_isModerator = filter_var($record["istModerator"], FILTER_VALIDATE_BOOLEAN);
 			$this->_email = $record["email"];
 			$this->_activationLink = $record["aktivierungslink"];
-			$this->_isActivated = filter_var($record["isactivated"], FILTER_VALIDATE_BOOLEAN);
+			$this->_isActivated = filter_var($record["istAktiviert"], FILTER_VALIDATE_BOOLEAN);
 			$this->_creationDate->setTimestamp((int) $record["erstellungsdatum"]);
 			$this->_lastConnectionDate->setTimestamp((int) $record["letzteverbindungsdatum"]);
 			$this->_ipAddress = $record["ipaddresse"];
@@ -100,7 +100,7 @@ class User extends AbstractModel {
 
 	public function login($identifier, $password) {
 		$addSupporter = $this->_connection->prepare(
-			"SELECT id, passwort FROM benutzer WHERE (benutzername = :_userName OR email = :_email) AND isactivated = true"
+			"SELECT id, passwort FROM benutzer WHERE (benutzername = :_userName OR email = :_email) AND istaktiviert = true"
         );
 		
         $addSupporter->bindValue(":_userName", $identifier);
@@ -150,21 +150,21 @@ class User extends AbstractModel {
         $addSupporter = $this->_connection->prepare(
             "INSERT INTO benutzer (
                 benutzername, 
-                name, 
-                vorname, 
+                biografie, 
+                foto, 
                 passwort, 
-                ismoderator, 
+                istModerator, 
                 email, 
                 aktivierungslink, 
-                isactivated, 
+                istAktiviert, 
                 erstellungsdatum, 
                 letzteverbindungsdatum, 
                 ipaddresse
             ) 
             VALUES (
                 :_userName, 
-                :_lastName, 
-                :_firstName,
+                :_biography, 
+                :_foto,
                 :_password,
                 :_isModerator,
                 :_email,
@@ -180,8 +180,8 @@ class User extends AbstractModel {
 		$isModerator = var_export($this->_isModerator, true);
 
         $addSupporter->bindValue(":_userName", $this->_userName);
-        $addSupporter->bindValue(":_lastName", $this->_lastName);
-        $addSupporter->bindValue(":_firstName", $this->_firstName);
+        $addSupporter->bindValue(":_biography", $this->_biography);
+        $addSupporter->bindValue(":_foto", $this->_foto);
 		$addSupporter->bindValue(":_password", $this->_password);
         $addSupporter->bindValue(":_email", $this->_email);
         $addSupporter->bindValue(":_activationLink", $this->_activationLink);
@@ -199,13 +199,13 @@ class User extends AbstractModel {
         $addSupporter = $this->_connection->prepare(
             "UPDATE benutzer SET
                 benutzername = :_userName, 
-                name = :_lastName, 
-                vorname = :_firstName, 
+                biografie = :_biography, 
+                foto = :_foto, 
                 passwort = :_password, 
-                ismoderator = :_isModerator, 
+                istModerator = :_isModerator, 
                 email = :_email, 
                 aktivierungslink = :_activationLink, 
-                isactivated = :_isActivated, 
+                istAktiviert = :_isActivated, 
                 letzteverbindungsdatum = :_lastConnectionDate, 
                 ipaddresse = :_ipAddress
             WHERE id = :_primaryKey"
@@ -215,8 +215,8 @@ class User extends AbstractModel {
 		$isModerator = var_export($this->_isModerator, true);
 
         $addSupporter->bindValue(":_userName", $this->_userName);
-        $addSupporter->bindValue(":_lastName", $this->_lastName);
-        $addSupporter->bindValue(":_firstName", $this->_firstName);
+        $addSupporter->bindValue(":_biography", $this->_biography);
+        $addSupporter->bindValue(":_foto", $this->_foto);
 		$addSupporter->bindValue(":_password", $this->_password);
 		$addSupporter->bindValue(":_isModerator", $isModerator);
         $addSupporter->bindValue(":_email", $this->_email);
@@ -261,30 +261,30 @@ class User extends AbstractModel {
 	 * @return mixed
 	 */
 	function getLastName() {
-		return $this->_lastName;
+		return $this->_biography;
 	}
 	
 	/**
-	 * @param mixed $_lastName 
+	 * @param mixed $_biography 
 	 * @return User
 	 */
-	function setLastName($lastName): self {
-		$this->_lastName = $lastName;
+	function setLastName($biography): self {
+		$this->_biography = $biography;
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getFirstName() {
-		return $this->_firstName;
+	function getFoto() {
+		return $this->_foto;
 	}
 	
 	/**
-	 * @param mixed $_firstName 
+	 * @param mixed $_foto 
 	 * @return User
 	 */
-	function setFirstName($firstName): self {
-		$this->_firstName = $firstName;
+	function setFoto($foto): self {
+		$this->_foto = $foto;
 		return $this;
 	}
 	/**
@@ -314,15 +314,15 @@ class User extends AbstractModel {
 	/**
 	 * @return mixed
 	 */
-	function getIsModerator() {
+	function getisModerator() {
 		return $this->_isModerator;
 	}
 	
 	/**
-	 * @param mixed $_isModerator 
+	 * @param mixed $_istModerator 
 	 * @return User
 	 */
-	function setIsModerator($isModerator): self {
+	function setisModerator($isModerator): self {
 		$this->_isModerator = $isModerator;
 		return $this;
 	}

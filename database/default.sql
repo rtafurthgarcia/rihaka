@@ -3,7 +3,7 @@ INSERT INTO benutzer (
     name,
     vorname,
     passwort,
-    ismoderator,
+    istModerator,
     email,
     aktivierungslink,
     isactivated,
