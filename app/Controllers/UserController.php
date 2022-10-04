@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use ErrorException;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -85,8 +87,8 @@ class UserController
 
         try {
             $newUser->login($formData['email'], $formData['password']);
-        } catch (\Exception $error) {
-            $errors["email"] = $error->getMessage();
+        } catch (Exception $error) {
+            $errors["password"] = $error->getMessage();
             $response->withStatus(301);
         }
 
@@ -95,7 +97,7 @@ class UserController
                 "page_title" => "RIHAKA - log-in",
                 "hide_login" => true,
                 "errors" => $errors
-            ]);
+            ])->withStatus(403);
         } else {
             //$newUser->save();
             return $response->withHeader('Location', "/user/" . $_SESSION['username'])->withStatus(303);
@@ -104,26 +106,90 @@ class UserController
 
     public function userAccount(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         $user = new User();
-
+        
         if ($_SESSION["authenticated"]) {
-            $user->getById($_SESSION['id']);
+            if ($_SESSION['username'] === $args['username']) {
+                $user->getById($_SESSION['id']);
+                
+                return $this->_renderer->render($response, "UserAccount.php", [
+                    "page_title" => "RIHAKA - log-in",
+                    "hide_signup" => true,
+                    "user" => $user
+                ]);
+            } else {
+                return $response->withStatus(403);
+            }
+        } else {
+            $user->getByUsername($args['username']);
 
             return $this->_renderer->render($response, "UserAccount.php", [
                 "page_title" => "RIHAKA - log-in",
-                "hide_signup" => true,
                 "user" => $user
             ]);
-        } else {
-            try {
-                $user->getByUsername($args['username']);
+        }
+    } 
+
+    public function userAccountSecurity(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        $user = new User();
+
+        if ($_SESSION["authenticated"]) {
+            if ($_SESSION['username'] === $args['username']) {
+                $user->getById($_SESSION['id']);
     
-                return $this->_renderer->render($response, "UserAccount.php", [
+                return $this->_renderer->render($response, "PasswordChange.php", [
                     "page_title" => "RIHAKA - log-in",
+                    "hide_signup" => true,
                     "user" => $user
                 ]);
-            } catch (\Throwable $th) {
-                //return 
+            } else {
+                return $response->withStatus(403);
             }
+        } else {
+            return $response->withHeader('Location', '/login')->withStatus(303);    
+        }
+    } 
+
+    public function userAccountSecurityFormUpload(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        
+        if ($_SESSION["authenticated"]) {
+            if ($_SESSION['username'] === $args['username']) {
+                $user = new User();
+                $user->getById($_SESSION['id']);
+
+                $formData = $request->getParsedBody();
+                $errors = array();
+                $successful = true;
+        
+                try {
+                    if (!password_verify($formData['current-password'], $user->getPassword())) {
+                        throw new ErrorException("Wrong password.", 1);
+                    }
+                } catch (Exception $error) {
+                    $errors["currentPassword"] = $error->getMessage();
+                    $response->withStatus(301);
+                    $successful = false;
+                }
+
+                try {
+                    $user->setPassword($formData['password'], $formData['password-confirmation']);
+                } catch (Exception $error) {
+                    $errors["newPassword"] = $error->getMessage();
+                    $response->withStatus(301);
+                    $successful = false;
+                }
+    
+                return $this->_renderer->render($response, "PasswordChange.php", [
+                    "page_title" => "RIHAKA - log-in",
+                    "hide_signup" => true,
+                    "user" => $user,
+                    "errors" => $errors,
+                    "successful" => $successful
+                ]);
+            } else {
+                return $response->withStatus(403);
+            }
+        } else {
+            return $response->withHeader('Location', '/login')->withStatus(303);    
         }
     } 
 

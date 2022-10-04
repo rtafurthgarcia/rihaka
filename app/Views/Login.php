@@ -11,7 +11,7 @@
                         <label for="floating-email">E-Mail or Username</label>
                     </div>
                     <div class="invalid-feedback">
-                        <?=(isset($errors["email"])) ? $errors["username"] : "Your E-Mail address or your username cannot be empty." ?>
+                        <?=(isset($errors["email"])) ? $errors["email"] : "Your E-Mail address or your username cannot be empty." ?>
                     </div>
                 </div>
                 <div class="form-floating mb-3">
