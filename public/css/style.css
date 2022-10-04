@@ -45,6 +45,20 @@
     background-size: 4px 4px;
 }
 
+.active-page {
+    background:
+    linear-gradient(
+        to bottom,
+        var(--mainColor) 0%,
+        var(--mainColor) 100%
+    );
+    border-radius: 6px 6px 0 0;
+}
+
+.nav-item a:hover, .active-page {
+    color: #212529 !important;
+}
+
 .btn-toggle::before {
 	width: 1.25em;
 	line-height: 0;
@@ -61,10 +75,6 @@
     #demo {
         background-color: #121314;
         height: 360px;
-    }
-
-    .nav-item a:hover {
-        color: #212529 !important;
     }
 
     .nav-item {

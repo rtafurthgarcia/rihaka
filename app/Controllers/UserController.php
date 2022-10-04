@@ -2,31 +2,30 @@
 
 namespace App\Controllers;
 
+use App\Core\AbstractController;
 use ErrorException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-use Slim\Views\PhpRenderer;
 use App\Models\User;
 
 use App\Core\NetworkHelper;
 
-class UserController
+class UserController extends AbstractController
 {
-    private $_renderer;
-
     public function __construct()
     {
-        $this->_renderer = new PhpRenderer(__DIR__ . '/../Views');
-        $this->_renderer->setLayout("./Base/Layout.php");
+        parent::__construct([
+            "activePage" => 0
+        ]);
     }
 
     public function registration(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {        
         return $this->_renderer->render($response, "Registration.php", [
-            "page_title" => "RIHAKA - registration",
-            "hide_signup" => true
+            "pageTitle" => "RIHAKA - registration",
+            "hideSignup" => true
         ]);
     }
 
@@ -39,19 +38,19 @@ class UserController
         try {
             $newUser->setUserName($formData['username']);
             $newUser->verifyUsername();
-        } catch (\Exception $error) {
+        } catch (Exception $error) {
             $errors["username"] = $error->getMessage();
         }
         try {
             $newUser->setEmail($formData['email']);
             $newUser->verifyEmail();
-        } catch (\Exception $error) {
+        } catch (Exception $error) {
             $errors["email"] = $error->getMessage();
         }
 
         try {
             $newUser->setPassword($formData['password'], $formData['password-confirmation']);
-        } catch (\Exception $error) {
+        } catch (Exception $error) {
             $errors["password"] = $error->getMessage();
         }
 
@@ -65,8 +64,8 @@ class UserController
         }
         //$response->withStatus()
         return $this->_renderer->render($response, "Registration.php", [
-            "page_title" => "RIHAKA - registration",
-            "hide_signup" => true,
+            "pageTitle" => "RIHAKA - registration",
+            "hideSignup" => true,
             "user" => $newUser,
             "successful" => $isSuccessful,
             "errors" => $errors
@@ -75,7 +74,7 @@ class UserController
 
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         return $this->_renderer->render($response, "Login.php", [
-            "page_title" => "RIHAKA - log-in",
+            "pageTitle" => "RIHAKA - log-in",
             "hide_login" => true
         ]);
     }
@@ -94,7 +93,7 @@ class UserController
 
         if (count($errors) > 0) {
             return $this->_renderer->render($response, "Login.php", [
-                "page_title" => "RIHAKA - log-in",
+                "pageTitle" => "RIHAKA - log-in",
                 "hide_login" => true,
                 "errors" => $errors
             ])->withStatus(403);
@@ -112,8 +111,8 @@ class UserController
                 $user->getById($_SESSION['id']);
                 
                 return $this->_renderer->render($response, "UserAccount.php", [
-                    "page_title" => "RIHAKA - log-in",
-                    "hide_signup" => true,
+                    "pageTitle" => "RIHAKA - log-in",
+                    "hideSignup" => true,
                     "user" => $user
                 ]);
             } else {
@@ -123,7 +122,7 @@ class UserController
             $user->getByUsername($args['username']);
 
             return $this->_renderer->render($response, "UserAccount.php", [
-                "page_title" => "RIHAKA - log-in",
+                "pageTitle" => "RIHAKA - log-in",
                 "user" => $user
             ]);
         }
@@ -137,8 +136,8 @@ class UserController
                 $user->getById($_SESSION['id']);
     
                 return $this->_renderer->render($response, "PasswordChange.php", [
-                    "page_title" => "RIHAKA - log-in",
-                    "hide_signup" => true,
+                    "pageTitle" => "RIHAKA - log-in",
+                    "hideSignup" => true,
                     "user" => $user
                 ]);
             } else {
@@ -179,8 +178,8 @@ class UserController
                 }
     
                 return $this->_renderer->render($response, "PasswordChange.php", [
-                    "page_title" => "RIHAKA - log-in",
-                    "hide_signup" => true,
+                    "pageTitle" => "RIHAKA - log-in",
+                    "hideSignup" => true,
                     "user" => $user,
                     "errors" => $errors,
                     "successful" => $successful

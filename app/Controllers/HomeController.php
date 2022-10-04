@@ -2,25 +2,25 @@
 
 namespace App\Controllers;
 
+use App\Core\AbstractController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-use Slim\Views\PhpRenderer;
-
-class HomeController
+class HomeController extends AbstractController
 {
-    private $_renderer;
-
     public function __construct()
     {
-        $this->_renderer = new PhpRenderer(__DIR__ . '/../Views');
-        $this->_renderer->setLayout("./Base/Layout.php");
+        parent::__construct([
+            "activePage" => 1
+        ]);
     }
 
     public function home(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {        
         return $this->_renderer->render($response, "Home.php", [
-            "page_title" => "RIHAKA - honeypot records database"
+            "pageTitle" => "RIHAKA - honeypot records database"
         ]);
     }
+
+    //public function about(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
 }
