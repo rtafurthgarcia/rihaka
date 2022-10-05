@@ -8,23 +8,28 @@
                 </div>
             <? endif; ?>
             <h2>Account informations</h2>
-            <form id="account-form" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation container col-12 col-md-9 text-start p-3 m-0" novalidate>
-                <div class="row">
-                    <div class="form-floating mb-3 col ps-0 p-md">
+            <form id="account-form" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
+                <div class="row justify-content-center">
+                    <div class="form-floating mb-3 col-12 col-md-9 p-0 pe-md-3 p-md">
                         <textarea class="form-control" placeholder="Write something about ya. Keep in mind everything's gonna be sanitized except links to external websites." id="biography" style="height: 100%"></textarea>
                         <label for="biography">Biography</label>
                     </div>
-                    <img src="/images/pp.jpg" class="mb-3 p-0 col-3 img-thumbnail">
+                    <div class="mb-3 p-0 col-9 col-md-3">
+                        <label for="pp-file" class="form-label p-0 m-0">
+                            <img src="/images/pp.jpg" class="m-0 p-0 img-thumbnail">
+                        </label>
+                        <input class="d-none" type="file" id="pp-file">
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="form-floating mb-3 ps-0 p-md col">
+                    <div class="form-floating mb-3 col-md p-0 p-md me-0 me-md-3">
                         <input type="email" class="form-control <?=(isset($errors["email"])) ? "is-invalid" : "" ?>" name="email" id="floating-email" minlength="3" maxlength="254" placeholder="johndoe@hftm.ch" value="<?=isset($user) ? $user->getemail() : ''?>" autocomplete="email" required>
                         <label for="floating-email">Email address</label>
                         <div class="invalid-feedback">
                             <?=(isset($errors["email"])) ? $errors["email"] : "E-Mail doesnt match a proper E-Mail pattern." ?>
                         </div>
                     </div>
-                    <div class="input-group mb-3 col p-0 p-md">
+                    <div class="input-group mb-3 col-md p-0 p-md">
                         <span class="input-group-text">@</span>
                         <div class="form-floating">
                             <input type="text" class="form-control" name="username" id="floating-user" placeholder="Username" minlength="3" maxlength="30" value="<?=isset($user) ? $user->getuserName() : ''?>" autocomplete="username" readonly>
