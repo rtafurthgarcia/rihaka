@@ -16,16 +16,16 @@
                 <div class="ms-auto text-end col-8 col-md-6 gap-2 row justify-content-end">
                     <? if (!$hide_login): ?>
                         <? if ($_SESSION['authenticated']): ?>
-                            <a href="/logout" class="btn btn-outline-light col-12 col-md-3" role="button">Logout</a>
+                            <a href="/logout" class="btn btn-outline-light col-12 col-md-4 col-lg-3" role="button">Logout</a>
                         <?else: ?>
-                            <a href="/login" class="btn btn-outline-light col-12 col-md-3" role="button">Login</a>
+                            <a href="/login" class="btn btn-outline-light col-12 col-md-4 col-lg-3" role="button">Login</a>
                         <?endif; ?>
                     <?endif; ?>
                     <? if (!$hideSignup): ?>
                         <? if ($_SESSION['authenticated']): ?>
-                            <a href="/user/<?=$_SESSION['username']?>" class="btn btn-warning col-12 col-md-3" role="button">Account</a>
+                            <a href="/user/<?=$_SESSION['username']?>" class="btn btn-warning col-12 col-md-4 col-lg-3" role="button">Account</a>
                         <?else: ?>
-                            <a href="/register" class="btn btn-warning col-12 col-md-3" role="button">Sign up</a>
+                            <a href="/register" class="btn btn-warning col-12 col-md-4 col-lg-3" role="button">Sign up</a>
                         <?endif; ?>
                     <? endif; ?>
                 </div>
