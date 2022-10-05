@@ -1,7 +1,7 @@
 <div class="container pt-3">
     <div class="row align-items-start">
         <?=$this->fetch('./Base/Sidebar.php', [])?>
-        <div class="signup-form col-12 col-xl-10 col-lg-9 col-md-8 px-4 py-4 py-md-0">
+        <div class="signup-form col-12 col-xl-10 col-lg-9 col-md-8 px-4 pe-md-0 py-4 py-md-0">
             <? if((isset($successful) && $successful)): ?>
                 <div class="alert alert-success" role="alert">
                     User information updated successfully!
@@ -22,14 +22,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-floating mb-3 col-md p-0 p-md me-0 me-md-3">
+                    <div class="form-floating mb-3 col-12 col-lg p-0 p-md me-0 me-md-3">
                         <input type="email" class="form-control <?=(isset($errors["email"])) ? "is-invalid" : "" ?>" name="email" id="floating-email" minlength="3" maxlength="254" placeholder="johndoe@hftm.ch" value="<?=isset($user) ? $user->getemail() : ''?>" autocomplete="email" required>
                         <label for="floating-email">Email address</label>
                         <div class="invalid-feedback">
                             <?=(isset($errors["email"])) ? $errors["email"] : "E-Mail doesnt match a proper E-Mail pattern." ?>
                         </div>
                     </div>
-                    <div class="input-group mb-3 col-md p-0 p-md">
+                    <div class="input-group mb-3 col-12 col-lg p-0 p-md">
                         <span class="input-group-text">@</span>
                         <div class="form-floating">
                             <input type="text" class="form-control" name="username" id="floating-user" placeholder="Username" minlength="3" maxlength="30" value="<?=isset($user) ? $user->getuserName() : ''?>" autocomplete="username" readonly>
