@@ -1,7 +1,7 @@
 <div class="container pt-3">
     <div class="row align-items-start">
         <?=$this->fetch('./Base/Sidebar.php', [])?>
-        <div class="signup-form col-12 col-md-5 px-4 py-4 py-md-5">
+        <div class="signup-form col-12 col-md-5 px-4 py-4 py-md-0">
             <? if((isset($successful) && $successful)): ?>
                 <div class="alert alert-success" role="alert">
                     Password changed successfully!
