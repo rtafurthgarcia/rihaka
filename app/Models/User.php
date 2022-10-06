@@ -269,7 +269,7 @@ class User extends AbstractModel {
 	 * @return User
 	 */
 	function setBiography($biography): self {
-		$this->_biography = trim($biography);
+		$this->_biography = strip_tags($biography);
 		return $this;
 	}
 	/**

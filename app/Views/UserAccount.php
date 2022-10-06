@@ -18,18 +18,12 @@
                 <input type="hidden" name="max_file_size" value="2097152">
                 <div class="row justify-content-center">
                     <div class="form-floating mb-3 col-12 col-md-9 p-0 pe-md-3 p-md">
-                        <textarea class="form-control" placeholder="Write something about ya. Keep in mind everything's gonna be sanitized except links to external websites." id="biography" name="biography" style="height: 100%">
-                        <?=isset($user) ? $user->getBiography() : ''?>
-                        </textarea>
+                        <textarea maxlength="300" class="form-control" OnKeyDown='return onKeyDownBiography();' placeholder="Write something about ya. Keep in mind everything's gonna be sanitized except links to external websites." id="biography" name="biography" style="height: 100%"><?=isset($user) ? trim($user->getBiography()) : ''?></textarea>
                         <label for="biography">Biography</label>
                     </div>
                     <div class="mb-3 p-0 col-9 col-md-3">
                         <label for="photo" class="form-label p-0 m-0">
-                            <? if($user->getPhoto()): ?>
-                                <img src="/<?=$user->getPhoto()?>" class="m-0 p-0 img-thumbnail">
-                            <? else: ?>
-                                <i class="bi bi-person-circle"></i>
-                            <? endif; ?>
+                            <img src="/<?=($user->getPhoto()) ? $user->getPhoto() : "images/default_pp.svg"?>" class="m-0 p-0 img-thumbnail">
                         </label>
                         <input class="d-none" type="file" id="photo" name="photo" accept="image/x-png,image/gif,image/jpeg">
                     </div>

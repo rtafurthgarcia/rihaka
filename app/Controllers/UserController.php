@@ -161,7 +161,7 @@ class UserController extends AbstractController
                         }
 
                         if ($uploadedFile->getSize() > 1000000) {
-                            throw new Exception('Error on upload: Exceeded file size limit.');
+                            throw new ErrorException('Error on upload: Exceeded file size limit.');
                         }
     
                         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
