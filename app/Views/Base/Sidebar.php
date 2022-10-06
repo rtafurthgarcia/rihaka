@@ -20,7 +20,7 @@
             </button>
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/" class="link-dark d-inline-flex text-decoration-none rounded">Profile</a></li>
+                    <li><a href="/user/<?=$_SESSION['username']?>" class="link-dark d-inline-flex text-decoration-none rounded">Profile</a></li>
                     <li><a href="/user/<?=$_SESSION['username']?>/security" class="link-dark d-inline-flex text-decoration-none rounded">Security</a></li>
                     <li><a href="/logout" class="link-dark d-inline-flex text-decoration-none rounded">Logout</a></li>
                 </ul>

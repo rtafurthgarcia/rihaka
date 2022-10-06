@@ -6,7 +6,7 @@ namespace App\Core;
 
 class SessionHelper {
     // My session start function support timestamp management
-    public static function startSession() {
+    public static function startSession(): void {
         session_start();
         // Do not allow to use too old session ID
         if (!empty($_SESSION['deleted_time']) && $_SESSION['deleted_time'] < time() - 180) {
@@ -20,7 +20,7 @@ class SessionHelper {
     }
 
     // My session regenerate id function
-    public static function regenerateSessionId() {
+    public static function regenerateSessionId(): void {
         // Call session_create_id() while session is active to 
         // make sure collision free.
         if (session_status() != PHP_SESSION_ACTIVE) {

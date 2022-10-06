@@ -15,7 +15,7 @@ class User extends AbstractModel {
     
     private $_userName = null;
     private $_biography = null;
-    private $_foto = null;
+    private $_photo = null;
     private $_password = null;
     private $_isModerator = null;
     private $_email = null;
@@ -29,7 +29,7 @@ class User extends AbstractModel {
     public function __construct() {
         parent::__construct();
 
-		$this->_foto = '';
+		$this->_photo = '';
 		$this->_biography = '';
 		$this->_isModerator = false;
 
@@ -55,7 +55,7 @@ class User extends AbstractModel {
 			$this->_primaryKey = (int)$record["id"];
 			$this->_userName = $record["benutzername"];
 			$this->_biography = $record["biografie"];
-			$this->_foto = $record["foto"];
+			$this->_photo = $record["foto"];
 			$this->_password = $record["passwort"];
 			$this->_isModerator = filter_var($record["istmoderator"], FILTER_VALIDATE_BOOLEAN);
 			$this->_email = $record["email"];
@@ -84,7 +84,7 @@ class User extends AbstractModel {
 			$this->_primaryKey = (int)$record["id"];
 			$this->_userName = $record["benutzername"];
 			$this->_biography = $record["biography"];
-			$this->_foto = $record["foto"];
+			$this->_photo = $record["foto"];
 			$this->_password = $record["passwort"];
 			$this->_isModerator = filter_var($record["istModerator"], FILTER_VALIDATE_BOOLEAN);
 			$this->_email = $record["email"];
@@ -164,7 +164,7 @@ class User extends AbstractModel {
             VALUES (
                 :_userName, 
                 :_biography, 
-                :_foto,
+                :_photo,
                 :_password,
                 :_isModerator,
                 :_email,
@@ -181,7 +181,7 @@ class User extends AbstractModel {
 
         $addSupporter->bindValue(":_userName", $this->_userName);
         $addSupporter->bindValue(":_biography", $this->_biography);
-        $addSupporter->bindValue(":_foto", $this->_foto);
+        $addSupporter->bindValue(":_photo", $this->_photo);
 		$addSupporter->bindValue(":_password", $this->_password);
         $addSupporter->bindValue(":_email", $this->_email);
         $addSupporter->bindValue(":_activationLink", $this->_activationLink);
@@ -200,7 +200,7 @@ class User extends AbstractModel {
             "UPDATE benutzer SET
                 benutzername = :_userName, 
                 biografie = :_biography, 
-                foto = :_foto, 
+                foto = :_photo, 
                 passwort = :_password, 
                 istModerator = :_isModerator, 
                 email = :_email, 
@@ -216,7 +216,7 @@ class User extends AbstractModel {
 
         $addSupporter->bindValue(":_userName", $this->_userName);
         $addSupporter->bindValue(":_biography", $this->_biography);
-        $addSupporter->bindValue(":_foto", $this->_foto);
+        $addSupporter->bindValue(":_photo", $this->_photo);
 		$addSupporter->bindValue(":_password", $this->_password);
 		$addSupporter->bindValue(":_isModerator", $isModerator);
         $addSupporter->bindValue(":_email", $this->_email);
@@ -260,7 +260,7 @@ class User extends AbstractModel {
 	/**
 	 * @return mixed
 	 */
-	function getLastName() {
+	function getBiography() {
 		return $this->_biography;
 	}
 	
@@ -268,23 +268,23 @@ class User extends AbstractModel {
 	 * @param mixed $_biography 
 	 * @return User
 	 */
-	function setLastName($biography): self {
-		$this->_biography = $biography;
+	function setBiography($biography): self {
+		$this->_biography = trim($biography);
 		return $this;
 	}
 	/**
 	 * @return mixed
 	 */
-	function getFoto() {
-		return $this->_foto;
+	function getPhoto() {
+		return $this->_photo;
 	}
 	
 	/**
-	 * @param mixed $_foto 
+	 * @param mixed $_photo 
 	 * @return User
 	 */
-	function setFoto($foto): self {
-		$this->_foto = $foto;
+	function setPhoto($photo): self {
+		$this->_photo = $photo;
 		return $this;
 	}
 	/**
@@ -422,7 +422,7 @@ class User extends AbstractModel {
 		return $this;
 	}
 
-	function verifyEmail() {
+	function verifyEmail(): Bool {
 		$addSupporter = $this->_connection->prepare(
             "SELECT id FROM benutzer WHERE email = :_email"
         );
@@ -438,7 +438,7 @@ class User extends AbstractModel {
 		return true;
 	}
 
-	function verifyUsername() {
+	function verifyUsername(): Bool {
 		$addSupporter = $this->_connection->prepare(
             "SELECT id FROM benutzer WHERE benutzername = :_userName"
         );
@@ -452,9 +452,5 @@ class User extends AbstractModel {
 		}
 
 		return true;
-	}
-
-	function verifyPassword() {
-
 	}
 }

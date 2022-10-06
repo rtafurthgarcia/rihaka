@@ -2,23 +2,36 @@
     <div class="row align-items-start">
         <?=$this->fetch('./Base/Sidebar.php', [])?>
         <div class="signup-form col-12 col-xl-10 col-lg-9 col-md-8 px-4 pe-md-0 py-4 py-md-0">
-            <? if((isset($successful) && $successful)): ?>
-                <div class="alert alert-success" role="alert">
-                    User information updated successfully!
-                </div>
+            <? if((isset($successful))): ?>
+                <? if($successful): ?>
+                    <div class="alert alert-success" role="alert">
+                        User information updated successfully!
+                    </div>
+                <? else: ?>
+                    <div class="alert alert-success" role="alert">
+                        <?=(isset($errors["upload"])) ? $errors["upload"] : "Uh. Something unexpected happened?" ?>
+                    </div>
+                <? endif; ?>
             <? endif; ?>
             <h2>Account informations</h2>
-            <form id="account-form" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
+            <form id="account-form" onsubmit="onFormSubmitted(event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
+                <input type="hidden" name="max_file_size" value="2097152">
                 <div class="row justify-content-center">
                     <div class="form-floating mb-3 col-12 col-md-9 p-0 pe-md-3 p-md">
-                        <textarea class="form-control" placeholder="Write something about ya. Keep in mind everything's gonna be sanitized except links to external websites." id="biography" style="height: 100%"></textarea>
+                        <textarea class="form-control" placeholder="Write something about ya. Keep in mind everything's gonna be sanitized except links to external websites." id="biography" name="biography" style="height: 100%">
+                        <?=isset($user) ? $user->getBiography() : ''?>
+                        </textarea>
                         <label for="biography">Biography</label>
                     </div>
                     <div class="mb-3 p-0 col-9 col-md-3">
-                        <label for="pp-file" class="form-label p-0 m-0">
-                            <img src="/images/pp.jpg" class="m-0 p-0 img-thumbnail">
+                        <label for="photo" class="form-label p-0 m-0">
+                            <? if($user->getPhoto()): ?>
+                                <img src="/<?=$user->getPhoto()?>" class="m-0 p-0 img-thumbnail">
+                            <? else: ?>
+                                <i class="bi bi-person-circle"></i>
+                            <? endif; ?>
                         </label>
-                        <input class="d-none" type="file" id="pp-file">
+                        <input class="d-none" type="file" id="photo" name="photo" accept="image/x-png,image/gif,image/jpeg">
                     </div>
                 </div>
                 <div class="row">

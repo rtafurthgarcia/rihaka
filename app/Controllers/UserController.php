@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use App\Models\User;
 
 use App\Core\NetworkHelper;
+use Ramsey\Uuid\Uuid;
 
 class UserController extends AbstractController
 {
@@ -111,7 +112,7 @@ class UserController extends AbstractController
                 $user->getById($_SESSION['id']);
                 
                 return $this->_renderer->render($response, "UserAccount.php", [
-                    "pageTitle" => "RIHAKA - log-in",
+                    "pageTitle" => "RIHAKA - profile",
                     "hideSignup" => true,
                     "user" => $user
                 ]);
@@ -119,14 +120,80 @@ class UserController extends AbstractController
                 return $response->withStatus(403);
             }
         } else {
-            $user->getByUsername($args['username']);
+            try {
+                $user->getByUsername($args['username']);
 
-            return $this->_renderer->render($response, "UserAccount.php", [
-                "pageTitle" => "RIHAKA - log-in",
-                "user" => $user
-            ]);
+                return $this->_renderer->render($response, "UserAccount.php", [
+                    "pageTitle" => "RIHAKA - profile",
+                    "user" => $user
+                ]);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+
         }
     } 
+
+    public function userAccountFormUpload(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        if ($_SESSION["authenticated"]) {
+            if ($_SESSION['username'] === $args['username']) {
+                $formData = $request->getParsedBody();
+                $errors = array();
+                $isSuccessful = true;
+                $directory = $_ENV['IMAGE_UPLOAD_DIRECTORY'];
+
+                $user = new User();
+                $user->getById($_SESSION['id']);
+                $user->setBiography($formData['biography']);
+
+                try {
+                    $uploadedFiles = $request->getUploadedFiles();
+                    $uploadedFile = null;
+
+                    if (array_key_exists('photo', $uploadedFiles)) {
+                        $uploadedFile = $uploadedFiles['photo'];
+                    }
+
+                    if (isset($uploadedFile) && $uploadedFile->getError() ==! UPLOAD_ERR_NO_FILE) {
+
+                        if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
+                            throw new ErrorException('Error on upload: upload failed, sorry');
+                        }
+
+                        if ($uploadedFile->getSize() > 1000000) {
+                            throw new Exception('Error on upload: Exceeded file size limit.');
+                        }
+    
+                        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+                        $uploadedFileName = $directory . Uuid::uuid4()->toString() . '.' . $extension;
+    
+                        $uploadedFile->moveTo($uploadedFileName);
+    
+                        $user->setPhoto($uploadedFileName);
+                    }
+                
+                    $user->save();
+                } catch (Exception $error) {
+                    $errors["upload"] = $error->getMessage();
+                    $isSuccessful = false;
+                }
+
+                return $this->_renderer->render($response, "UserAccount.php", [
+                    "pageTitle" => "RIHAKA - profile",
+                    "hideSignup" => true,
+                    "user" => $user,
+                    "successful" => $isSuccessful,
+                    "errors" => $errors
+                ]);
+
+            } else {
+                return $response->withStatus(403);
+            }
+        } else {
+            return $response->withHeader('Location', '/login')->withStatus(303);    
+        }
+    }
+
 
     public function userAccountSecurity(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         $user = new User();
@@ -136,7 +203,7 @@ class UserController extends AbstractController
                 $user->getById($_SESSION['id']);
     
                 return $this->_renderer->render($response, "PasswordChange.php", [
-                    "pageTitle" => "RIHAKA - log-in",
+                    "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
                     "user" => $user
                 ]);
@@ -178,7 +245,7 @@ class UserController extends AbstractController
                 }
     
                 return $this->_renderer->render($response, "PasswordChange.php", [
-                    "pageTitle" => "RIHAKA - log-in",
+                    "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
                     "user" => $user,
                     "errors" => $errors,

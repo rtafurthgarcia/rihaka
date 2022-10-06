@@ -18,6 +18,7 @@ class Router {
         $app->get('/logout', UserController::class . ':logout');
         $app->group('/user/{username}', function (RouteCollectorProxy $group) {
             $group->get('', UserController::class . ':userAccount');
+            $group->post('', UserController::class . ':userAccountFormUpload');
             $group->get('/security', UserController::class . ':userAccountSecurity');
             $group->post('/security', UserController::class . ':userAccountSecurityFormUpload');
         });

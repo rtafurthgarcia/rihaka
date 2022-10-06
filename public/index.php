@@ -13,8 +13,6 @@ SessionHelper::startSession();
 
 $app = AppFactory::create();
 
-(Dotenv\Dotenv::createImmutable(__DIR__ . '/../config/', ['Database.env', 'App.env']))->load();
-
 // Parse json, form data and xml
 $app->addBodyParsingMiddleware();
 

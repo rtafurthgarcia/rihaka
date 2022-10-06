@@ -3,7 +3,7 @@
 namespace App\Core;
 
 class NetworkHelper {
-    static public function getIPAddress() {  
+    static public function getIPAddress(): string {  
         if(!empty($_SERVER['HTTP_CLIENT_IP'])) {  
             $ip = $_SERVER['HTTP_CLIENT_IP'];  
         }  
