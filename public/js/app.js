@@ -37,3 +37,17 @@ function onKeyDownBiography() {
         labelElement.classList.add('is-invalid')
     }
 }
+
+function onPictureChanged() {
+    const photoInputElement = document.getElementById("photo")
+    const imgPhotoElement = document.getElementById("img-photo")
+    
+    const files = photoInputElement.files[0]
+    if (files) {
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(files)
+        fileReader.addEventListener("load", function () {
+            imgPhotoElement.src = this.result
+        })
+    }
+}

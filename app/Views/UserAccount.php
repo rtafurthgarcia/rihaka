@@ -23,9 +23,9 @@
                     </div>
                     <div class="mb-3 p-0 col-9 col-md-3">
                         <label for="photo" class="form-label p-0 m-0">
-                            <img src="/<?=($user->getPhoto()) ? $user->getPhoto() : "images/default_pp.svg"?>" class="m-0 p-0 img-thumbnail">
+                            <img id="img-photo" src="/<?=($user->getPhoto()) ? $user->getPhoto() : "images/default_pp.svg"?>" class="m-0 p-0 img-thumbnail">
                         </label>
-                        <input class="d-none" type="file" id="photo" name="photo" accept="image/x-png,image/gif,image/jpeg">
+                        <input class="d-none" type="file" id="photo" name="photo" accept="image/x-png,image/gif,image/jpeg" onchange="onPictureChanged()">
                     </div>
                 </div>
                 <div class="row">
