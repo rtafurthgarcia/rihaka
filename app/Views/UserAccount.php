@@ -8,9 +8,11 @@
                         User information updated successfully!
                     </div>
                 <? else: ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?=(isset($errors["upload"])) ? $errors["upload"] : "Uh. Something unexpected happened?" ?>
-                    </div>
+                    <? if((array_key_exists("upload", $errors))): ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?=$errors["upload"]?>
+                        </div>
+                    <? endif; ?>
                 <? endif; ?>
             <? endif; ?>
             <h2>Account informations</h2>

@@ -215,6 +215,51 @@ class UserController extends AbstractController
         }
     } 
 
+    public function deleteUserAccount(ServerRequestInterface $request, ResponseInterface $response, array $args) {
+        $user = new User();
+
+        if ($_SESSION["authenticated"]) {
+            if ($_SESSION['username'] === $args['username']) {
+                $formData = $request->getParsedBody();
+                $errors = array();
+                $isSuccessful = true;
+
+                $user->getById($_SESSION['id']);
+
+                try {
+                    if (!password_verify($formData['current-password'], $user->getPassword())) {
+                        throw new ErrorException("Wrong password.", 1);
+                    }
+
+                    $user->delete();
+
+                } catch (Exception $error) {
+                    $errors["deletionCurrentPassword"] = $error->getMessage();
+                    $response->withStatus(301);
+                    $isSuccessful = false;
+                }
+
+                if (count($errors) > 0) {
+                    return $this->_renderer->render($response, "AccountSecurity.php", [
+                        "pageTitle" => "RIHAKA - security",
+                        "hideSignup" => true,
+                        "user" => $user,
+                        "errors" => $errors,
+                        "successful" => $isSuccessful
+                    ]);
+                } else {
+                    return $this->_renderer->render($response, "Goodbye.php", [
+                        "pageTitle" => "RIHAKA - see ya!"
+                    ]);
+                }
+            } else {
+                return $response->withStatus(403);
+            }
+        } else {
+            return $response->withHeader('Location', '/login')->withStatus(303);    
+        }
+    }
+
     public function changeUserPassword(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         
         if ($_SESSION["authenticated"]) {
@@ -224,7 +269,7 @@ class UserController extends AbstractController
 
                 $formData = $request->getParsedBody();
                 $errors = array();
-                $successful = true;
+                $isSuccessful = true;
         
                 try {
                     if (!password_verify($formData['current-password'], $user->getPassword())) {
@@ -233,7 +278,7 @@ class UserController extends AbstractController
                 } catch (Exception $error) {
                     $errors["currentPassword"] = $error->getMessage();
                     $response->withStatus(301);
-                    $successful = false;
+                    $isSuccessful = false;
                 }
 
                 try {
@@ -241,7 +286,7 @@ class UserController extends AbstractController
                 } catch (Exception $error) {
                     $errors["newPassword"] = $error->getMessage();
                     $response->withStatus(301);
-                    $successful = false;
+                    $isSuccessful = false;
                 }
     
                 return $this->_renderer->render($response, "AccountSecurity.php", [
@@ -249,7 +294,7 @@ class UserController extends AbstractController
                     "hideSignup" => true,
                     "user" => $user,
                     "errors" => $errors,
-                    "successful" => $successful
+                    "successful" => $isSuccessful
                 ]);
             } else {
                 return $response->withStatus(403);

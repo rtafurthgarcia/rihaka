@@ -19,7 +19,7 @@ class Router {
         $app->group('/user/{username}', function (RouteCollectorProxy $group) {
             $group->get('', UserController::class . ':getUserAccount');
             $group->post('', UserController::class . ':updateUserProfile');
-            $group->delete('', UserController::class . ':deleteUserAccount');
+            $group->post('/delete', UserController::class . ':deleteUserAccount');
             $group->get('/security', UserController::class . ':getUserAccountSecurity');
             $group->post('/security', UserController::class . ':changeUserPassword');
         });

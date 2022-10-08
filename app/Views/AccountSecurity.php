@@ -7,8 +7,13 @@
                     Password changed successfully!
                 </div>
             <? else: ?>
-                <h2 class="fs-3 fw-semibold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 ps-0 collapsed" data-bs-toggle="collapse" data-bs-target="#password-change-collapse" aria-expanded="false">Change your password</h2>
-                <section id="password-change-collapse" class="collapse collapsed">
+                <? if(isset($errors["currentPassword"]) || isset($errors["newPassword"])): ?>
+                    <h2 class="fs-3 fw-semibold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 ps-0" data-bs-toggle="collapse" data-bs-target="#password-change-collapse" aria-expanded="true">Change your password</h2>
+                    <section id="password-change-collapse" class="collapse show">
+                <? else: ?>
+                    <h2 class="fs-3 fw-semibold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 ps-0 collapsed" data-bs-toggle="collapse" data-bs-target="#password-change-collapse" aria-expanded="false">Change your password</h2>
+                    <section id="password-change-collapse" class="collapse collapsed">
+                <? endif; ?>
                     <p>Please enter your old password, followed by your new password and a confirmation. </p>
                     <form id="password-form" onsubmit="onFormSubmitted(this, event)" method="post" class="needs-validation" autocomplete="on" novalidate>
                         <div class="form-floating mb-3">
@@ -40,18 +45,23 @@
                     </form>
                 </section>
             <? endif; ?>
-            <h2 class="text-nowrap fs-3 fw-semibold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 ps-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-deletion-collapse" aria-expanded="false">Request your account deletion</h2>
-            <section id="account-deletion-collapse" class="collapse collapsed">
+            <? if(isset($errors["deletionCurrentPassword"])): ?>
+                <h2 class="text-nowrap fs-3 fw-semibold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 ps-0" data-bs-toggle="collapse" data-bs-target="#account-deletion-collapse" aria-expanded="true">Request your account deletion</h2>
+                <section id="account-deletion-collapse" class="collapse show">
+            <? else: ?>
+                <h2 class="text-nowrap fs-3 fw-semibold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 ps-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-deletion-collapse" aria-expanded="false">Request your account deletion</h2>
+                <section id="account-deletion-collapse" class="collapse collapsed">
+            <? endif; ?>
                 <p>Please enter your current password and confirm before we can delete anything.</p>
                 <div class="alert alert-warning" role="alert">
                     Please understand deletion is <u>not</u> reversible !
                 </div>
-                <form id="account-deletion-form" onsubmit="onFormSubmitted(this, event)" action="/user/<?=$_SESSION['username']?>" method="delete" class="needs-validation" autocomplete="off" novalidate>
+                <form id="account-deletion-form" onsubmit="onFormSubmitted(this, event)" action="/user/<?=$_SESSION['username']?>/delete" method="post" class="needs-validation" autocomplete="off" novalidate>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control <?=(isset($errors["currentPassword"])) ? "is-invalid" : "" ?>" name="current-password" id="current-password" minlength="10" placeholder="Password" required>
+                        <input type="password" class="form-control <?=(isset($errors["deletionCurrentPassword"])) ? "is-invalid" : "" ?>" name="current-password" id="current-password" minlength="10" placeholder="Password" required>
                         <label for="current-password">Current password</label>
                         <div class="invalid-feedback">
-                            <?=(isset($errors["currentPassword"])) ? $errors["currentPassword"] : "No proper password, no deletion." ?>
+                            <?=(isset($errors["deletionCurrentPassword"])) ? $errors["deletionCurrentPassword"] : "No proper password, no deletion." ?>
                         </div>
                     </div>
                     <div class="row">
