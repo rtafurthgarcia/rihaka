@@ -14,9 +14,7 @@ function onPasswordChange() {
     })
 }
 
-function onFormSubmitted(event) {
-    const form = document.querySelector('form.needs-validation')
-
+function onFormSubmitted(form, event) {
     if (!form.checkValidity()) {
         console.log(event)
         event.preventDefault()
@@ -26,8 +24,8 @@ function onFormSubmitted(event) {
 }
 
 function onKeyDownBiography() {
-    let biographyElement = document.querySelector("#biography")
-    let labelElement = document.querySelector("#biography + label")
+    const biographyElement = document.querySelector("#biography")
+    const labelElement = document.querySelector("#biography + label")
 
     labelElement.textContent = `Biography (${biographyElement.textLength}/${MAX_LENGTH_BIOGRAPHY})`
 
