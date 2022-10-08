@@ -22,7 +22,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function registration(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function getRegistrationForm(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {        
         return $this->_renderer->render($response, "Registration.php", [
             "pageTitle" => "RIHAKA - registration",
@@ -30,7 +30,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function registrationFormUpload(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function registerAccount(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {   
         $newUser = New User();
         $formData = $request->getParsedBody();
@@ -73,14 +73,14 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+    public function getLoginForm(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         return $this->_renderer->render($response, "Login.php", [
             "pageTitle" => "RIHAKA - log-in",
             "hide_login" => true
         ]);
     }
 
-    public function loginFormUpload(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+    public function loginThroughForm(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $newUser = New User();
         $formData = $request->getParsedBody();
         $errors = array();
@@ -104,7 +104,7 @@ class UserController extends AbstractController
         }
     }
 
-    public function userAccount(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    public function getUserAccount(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         $user = new User();
         
         if ($_SESSION["authenticated"]) {
@@ -134,7 +134,7 @@ class UserController extends AbstractController
         }
     } 
 
-    public function userAccountFormUpload(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    public function updateUserProfile(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         if ($_SESSION["authenticated"]) {
             if ($_SESSION['username'] === $args['username']) {
                 $formData = $request->getParsedBody();
@@ -195,7 +195,7 @@ class UserController extends AbstractController
     }
 
 
-    public function userAccountSecurity(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    public function getUserAccountSecurity(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         $user = new User();
 
         if ($_SESSION["authenticated"]) {
@@ -215,7 +215,7 @@ class UserController extends AbstractController
         }
     } 
 
-    public function userAccountSecurityFormUpload(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    public function changeUserPassword(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         
         if ($_SESSION["authenticated"]) {
             if ($_SESSION['username'] === $args['username']) {

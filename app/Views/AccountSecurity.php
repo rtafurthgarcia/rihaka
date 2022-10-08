@@ -46,7 +46,7 @@
                 <div class="alert alert-warning" role="alert">
                     Please understand deletion is <u>not</u> reversible !
                 </div>
-                <form id="account-deletion-form" onsubmit="onFormSubmitted(this, event)" action="/user/<?=$_SESSION['username']?>/delete" method="post" class="needs-validation" autocomplete="off" novalidate>
+                <form id="account-deletion-form" onsubmit="onFormSubmitted(this, event)" action="/user/<?=$_SESSION['username']?>" method="delete" class="needs-validation" autocomplete="off" novalidate>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control <?=(isset($errors["currentPassword"])) ? "is-invalid" : "" ?>" name="current-password" id="current-password" minlength="10" placeholder="Password" required>
                         <label for="current-password">Current password</label>
