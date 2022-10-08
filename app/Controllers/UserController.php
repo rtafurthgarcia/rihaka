@@ -202,7 +202,7 @@ class UserController extends AbstractController
             if ($_SESSION['username'] === $args['username']) {
                 $user->getById($_SESSION['id']);
     
-                return $this->_renderer->render($response, "PasswordChange.php", [
+                return $this->_renderer->render($response, "AccountSecurity.php", [
                     "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
                     "user" => $user
@@ -244,7 +244,7 @@ class UserController extends AbstractController
                     $successful = false;
                 }
     
-                return $this->_renderer->render($response, "PasswordChange.php", [
+                return $this->_renderer->render($response, "AccountSecurity.php", [
                     "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
                     "user" => $user,
