@@ -26,7 +26,7 @@
             <? endif; ?>
                 <h2>Sign-up</h2>
                 <p>By having a RIHAKA account, you can vote, comment and post all your sweet sweet honeypot sessions logs. Sign up in just seconds.</p>
-                <form id="registration-form" action="/register#" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation" autocomplete="on" novalidate>
+                <form id="registration-form" action="/register#" onsubmit="onFormSubmitted(this, event)" method="post" class="needs-validation" autocomplete="on" novalidate>
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control <?=(isset($errors["email"])) ? "is-invalid" : "" ?>" name="email" id="floating-email" minlength="3" maxlength="254" placeholder="johndoe@hftm.ch" value="<?=isset($user) ? $user->getemail() : ''?>" autocomplete="email" required>
                         <label for="floating-email">Email address</label>

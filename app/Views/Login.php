@@ -3,7 +3,7 @@
         <div class="signup-form col-12 col-md-5 me-md-5">
             <h2>Log-in</h2>
             <p>By login-in your RIHAKA account, you can vote, comment and post all your sweet sweet honeypot sessions logs. </p>
-            <form id="login-form" action="/login#" onsubmit="onFormSubmitted(event)" method="post" class="needs-validation" autocomplete="on" novalidate>
+            <form id="login-form" action="/login#" onsubmit="onFormSubmitted(this, event)" method="post" class="needs-validation" autocomplete="on" novalidate>
                 <div class="input-group mb-3">
                     <span class="input-group-text">@</span>
                     <div class="form-floating">

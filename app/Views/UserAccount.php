@@ -14,7 +14,7 @@
                 <? endif; ?>
             <? endif; ?>
             <h2>Account informations</h2>
-            <form id="account-form" onsubmit="onFormSubmitted(event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
+            <form id="account-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                 <input type="hidden" name="max_file_size" value="2097152">
                 <div class="row justify-content-center">
                     <div class="form-floating mb-3 col-12 col-md-9 p-0 pe-md-3 p-md">
