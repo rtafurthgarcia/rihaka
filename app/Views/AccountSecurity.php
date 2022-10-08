@@ -4,6 +4,7 @@
         <div class="signup-form col-12 col-md-8 col-lg-5 px-4 py-4 py-md-0">
             <? if((isset($successful) && $successful)): ?>
                 <div class="alert alert-success" role="alert">
+                    <i class="bi bi-check-circle-fill"></i>
                     Password changed successfully!
                 </div>
             <? else: ?>
@@ -54,6 +55,7 @@
             <? endif; ?>
                 <p>Please enter your current password and confirm before we can delete anything.</p>
                 <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i>
                     Please understand deletion is <u>not</u> reversible !
                 </div>
                 <form id="account-deletion-form" onsubmit="onFormSubmitted(this, event)" action="/user/<?=$_SESSION['username']?>/delete" method="post" class="needs-validation" autocomplete="off" novalidate>

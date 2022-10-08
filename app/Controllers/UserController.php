@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Core\AbstractController;
+use App\Core\SessionHelper;
+use DateTime;
 use ErrorException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -12,6 +14,8 @@ use App\Models\User;
 
 use App\Core\NetworkHelper;
 use Ramsey\Uuid\Uuid;
+use SessionHandler;
+use SessionHandlerInterface;
 
 class UserController extends AbstractController
 {
@@ -76,7 +80,7 @@ class UserController extends AbstractController
     public function getLoginForm(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         return $this->_renderer->render($response, "Login.php", [
             "pageTitle" => "RIHAKA - log-in",
-            "hide_login" => true
+            "hideLogin" => true
         ]);
     }
 
@@ -87,6 +91,12 @@ class UserController extends AbstractController
 
         try {
             $newUser->login($formData['email'], $formData['password']);
+
+            // if account is brand new, display some help that the user can disable.
+            if ((new DateTime()) < $newUser->getCreationDate()->modify('+1 day')) {
+                setcookie("showHelpAccount", true, time()+3600*24);
+                setcookie("showHelpUpload", true, time()+3600*24);
+            }
         } catch (Exception $error) {
             $errors["password"] = $error->getMessage();
             $response->withStatus(301);
@@ -95,7 +105,7 @@ class UserController extends AbstractController
         if (count($errors) > 0) {
             return $this->_renderer->render($response, "Login.php", [
                 "pageTitle" => "RIHAKA - log-in",
-                "hide_login" => true,
+                "hideLogin" => true,
                 "errors" => $errors
             ])->withStatus(403);
         } else {
@@ -110,7 +120,7 @@ class UserController extends AbstractController
         if ($_SESSION["authenticated"]) {
             if ($_SESSION['username'] === $args['username']) {
                 $user->getById($_SESSION['id']);
-                
+
                 return $this->_renderer->render($response, "UserAccount.php", [
                     "pageTitle" => "RIHAKA - profile",
                     "hideSignup" => true,
@@ -232,6 +242,7 @@ class UserController extends AbstractController
                     }
 
                     $user->delete();
+                    SessionHelper::endSession();
 
                 } catch (Exception $error) {
                     $errors["deletionCurrentPassword"] = $error->getMessage();
@@ -305,8 +316,7 @@ class UserController extends AbstractController
     } 
 
     public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        session_unset();
-        session_destroy();
+        SessionHelper::endSession();
 
         return $response->withHeader('Location', '/')->withStatus(303); // 303 -> see other -> perfect after post or operation
     }

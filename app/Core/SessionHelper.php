@@ -38,5 +38,10 @@ class SessionHelper {
         // Start with custom session ID
         session_start();
     }
+
+    public static function endSession(): void {
+        session_unset();
+        session_destroy();
+    }
 }
 ?>

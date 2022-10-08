@@ -16,7 +16,7 @@
 
 <body class="d-flex flex-column min-vh-100">
     <?=$this->fetch('./Base/Header.php', [
-        "hide_login" => (isset($hide_login)) ? true : false,
+        "hideLogin" => (isset($hideLogin)) ? true : false,
         "hideSignup" => (isset($hideSignup)) ? true : false,
     ])?>
     <main>

@@ -49,3 +49,13 @@ function onPictureChanged() {
         })
     }
 }
+
+function setCookie(cookieName, cookieValue, daysToExpire) {
+    const date = new Date()
+    date.setTime(date.getTime() + (daysToExpire*24*60*60*1000))
+    document.cookie = `${cookieName}=${cookieValue}; expires=${date.toGMTString()}; samesite=strict; path=/`
+}
+
+function onHideHelp(button) {
+    setCookie(button.id, 0, 1)
+}

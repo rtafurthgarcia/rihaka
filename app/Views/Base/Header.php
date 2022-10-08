@@ -14,7 +14,7 @@
                     <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md <?=($activePage === 5) ? "active-page": "" ?>">Community</a></li>
                 </ul>
                 <div class="ms-auto text-end col-8 col-md-6 gap-2 row justify-content-end">
-                    <? if (!$hide_login): ?>
+                    <? if (!$hideLogin): ?>
                         <? if ($_SESSION['authenticated']): ?>
                             <a href="/logout" class="btn btn-outline-light col-12 col-md-4 col-lg-3" role="button">Logout</a>
                         <?else: ?>

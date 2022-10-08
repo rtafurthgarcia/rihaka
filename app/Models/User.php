@@ -36,8 +36,8 @@ class User extends AbstractModel {
 		// Account enabled by default when on dev mode
 		$this->_isActivated = true; //filter_var($_ENV["DEBUG_MODE"], FILTER_VALIDATE_BOOLEAN);
 
-        $this->_creationDate = (New DateTime())->setTimestamp(time());
-        $this->_lastConnectionDate = (New DateTime())->setTimestamp(time());
+        $this->_creationDate = New DateTime();
+        $this->_lastConnectionDate = New DateTime();
 	}
 
 	public function getById($primaryKey) {
@@ -307,7 +307,11 @@ class User extends AbstractModel {
 			throw new LengthException("Password doesnt meet length requirements.", 2);
 		}
 			
-		$this->_password = password_hash($password, PASSWORD_DEFAULT);
+		if ($this->_password === password_hash($password, PASSWORD_DEFAULT)) {
+			throw new ErrorException("New password cannot be the same as your old one.", 1);
+		} else {
+			$this->_password = password_hash($password, PASSWORD_DEFAULT);
+		}
 		
 		return $this;
 	}
