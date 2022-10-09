@@ -25,7 +25,12 @@
                         <button type="button" id="showHelpAccount" onclick="onHideHelp(this)" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <? endif; ?>
-                <h2>Account informations</h2>
+                <div class="d-flex flex-row justify-content-between"> 
+                    <h2>Account informations</h2>
+                    <? if ($_SESSION['username'] === $user->getUserName()): ?>
+                        <a href="/session/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload me-2"></i>Upload recording</a>
+                    <? endif; ?>
+                </div>
                 <form id="account-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                     <input type="hidden" name="max_file_size" value="2097152">
                     <div class="row justify-content-center">

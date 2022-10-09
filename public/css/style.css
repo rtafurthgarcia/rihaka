@@ -25,7 +25,7 @@
     line-height: 0.8;
 }
 
-.btn-toggle-nav a{
+.btn-toggle-nav a {
 	padding: .1875rem .5rem;
 	margin-top: .125rem;
 	margin-left: 2em;
@@ -33,7 +33,7 @@
     background-size: 4px 0px;
 }
 
-.btn-toggle-nav a:hover, .active-menu {
+.btn-toggle-nav a:hover:not(.btn), .active-menu {
     background:
     linear-gradient(
         to bottom,

@@ -6,6 +6,7 @@ use Slim\App;
 
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
+use App\Controllers\VideoController;
 use Slim\Routing\RouteCollectorProxy;
 
 class Router {
@@ -23,5 +24,6 @@ class Router {
             $group->get('/security', UserController::class . ':getUserAccountSecurity');
             $group->post('/security', UserController::class . ':changeUserPassword');
         });
+        $app->get('/session/new', VideoController::class . ':getNewContentPage'); 
     } 
 }

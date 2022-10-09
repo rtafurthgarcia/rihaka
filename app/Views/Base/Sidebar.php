@@ -2,18 +2,19 @@
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
             <? if(isset($activeMenu) && $activeMenu > 0 && $activeMenu <= 3 ): ?>
-                <button class="fw-bold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#contributions-collapse" aria-expanded="true">
-                    Contributions
-                </button>
+                <button class="fw-bold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#contributions-collapse" aria-expanded="true">Contributions</button>
                 <div class="collapse show" id="contributions-collapse">
             <? else: ?>
-                <button class="fw-bold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#contributions-collapse" aria-expanded="false">
-                    Contributions
-                </button>
+                <button class="fw-bold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#contributions-collapse" aria-expanded="false">Contributions</button>
                 <div class="collapse collapsed" id="contributions-collapse">
             <? endif; ?>
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 1) ? "active-menu": "" ?>">SSH-Sessions</a></li>
+                    <li class="d-flex flex-row">
+                        <a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 1) ? "active-menu": "" ?>">Recordings</a>
+                        <? if($_SESSION['authenticated']): ?>
+                            <a href="/session/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload"></i></a>
+                        <? endif; ?>
+                    </li>
                     <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 2) ? "active-menu": "" ?>">Comments</a></li>
                     <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 3) ? "active-menu": "" ?>">Likes</a></li>
                 </ul>
