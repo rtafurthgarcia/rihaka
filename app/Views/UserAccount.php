@@ -28,7 +28,7 @@
                 <div class="d-flex flex-row justify-content-between"> 
                     <h2>Account informations</h2>
                     <? if ($_SESSION['username'] === $user->getUserName()): ?>
-                        <a href="/session/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload me-2"></i>Upload recording</a>
+                        <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload me-2"></i>Upload recording</a>
                     <? endif; ?>
                 </div>
                 <form id="account-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
@@ -63,8 +63,8 @@
                     </div>
                     <div class="row justify-content-between">
                         <div class="col-12 px-0">
-                            <button id="submit-button" type="submit" class="btn btn-secondary mb-3">Save</button>
-                            <a href="/user/<?=$_SESSION['username']?>" class="btn btn-warning float-end" role="button">Cancel</a>
+                            <a href="/user/<?=$_SESSION['username']?>" class="btn btn-secondary float-end" role="button">Cancel</a>
+                            <button id="submit-button" type="submit" class="btn btn-warning mb-3">Save</button>
                         </div>
                     </div>
                 </form>

@@ -27,7 +27,7 @@ class User extends AbstractModel {
     /**
 	 */
     public function __construct() {
-        parent::__construct();
+        parent::__construct("benutzer");
 
 		$this->_photo = '';
 		$this->_biography = '';
@@ -42,7 +42,7 @@ class User extends AbstractModel {
 
 	public function getById($primaryKey) {
 		$addSupporter = $this->_connection->prepare(
-			"SELECT * FROM benutzer WHERE id = :_primaryKey"
+			"SELECT * FROM {$this->_tableName} WHERE id = :_primaryKey"
         );
 		
         $addSupporter->bindValue(":_primaryKey", $primaryKey);
@@ -71,7 +71,7 @@ class User extends AbstractModel {
 
 	public function getByUsername($username) {
 		$addSupporter = $this->_connection->prepare(
-			"SELECT * FROM benutzer WHERE benutzername = :_userName"
+			"SELECT * FROM {$this->_tableName} WHERE benutzername = :_userName"
         );
 		
         $addSupporter->bindValue(":_userName", $username);
@@ -100,7 +100,7 @@ class User extends AbstractModel {
 
 	public function login($identifier, $password) {
 		$addSupporter = $this->_connection->prepare(
-			"SELECT id, passwort FROM benutzer WHERE (benutzername = :_userName OR email = :_email) AND istaktiviert = true"
+			"SELECT id, passwort FROM {$this->_tableName} WHERE (benutzername = :_userName OR email = :_email) AND istaktiviert = true"
         );
 		
         $addSupporter->bindValue(":_userName", $identifier);
@@ -130,25 +130,12 @@ class User extends AbstractModel {
 			throw new ErrorException("No account found with such username or e-mail address.", 1);
 		}
 	}
-    
 
-    /**
-     *
-     * @return mixed
-     */
-    public function save() {
-        if ($this->_primaryKey) {
-            $this->_update();
-        } else {
-            $this->_insert();
-        }
-    }
-
-    private function _insert() {
+    protected function _insert() {
 		$this->_activationLink = Uuid::uuid4()->toString();
 
         $addSupporter = $this->_connection->prepare(
-            "INSERT INTO benutzer (
+            "INSERT INTO {$this->_tableName} (
                 benutzername, 
                 biografie, 
                 foto, 
@@ -195,9 +182,9 @@ class User extends AbstractModel {
         }
     }
 
-    private function _update() {
+    protected function _update() {
         $addSupporter = $this->_connection->prepare(
-            "UPDATE benutzer SET
+            "UPDATE {$this->_tableName} SET
                 benutzername = :_userName, 
                 biografie = :_biography, 
                 foto = :_photo, 
@@ -229,19 +216,6 @@ class User extends AbstractModel {
         $addSupporter->execute();
     }
     
-    /**
-     *
-     * @return mixed
-     */
-    public function delete() {
-        $addSupporter = $this->_connection->prepare(
-            "DELETE FROM benutzer WHERE id = :_primaryKey"
-        );
-
-        $addSupporter->bindValue(":_primaryKey", (int) $this->_primaryKey);
-
-        $addSupporter->execute();    
-    }
 	/**
 	 * @return mixed
 	 */
@@ -427,8 +401,8 @@ class User extends AbstractModel {
 	}
 
 	function verifyEmail(): Bool {
-		$addSupporter = $this->_connection->prepare(
-            "SELECT id FROM benutzer WHERE email = :_email"
+		$addSupporter = $this->_connection->prepare (
+            "SELECT id FROM {$this->_tableName} WHERE email = :_email"
         );
 
         $addSupporter->bindValue(":_email", $this->_email);
@@ -444,7 +418,7 @@ class User extends AbstractModel {
 
 	function verifyUsername(): Bool {
 		$addSupporter = $this->_connection->prepare(
-            "SELECT id FROM benutzer WHERE benutzername = :_userName"
+            "SELECT id FROM {$this->_tableName} WHERE benutzername = :_userName"
         );
 
         $addSupporter->bindValue(":_userName", $this->_userName);

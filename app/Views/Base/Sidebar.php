@@ -12,7 +12,7 @@
                     <li class="d-flex flex-row">
                         <a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 1) ? "active-menu": "" ?>">Recordings</a>
                         <? if($_SESSION['authenticated']): ?>
-                            <a href="/session/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload"></i></a>
+                            <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload"></i></a>
                         <? endif; ?>
                     </li>
                     <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 2) ? "active-menu": "" ?>">Comments</a></li>

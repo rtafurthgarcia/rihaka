@@ -20,7 +20,7 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class VideoController extends AbstractController
+class RecordingController extends AbstractController
 {
     public function __construct()
     {
@@ -37,7 +37,7 @@ class VideoController extends AbstractController
         if ($_SESSION["authenticated"]) {
             $user->getById($_SESSION['id']);
 
-            return $this->_renderer->render($response, "SSHSession.php", [
+            return $this->_renderer->render($response, "Recording.php", [
                 "pageTitle" => "RIHAKA - new upload",
                 "hideSignup" => true,
                 "user" => $user,
