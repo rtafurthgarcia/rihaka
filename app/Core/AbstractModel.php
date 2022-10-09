@@ -59,4 +59,12 @@ abstract class AbstractModel {
 	public function getPrimaryKey() {
 		return $this->_primaryKey;
 	}
+	/**
+	 * @param mixed $_primaryKey 
+	 * @return AbstractModel
+	 */
+	function setPrimaryKey($primaryKey): self {
+		$this->_primaryKey = $primaryKey;
+		return $this;
+	}
 }

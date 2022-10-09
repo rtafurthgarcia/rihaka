@@ -1,18 +1,18 @@
 INSERT INTO benutzer (
     benutzername,
-    name,
-    vorname,
+    biografie,
+    foto,
     passwort,
     istModerator,
     email,
     aktivierungslink,
-    isactivated,
+    istAktiviert,
     erstellungsdatum,
     letzteverbindungsdatum
 )
 VALUES (
     'RIHAKA',
-    '',
+    'We do a little trollin',
     '',
     '',
     true,
@@ -30,11 +30,12 @@ INSERT INTO video (
     beschreibung,
     benutzerid,
     istprivat,
+    
     istkommentierbar,
     erstellungsdatum
 )
 VALUES (
-    generateSecondaryVideoId(),
+    'gh59fjdj40fjd1mxbwit',
     'real.cast',
     'Dude gets confused for real.',
     'Tries to change users password',
@@ -43,3 +44,39 @@ VALUES (
     false,
     CURRENT_TIMESTAMP
   );
+
+INSERT INTO kategorie (
+    name,
+    beschreibung
+)
+VALUES (
+    'Elite',
+    ''
+);
+
+INSERT INTO kategorie (
+    name,
+    beschreibung
+)
+VALUES (
+    'Scriptkiddie',
+    ''
+);
+
+INSERT INTO kategorie (
+    name,
+    beschreibung
+)
+VALUES (
+    'Botnet',
+    ''
+);
+
+INSERT INTO kategorie (
+    name,
+    beschreibung
+)
+VALUES (
+    'Cringe',
+    ''
+);

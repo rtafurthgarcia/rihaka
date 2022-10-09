@@ -135,12 +135,4 @@ CREATE INDEX IF NOT EXISTS benutzerId_kommentar_idx ON kommentar (benutzerId);
 CREATE INDEX IF NOT EXISTS videoId_kommentar_idx ON kommentar (videoId);
 CREATE INDEX IF NOT EXISTS erstellungsdatum_kommentar_idx ON kommentar (erstellungsdatum);
 
-CREATE OR REPLACE FUNCTION generateSecondaryVideoId()
-   RETURNS INT AS
-$$
-BEGIN
-   RETURN floor(random()* (999999999-100000000 + 1) + 100000000);
-END;
-$$ language 'plpgsql' STRICT;
-
 COMMIT TRANSACTION;

@@ -21,6 +21,7 @@ class Recording extends AbstractModel {
     private $_isPrivate = null;
     private $_commentsAuthorized = null;
     private $_creationDate = null;
+	private $_categories = array(); 
 
 	/**
 	 */
