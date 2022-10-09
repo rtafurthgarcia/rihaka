@@ -25,7 +25,7 @@
     line-height: 0.8;
 }
 
-.btn-toggle-nav a {
+.btn-toggle-nav a{
 	padding: .1875rem .5rem;
 	margin-top: .125rem;
 	margin-left: 2em;
@@ -33,7 +33,7 @@
     background-size: 4px 0px;
 }
 
-.btn-toggle-nav a:hover {
+.btn-toggle-nav a:hover, .active-menu {
     background:
     linear-gradient(
         to bottom,
@@ -42,7 +42,7 @@
     );
     background-position: 0 100%;
     background-repeat: repeat-x;
-    background-size: 4px 4px;
+    background-size: 4px 4px !important;
 }
 
 .active-page {

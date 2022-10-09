@@ -16,13 +16,17 @@ use App\Core\NetworkHelper;
 use Ramsey\Uuid\Uuid;
 use SessionHandler;
 use SessionHandlerInterface;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpUnauthorizedException;
 
 class UserController extends AbstractController
 {
     public function __construct()
     {
         parent::__construct([
-            "activePage" => 0
+            "activePage" => 0,
+            "activeMenu" => 0,
+            "contributionsOnly" => true
         ]);
     }
 
@@ -117,28 +121,27 @@ class UserController extends AbstractController
     public function getUserAccount(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         $user = new User();
         
-        if ($_SESSION["authenticated"]) {
-            if ($_SESSION['username'] === $args['username']) {
-                $user->getById($_SESSION['id']);
+        if ($_SESSION["authenticated"] && $_SESSION['username'] === $args['username']) {
+            $user->getById($_SESSION['id']);
 
-                return $this->_renderer->render($response, "UserAccount.php", [
-                    "pageTitle" => "RIHAKA - profile",
-                    "hideSignup" => true,
-                    "user" => $user
-                ]);
-            } else {
-                return $response->withStatus(403);
-            }
+            return $this->_renderer->render($response, "UserAccount.php", [
+                "pageTitle" => "RIHAKA - profile",
+                "hideSignup" => true,
+                "user" => $user,
+                "activeMenu" => 4
+            ]);
         } else {
             try {
                 $user->getByUsername($args['username']);
 
                 return $this->_renderer->render($response, "UserAccount.php", [
                     "pageTitle" => "RIHAKA - profile",
-                    "user" => $user
+                    "user" => $user,
+                    "activeMenu" => 4,
+                    "contributionsOnly" => true
                 ]);
             } catch (\Throwable $th) {
-                //throw $th;
+                throw new HttpNotFoundException($request, "User account not found");
             }
 
         }
@@ -192,12 +195,14 @@ class UserController extends AbstractController
                     "pageTitle" => "RIHAKA - profile",
                     "hideSignup" => true,
                     "user" => $user,
+                    "activeMenu" => 4,
                     "successful" => $isSuccessful,
                     "errors" => $errors
                 ]);
 
             } else {
-                return $response->withStatus(403);
+                //return $response->withStatus(403);
+                throw new HttpUnauthorizedException($request);
             }
         } else {
             return $response->withHeader('Location', '/login')->withStatus(303);    
@@ -215,10 +220,11 @@ class UserController extends AbstractController
                 return $this->_renderer->render($response, "AccountSecurity.php", [
                     "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
-                    "user" => $user
+                    "user" => $user,
+                    "activeMenu" => 5,
                 ]);
             } else {
-                return $response->withStatus(403);
+                throw new HttpUnauthorizedException($request);
             }
         } else {
             return $response->withHeader('Location', '/login')->withStatus(303);    
@@ -254,6 +260,7 @@ class UserController extends AbstractController
                     return $this->_renderer->render($response, "AccountSecurity.php", [
                         "pageTitle" => "RIHAKA - security",
                         "hideSignup" => true,
+                        "activeMenu" => 5,
                         "user" => $user,
                         "errors" => $errors,
                         "successful" => $isSuccessful
@@ -303,6 +310,7 @@ class UserController extends AbstractController
                 return $this->_renderer->render($response, "AccountSecurity.php", [
                     "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
+                    "activeMenu" => 5,
                     "user" => $user,
                     "errors" => $errors,
                     "successful" => $isSuccessful
