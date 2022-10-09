@@ -10,8 +10,8 @@
                     </div>
                 <? else: ?>
                     <? if((array_key_exists("upload", $errors))): ?>
-                        <i class="bi bi-exclamation-circle-fill"></i>
                         <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-circle-fill"></i>
                             <?=$errors["upload"]?>
                         </div>
                     <? endif; ?>

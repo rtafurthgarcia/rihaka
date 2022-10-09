@@ -53,6 +53,8 @@ class RecordingController extends AbstractController
 
     public function uploadNewRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         
+        $uploadedFileName = null;
+
         if ($_SESSION["authenticated"]) {
             $formData = $request->getParsedBody();
             $errors = array();
@@ -85,21 +87,33 @@ class RecordingController extends AbstractController
                     }
 
                     if ($uploadedFile->getSize() > 10000000) {
-                        throw new ErrorException('Error on upload: Exceeded file size limit.');
+                        throw new ErrorException('Error on upload: Exceeded file size limit');
+                    }
+
+                    if ($uploadedFile->getClientMediaType() ==! 'application/octet-stream') {
+                        throw new ErrorException('Error on upload: Wrong file type');
                     }
 
                     $uploadedFileName = $directory . Uuid::uuid4()->toString();
                     $uploadedFile->moveTo($uploadedFileName);
                     $convertedFileName = ConverterHelper::convertUMLtoASCIInema($uploadedFileName);
-                    unlink($uploadedFileName);
+
+                    $data = file_get_contents($convertedFileName); 
+                    $recording_json = json_decode($data); 
+
+                    if ((int)$recording_json->duration < 15) {
+                        throw new ErrorException('Recording: not really worth it if less than 15 seconds tbh.');
+                    }
                     
                     $recording->setVideoLink($convertedFileName);
+
+                    $recording->save();
                 }
-            
-                $recording->save();
             } catch (Exception $error) {
                 $errors["upload"] = $error->getMessage();
                 $isSuccessful = false;
+            } finally {
+                unlink($uploadedFileName);
             }
 
             return $this->_renderer->render($response, "Recording.php", [
