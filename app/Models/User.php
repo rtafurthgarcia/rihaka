@@ -74,7 +74,7 @@ class User extends AbstractModel {
 			"SELECT * FROM benutzer WHERE benutzername = :_userName"
         );
 		
-        $addSupporter->bindValue(":_userName", $this->_userName);
+        $addSupporter->bindValue(":_userName", $username);
         $addSupporter->execute();
 
 		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
@@ -83,15 +83,15 @@ class User extends AbstractModel {
 
 			$this->_primaryKey = (int)$record["id"];
 			$this->_userName = $record["benutzername"];
-			$this->_biography = $record["biography"];
+			$this->_biography = $record["biografie"];
 			$this->_photo = $record["foto"];
 			$this->_password = $record["passwort"];
-			$this->_isModerator = filter_var($record["istModerator"], FILTER_VALIDATE_BOOLEAN);
+			$this->_isModerator = filter_var($record["istmoderator"], FILTER_VALIDATE_BOOLEAN);
 			$this->_email = $record["email"];
 			$this->_activationLink = $record["aktivierungslink"];
-			$this->_isActivated = filter_var($record["istAktiviert"], FILTER_VALIDATE_BOOLEAN);
-			$this->_creationDate->setTimestamp((int) $record["erstellungsdatum"]);
-			$this->_lastConnectionDate->setTimestamp((int) $record["letzteverbindungsdatum"]);
+			$this->_isActivated = filter_var($record["istaktiviert"], FILTER_VALIDATE_BOOLEAN);
+			$this->_creationDate = new DateTime($record["erstellungsdatum"]);
+			$this->_lastConnectionDate = new DateTime($record["letzteverbindungsdatum"]);
 			$this->_ipAddress = $record["ipaddresse"];
 		} else {
 			throw new ErrorException("No user with such username.", 1);
