@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\AbstractController;
+use App\Core\ConverterHelper;
 use App\Core\SessionHelper;
 use App\Models\Recording;
 use DateTime;
@@ -87,12 +88,12 @@ class RecordingController extends AbstractController
                         throw new ErrorException('Error on upload: Exceeded file size limit.');
                     }
 
-                    $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
-                    $uploadedFileName = $directory . Uuid::uuid4()->toString() . '.' . $extension;
-
+                    $uploadedFileName = $directory . Uuid::uuid4()->toString();
                     $uploadedFile->moveTo($uploadedFileName);
-
-                    $recording->setVideoLink($uploadedFileName);
+                    $convertedFileName = ConverterHelper::convertUMLtoASCIInema($uploadedFileName);
+                    unlink($uploadedFileName);
+                    
+                    $recording->setVideoLink($convertedFileName);
                 }
             
                 $recording->save();
