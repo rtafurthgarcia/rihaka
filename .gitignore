@@ -3,3 +3,4 @@ config/App.env
 vendor/
 honeypot/etc/conwrie.cfg
 public/images/*
+public/videos/*

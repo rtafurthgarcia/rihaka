@@ -29,13 +29,13 @@
                 <input type="hidden" name="max_file_size" value="20971520">
                 <div class="row">
                     <div class="form-floating mb-3 col-12 p-0 p-md">
-                        <textarea maxlength="300" class="form-control" OnKeyDown='return onKeyDownBiography();' id="description" name="description" style="height: 100%"><?=isset($category) ? $category->getBiography() : ''?></textarea>
+                        <textarea maxlength="300" class="form-control" OnKeyDown='return onKeyDownBiography();' id="description" name="description" style="height: 100%"><?=(isset($recording)) ? $recording->getDescription() : ""?></textarea>
                         <label for="description">Description</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md me-0 me-md-3">
-                        <input type="title" class="form-control <?=(isset($errors["title"])) ? "is-invalid" : "" ?>" name="title" id="floating-title" minlength="10" maxlength="50" required>
+                        <input type="title" class="form-control <?=(isset($errors["title"])) ? "is-invalid" : "" ?>" name="title" id="floating-title" minlength="10" maxlength="50" value="<?=(isset($recording)) ? $recording->getTitle(): ""?>" required>
                         <label for="floating-title">Title</label>
                         <div class="invalid-feedback">
                             <?=(isset($errors["title"])) ? $errors["title"] : "Oops.. Make sure the title is between 10 and 50 caracters long." ?>
@@ -56,13 +56,13 @@
                 </div> 
                 <div class="row mb-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" name="isPrivate" id="checkbox-is-private">
+                        <input class="form-check-input" type="checkbox" value="" name="isPrivate" id="checkbox-is-private" <?=((isset($recording)) && $recording->getIsPrivate()) ? "checked" : ""?>>
                         <label class="form-check-label" for="checkbox-is-private">
                             This recording is gonna be private aka only accessible by me.
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" name="commentsAuthorized" id="checkbox-comments-authorized" checked>
+                        <input class="form-check-input" type="checkbox" value="" name="commentsAuthorized" id="checkbox-comments-authorized" <?=((isset($recording)) && $recording->getCommentsAuthorized()) ? "checked" : ""?>>
                         <label class="form-check-label" for="checkbox-comments-authorized">
                             Everyone can comment that recording.
                         </label>
