@@ -28,7 +28,7 @@
                 <div class="d-flex flex-row justify-content-between"> 
                     <h2>Account informations</h2>
                     <? if ($_SESSION['username'] === $user->getUserName()): ?>
-                        <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload me-2"></i>Upload recording</a>
+                        <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload me-2"></i>Publish recording</a>
                     <? endif; ?>
                 </div>
                 <form id="account-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
@@ -42,7 +42,7 @@
                             <label for="photo" class="form-label p-0 m-0">
                                 <img id="img-photo" src="/<?=($user->getPhoto()) ? $user->getPhoto() : "images/default_pp.svg"?>" class="m-0 p-0 img-thumbnail">
                             </label>
-                            <input class="d-none" type="file" id="photo" name="photo" accept="image/x-png,image/gif,image/jpeg" onchange="onPictureChanged()">
+                            <input class="d-none" type="file" id="photo" name="photo" onchange="onPictureChanged()">
                         </div>
                     </div>
                     <div class="row">

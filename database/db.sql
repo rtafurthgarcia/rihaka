@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS kommentar
 CREATE TABLE IF NOT EXISTS video
 (
   id               INT            NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
-  sekundaerId      INT            NOT NULL UNIQUE,
+  sekundaerId      VARCHAR(50)    NOT NULL UNIQUE,
   video            VARCHAR(300)   NOT NULL UNIQUE,
   titel            VARCHAR(50)    NOT NULL,
   beschreibung     VARCHAR(300),

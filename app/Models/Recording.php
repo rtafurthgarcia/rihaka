@@ -165,7 +165,7 @@ class Recording extends AbstractModel {
                 titel, 
                 beschreibung, 
                 benutzerid, 
-                istprivate, 
+                istprivat, 
                 istkommentierbar, 
                 erstellungsdatum
             ) 

@@ -43,9 +43,29 @@
                     </div>
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md">
                         <div class="form-floating">
-                            <input type="text" class="form-control" name="username" id="floating-category" minlength="3" maxlength="50">
+                            <input type="text" class="form-control" name="category" id="floating-category" minlength="3" maxlength="50">
                             <label for="floating-category">Categories</label>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-12 col-lg p-0 p-md me-0">
+                        <label for="recording-file" class="form-label">UML Record (will be automatically converted)</label>
+                        <input class="form-control" type="file" name="recording-file" id="recording-file">
+                    </div>
+                </div> 
+                <div class="row mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" name="isPrivate" id="checkbox-is-private">
+                        <label class="form-check-label" for="checkbox-is-private">
+                            This recording is gonna be private aka only accessible by me.
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" name="commentsAuthorized" id="checkbox-comments-authorized" checked>
+                        <label class="form-check-label" for="checkbox-comments-authorized">
+                            Everyone can comment that recording.
+                        </label>
                     </div>
                 </div>
                 <div class="row justify-content-between">
