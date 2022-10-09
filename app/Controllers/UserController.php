@@ -128,7 +128,8 @@ class UserController extends AbstractController
                 "pageTitle" => "RIHAKA - profile",
                 "hideSignup" => true,
                 "user" => $user,
-                "activeMenu" => 4
+                "activeMenu" => 4,
+                "contributionsOnly" => false
             ]);
         } else {
             try {
@@ -137,8 +138,7 @@ class UserController extends AbstractController
                 return $this->_renderer->render($response, "UserAccount.php", [
                     "pageTitle" => "RIHAKA - profile",
                     "user" => $user,
-                    "activeMenu" => 4,
-                    "contributionsOnly" => true
+                    "activeMenu" => 4
                 ]);
             } catch (\Throwable $th) {
                 throw new HttpNotFoundException($request, "User account not found");
@@ -196,6 +196,7 @@ class UserController extends AbstractController
                     "hideSignup" => true,
                     "user" => $user,
                     "activeMenu" => 4,
+                    "contributionsOnly" => false,
                     "successful" => $isSuccessful,
                     "errors" => $errors
                 ]);
@@ -222,6 +223,7 @@ class UserController extends AbstractController
                     "hideSignup" => true,
                     "user" => $user,
                     "activeMenu" => 5,
+                    "contributionsOnly" => false
                 ]);
             } else {
                 throw new HttpUnauthorizedException($request);
@@ -261,6 +263,7 @@ class UserController extends AbstractController
                         "pageTitle" => "RIHAKA - security",
                         "hideSignup" => true,
                         "activeMenu" => 5,
+                        "contributionsOnly" => false,
                         "user" => $user,
                         "errors" => $errors,
                         "successful" => $isSuccessful
@@ -311,6 +314,7 @@ class UserController extends AbstractController
                     "pageTitle" => "RIHAKA - security",
                     "hideSignup" => true,
                     "activeMenu" => 5,
+                    "contributionsOnly" => false,
                     "user" => $user,
                     "errors" => $errors,
                     "successful" => $isSuccessful

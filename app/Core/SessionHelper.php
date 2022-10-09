@@ -16,6 +16,8 @@ class SessionHelper {
 
         if (!isset($_SESSION['authenticated'])) {
             $_SESSION['authenticated'] = false;
+            $_SESSION['username'] = '';
+            $_SESSION['id'] = '';
         }
     }
 

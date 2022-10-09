@@ -19,7 +19,7 @@
                 </ul>
             </div>
         </li>
-        <? if (isset($contributionsOnly) && $contributionsOnly): ?>
+        <? if (isset($contributionsOnly) && ! $contributionsOnly): ?>
             <li class="mb-1">
                 <? if(isset($activeMenu) && $activeMenu > 3 && $activeMenu <= 6 ): ?>
                     <button class="fw-bold btn btn-lg btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"

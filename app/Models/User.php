@@ -179,8 +179,8 @@ class User extends AbstractModel {
 		$isActivated = var_export($this->_isActivated, true);
 		$isModerator = var_export($this->_isModerator, true);
 
-        $addSupporter->bindValue(":_userName", $this->_userName);
-        $addSupporter->bindValue(":_biography", $this->_biography);
+        $addSupporter->bindValue(":_userName", strip_tags($this->_userName));
+        $addSupporter->bindValue(":_biography", strip_tags($this->_biography));
         $addSupporter->bindValue(":_photo", $this->_photo);
 		$addSupporter->bindValue(":_password", $this->_password);
         $addSupporter->bindValue(":_email", $this->_email);
@@ -214,8 +214,8 @@ class User extends AbstractModel {
 		$isActivated = var_export($this->_isActivated, true);
 		$isModerator = var_export($this->_isModerator, true);
 
-        $addSupporter->bindValue(":_userName", $this->_userName);
-        $addSupporter->bindValue(":_biography", $this->_biography);
+        $addSupporter->bindValue(":_userName", strip_tags($this->_userName));
+        $addSupporter->bindValue(":_biography", strip_tags($this->_biography));
         $addSupporter->bindValue(":_photo", $this->_photo);
 		$addSupporter->bindValue(":_password", $this->_password);
 		$addSupporter->bindValue(":_isModerator", $isModerator);
@@ -254,7 +254,7 @@ class User extends AbstractModel {
 	 * @return User
 	 */
 	function setUserName($userName): self {
-		$this->_userName = trim($userName);
+		$this->_userName = strip_tags($userName);
 		return $this;
 	}
 	/**

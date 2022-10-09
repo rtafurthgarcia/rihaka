@@ -64,7 +64,8 @@
                     </div>
                 </form>
             <? else: ?>
-                <h2><?=$user->getUserName()?>'s profile</h2>
+                <h2 class="mb-0"><?=$user->getUserName()?>'s profile</h2>
+                <small class="text-muted">Been here since <?=$user->getCreationDate()->format('F Y')?></small>
                 <div class="container col-12 col-lg-9 text-start p-3 m-0">
                     <div class="row justify-content-center">
                         <div class="mb-3 col-12 col-md-9 p-0 pe-md-3 p-md">
