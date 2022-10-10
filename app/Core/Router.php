@@ -5,6 +5,9 @@ namespace App\Core;
 use Slim\App;
 
 use App\Controllers\HomeController;
+use App\Controllers\ImpressumController;
+use App\Controllers\FAQsController; 
+use App\Controllers\PrivacyPolicyController;
 use App\Controllers\UserController;
 use App\Controllers\RecordingController;
 use Slim\Routing\RouteCollectorProxy;
@@ -13,6 +16,8 @@ class Router {
     public static function defineRoutes(App &$app) {
         $app->get('/', HomeController::class . ':home');
         $app->get('/impressum', ImpressumController::class . ':getImpressumInformation');
+        $app->get('/faqs', FAQsController::class . ':getFAQs');
+        $app->get('/privacypolicy', PrivacyPolicyController::class . ':getPrivacyPolicy');
         $app->get('/register', UserController::class . ':getRegistrationForm');
         $app->post('/register', UserController::class . ':registerAccount');
         $app->get('/login', UserController::class . ':getLoginForm');
