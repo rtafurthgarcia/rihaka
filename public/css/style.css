@@ -16,7 +16,7 @@
     background-color: #121314;
     height: 240px;
 }
- 
+
 .nav-link:hover {
     color: #9b9d9e;
 }
@@ -26,20 +26,19 @@
 }
 
 .btn-toggle-nav a {
-	padding: .1875rem .5rem;
-	margin-top: .125rem;
-	margin-left: 2em;
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 2em;
     transition: background-size .2s;
     background-size: 4px 0px;
 }
 
-.btn-toggle-nav a:hover:not(.btn), .active-menu {
+.btn-toggle-nav a:hover:not(.btn),
+.active-menu {
     background:
-    linear-gradient(
-        to bottom,
-        var(--mainColor) 0%,
-        var(--mainColor) 100%
-    );
+        linear-gradient(to bottom,
+            var(--mainColor) 0%,
+            var(--mainColor) 100%);
     background-position: 0 100%;
     background-repeat: repeat-x;
     background-size: 4px 4px !important;
@@ -47,31 +46,57 @@
 
 .active-page {
     background:
-    linear-gradient(
-        to bottom,
-        var(--mainColor) 0%,
-        var(--mainColor) 100%
-    );
+        linear-gradient(to bottom,
+            var(--mainColor) 0%,
+            var(--mainColor) 100%);
     border-radius: 6px 6px 0 0;
 }
 
-.nav-item a:hover, .active-page {
+.nav-item a:hover,
+.active-page {
     color: #212529 !important;
 }
 
 .btn-toggle::before {
-	width: 1.25em;
-	line-height: 0;
-	content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-	transition: transform .35s ease;
-	transform-origin: .5em 50%;
+    width: 1.25em;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
 }
 
 .btn-toggle[aria-expanded="true"]::before {
-	transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
-@media (min-width: 768px) { 
+.keyword-box ul {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 7px;
+    margin: 12px 0;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.keyword-box ul li {
+    color: #333;
+    margin: 4px 3px;
+    list-style: none;
+    border-radius: 5px;
+    background: #F2F2F2;
+    padding: 5px 8px 5px 10px;
+    border: 1px solid #e3e1e1;
+}
+
+.keyword-box ul input {
+    flex: 1;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
     #demo {
         background-color: #121314;
         height: 360px;
@@ -79,14 +104,12 @@
 
     .nav-item {
         background:
-            linear-gradient(
-                to bottom,
+            linear-gradient(to bottom,
                 var(--mainColor) 0%,
-                var(--mainColor) 100%
-            );
-            background-position: 0 100%;
-            background-repeat: repeat-x;
-            background-size: 4px 4px;
+                var(--mainColor) 100%);
+        background-position: 0 100%;
+        background-repeat: repeat-x;
+        background-size: 4px 4px;
         color: #212529;
         text-decoration: none;
         transition: background-size .2s;

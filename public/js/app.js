@@ -16,7 +16,6 @@ function onPasswordChange() {
 
 function onFormSubmitted(form, event) {
     if (!form.checkValidity()) {
-        console.log(event)
         event.preventDefault()
         event.stopPropagation()
     }
@@ -59,3 +58,43 @@ function setCookie(cookieName, cookieValue, daysToExpire) {
 function onHideHelp(button) {
     setCookie(button.id, 0, 1)
 }
+
+const ul = document.querySelector(".keyword-box ul")
+const input = document.querySelector(".keyword-box input")
+
+let MAX_TAGS = 5
+let tags = []
+
+createTag()
+
+function createTag(){
+    ul.querySelectorAll("li").forEach(li => li.remove())
+    tags.slice().reverse().forEach(tag =>{
+        let liTag = `<li class="me-1 my-auto mb-1">${tag} <i class="bi bi-x-lg" onclick="remove(this, '${tag}')"></i></li>`
+        ul.insertAdjacentHTML("afterbegin", liTag)
+    });
+}
+
+function remove(element, tag){
+    let index  = tags.indexOf(tag)
+    tags = [...tags.slice(0, index), ...tags.slice(index + 1)]
+    element.parentElement.remove()
+}
+
+function addTag(element){
+    if(element.keyCode === 32 && tags.length < MAX_TAGS){
+        let tag = element.target.value.replace(/\s+/g, ' ')
+        if(tag.length > 1 && !tags.includes(tag)){
+            if(tags.length < 20){
+                tag.split(',').forEach(tag => {
+                    tags.push(tag)
+                    createTag()
+                    document.querySelector("#categories").value = tags.toString();
+                });
+            }
+        }
+        element.target.value = ""
+    }
+}
+
+input.addEventListener("keyup", addTag)
