@@ -1,4 +1,3 @@
-
 <?php 
 
 namespace App\Models;
@@ -8,7 +7,7 @@ use ErrorException;
 use PDO;
 
 
-class VideoCategory extends AbstractModel {
+class RecordingCategory extends AbstractModel {
 
 private $_videoId = null;
 private $_categoryId = null;
@@ -18,6 +17,21 @@ private $_categoryId = null;
 	 * @return mixed
 	 */
 	function _insert() {
+		$addSupporter = $this->_connection->prepare(
+            "INSERT INTO {$this->_tableName} (
+                videoid, 
+                kategorieid
+            ) 
+            VALUES (
+                :_videoId, 
+                :_categoryId
+            )"
+        );
+
+        $addSupporter->bindValue(":_videoId", $this->_videoId);
+        $addSupporter->bindValue(":_categoryId", $this->_categoryId);
+
+        $addSupporter->execute();
 	}
 	
 	/**
