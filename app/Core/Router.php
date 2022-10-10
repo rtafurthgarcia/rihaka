@@ -8,6 +8,7 @@ use App\Controllers\HomeController;
 use App\Controllers\ImpressumController;
 use App\Controllers\FAQsController; 
 use App\Controllers\PrivacyPolicyController;
+use App\Controllers\ContactController;
 use App\Controllers\UserController;
 use App\Controllers\RecordingController;
 use Slim\Routing\RouteCollectorProxy;
@@ -33,6 +34,9 @@ class Router {
         $app->group('/recording/new', function (RouteCollectorProxy $group) {
             $group->get('', RecordingController::class . ':getNewContentPage'); 
             $group->post('', RecordingController::class . ':uploadNewRecording'); 
+        });
+        $app->group('/contact', function  (RouteCollectorProxy $group){
+            $group->get('', ContactController::class . ':getContactPage');
         });
     } 
 }

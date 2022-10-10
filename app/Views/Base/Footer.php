@@ -6,7 +6,7 @@
         by <a href="https://github.com/rtafurthgarcia/rihaka" class="link-warning">HFTM students.</a></div>
 
     <ul class="col-12 nav col-md-4 justify-content-center justify-content-md-end">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Contact</a></li>
+        <li class="nav-item"><a href="/contact" class="nav-link px-2 text-muted">Contact</a></li>
         <li class="nav-item"><a href="/impressum" class="nav-link px-2 text-muted">Impressum</a></li>
         <li class="nav-item"><a href="/privacypolicy" class="nav-link px-2 text-muted">Privacy policy</a></li>
         <li class="nav-item"><a href="/faqs" class="nav-link px-2 text-muted">FAQs</a></li>
