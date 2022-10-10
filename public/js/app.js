@@ -60,22 +60,21 @@ function onHideHelp(button) {
 }
 
 const ul = document.querySelector(".keyword-box ul")
-const input = document.querySelector(".keyword-box input")
+const input = document.querySelectorAll(".keyword-box input")[0]
+const inputValues = document.querySelectorAll(".keyword-box input")[1]
 
 let MAX_TAGS = 5
 let tags = []
 
-createTag()
-
-function createTag(){
+function createTagElements(){
     ul.querySelectorAll("li").forEach(li => li.remove())
     tags.slice().reverse().forEach(tag =>{
-        let liTag = `<li class="me-1 my-auto mb-1">${tag} <i class="bi bi-x-lg" onclick="remove(this, '${tag}')"></i></li>`
+        let liTag = `<li class="mx-1 my-auto">${tag} <i class="bi bi-x-lg" onclick="removeTagElement(this, '${tag}')"></i></li>`
         ul.insertAdjacentHTML("afterbegin", liTag)
     });
 }
 
-function remove(element, tag){
+function removeTagElement(element, tag){
     let index  = tags.indexOf(tag)
     tags = [...tags.slice(0, index), ...tags.slice(index + 1)]
     element.parentElement.remove()
@@ -88,12 +87,15 @@ function addTag(element){
             if(tags.length < 20){
                 tag.split(',').forEach(tag => {
                     tags.push(tag)
-                    createTag()
-                    document.querySelector("#categories").value = tags.toString();
+                    createTagElements()
+                    inputValues.value = tags.toString()
                 });
             }
         }
         element.target.value = ""
+    } else if (element.keyCode == 8 && input.value === '') {
+        tags.pop()
+        createTagElements()
     }
 }
 
