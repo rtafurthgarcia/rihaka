@@ -44,9 +44,9 @@
                     
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md">
                         <div class="keyword-box h-100">
-                            <ul class="m-0 h-100">
-                                <input type="text" class="form-control" spellcheck="false" placeholder="Categories">
-                                <input type="text" class="d-none" id="categories" name="category" spellcheck="false">
+                            <ul class="m-0 p-0 h-100">
+                                <input type="text" class="form-control p-0 ps-3" spellcheck="false" placeholder="Categories">
+                                <input type="text" class="d-none" id="categories" name="categories" spellcheck="false">
                             </ul>
                         </div>
                     </div>
