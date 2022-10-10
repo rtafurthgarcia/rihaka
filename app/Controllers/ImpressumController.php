@@ -17,7 +17,7 @@ use SessionHandlerInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class AboutController extends AbstractController
+class ImpressumController extends AbstractController
 {
     public function __construct()
     {
@@ -28,10 +28,10 @@ class AboutController extends AbstractController
         ]);
     }
 
-    public function getAboutInformation(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function getImpressumInformation(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {        
-        return $this->_renderer->render($response, "About.php", [
-            "pageTitle" => "RIHAKA - About Us"
+        return $this->_renderer->render($response, "Impressum.php", [
+            "pageTitle" => "RIHAKA - Impressum"
         ]);
     }
 }

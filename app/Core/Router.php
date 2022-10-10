@@ -12,7 +12,7 @@ use Slim\Routing\RouteCollectorProxy;
 class Router {
     public static function defineRoutes(App &$app) {
         $app->get('/', HomeController::class . ':home');
-        $app->get('/about', AboutController::class . ':getAboutInformation');
+        $app->get('/impressum', ImpressumController::class . ':getImpressumInformation');
         $app->get('/register', UserController::class . ':getRegistrationForm');
         $app->post('/register', UserController::class . ':registerAccount');
         $app->get('/login', UserController::class . ':getLoginForm');
