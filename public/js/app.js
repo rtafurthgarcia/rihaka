@@ -61,7 +61,7 @@ function onHideHelp(button) {
 
 const ul = document.querySelector(".keyword-box ul")
 const input = document.querySelectorAll(".keyword-box input")[0]
-const inputValues = document.querySelectorAll(".keyword-box input")[1]
+let inputValues = document.querySelectorAll(".keyword-box input")[1]
 
 let MAX_TAGS = 5
 let tags = []
@@ -86,9 +86,10 @@ function addTag(element){
         if(tag.length > 1 && !tags.includes(tag)){
             if(tags.length < 20){
                 tag.split(',').forEach(tag => {
-                    tags.push(tag)
+                    tags.push(tag.trim())
                     createTagElements()
                     inputValues.value = tags.toString()
+                    console.log(inputValues)
                 });
             }
         }

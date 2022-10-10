@@ -44,6 +44,26 @@ class Category extends AbstractModel {
 		return $categories;
 	}
 
+	public function getAllCategoriesNames(): array {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT * FROM {$this->_tableName}"
+        );
+		
+		$categories = array();
+        $addSupporter->execute();
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+
+		if (count($rows)) {
+			foreach($rows as &$record) {
+				$categories[$record["name"]] = $record["id"];
+			}
+		} else {
+			throw new ErrorException("No categories in database ?.", 3);
+		}
+
+		return $categories;
+	}
+
 	public function getByName($name): void {
 		$addSupporter = $this->_connection->prepare(
 			"SELECT * FROM {$this->_tableName} WHERE name = :_name"
@@ -70,6 +90,24 @@ class Category extends AbstractModel {
 	 * @return mixed
 	 */
 	protected function _insert() {
+		$addSupporter = $this->_connection->prepare(
+            "INSERT INTO {$this->_tableName} (
+                name, 
+                beschreibung
+            ) 
+            VALUES (
+                :_name, 
+                :_description
+            )"
+        );
+
+        $addSupporter->bindValue(":_name", $this->_name);
+        $addSupporter->bindValue(":_description", $this->_description);
+
+		$execution_result = $addSupporter->execute();
+        if($execution_result) {
+            $this->_primaryKey = $this->_connection->lastInsertId();
+        }
 	}
 	
 	/**

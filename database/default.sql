@@ -50,7 +50,7 @@ INSERT INTO kategorie (
     beschreibung
 )
 VALUES (
-    'Elite',
+    'elite',
     ''
 );
 
@@ -59,7 +59,7 @@ INSERT INTO kategorie (
     beschreibung
 )
 VALUES (
-    'Scriptkiddie',
+    'scriptkiddie',
     ''
 );
 
@@ -68,7 +68,7 @@ INSERT INTO kategorie (
     beschreibung
 )
 VALUES (
-    'Botnet',
+    'botnet',
     ''
 );
 
@@ -77,6 +77,6 @@ INSERT INTO kategorie (
     beschreibung
 )
 VALUES (
-    'Cringe',
+    'cringe',
     ''
 );

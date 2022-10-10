@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Core\AbstractController;
 use App\Core\ConverterHelper;
 use App\Core\SessionHelper;
+use App\Models\Category;
 use App\Models\Recording;
+use App\Models\RecordingCategory;
 use DateTime;
 use ErrorException;
 use Exception;
@@ -114,6 +116,29 @@ class RecordingController extends AbstractController
                 $isSuccessful = false;
             } finally {
                 unlink($uploadedFileName);
+            }
+
+            if ($isSuccessful) {
+                $newCategory = new Category();
+                $currentlyExistingCategories = $newCategory->getAllCategoriesNames();
+    
+                try {
+                    $categoriesToSet = explode(',', strtolower($formData["categories"]));
+                    foreach($categoriesToSet as &$categoryName) {
+                        if(isset($currentlyExistingCategories[$categoryName])) {
+                            (new RecordingCategory($recording->getPrimaryKey(), $currentlyExistingCategories[$categoryName]))->save();
+                        } else {
+                            $newCategory = new Category();
+                            $newCategory->setName($categoryName);
+                            $newCategory->save();
+    
+                            (new RecordingCategory($recording->getPrimaryKey(), $newCategory->getPrimaryKey()))->save();
+                        }
+                    }
+                } catch (Exception $error) {
+                    $errors["categories"] = $error->getMessage();
+                    $isSuccessful = false;
+                }
             }
 
             return $this->_renderer->render($response, "Recording.php", [
