@@ -35,16 +35,19 @@
                 </div>
                 <div class="row">
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md me-0 me-md-3">
-                        <input type="title" class="form-control <?=(isset($errors["title"])) ? "is-invalid" : "" ?>" name="title" id="floating-title" minlength="10" maxlength="50" value="<?=(isset($recording)) ? $recording->getTitle(): ""?>" required>
+                        <input type="text" class="form-control <?=(isset($errors["title"])) ? "is-invalid" : "" ?>" name="title" id="floating-title" minlength="10" maxlength="50" value="<?=(isset($recording)) ? $recording->getTitle(): ""?>" required>
                         <label for="floating-title">Title</label>
                         <div class="invalid-feedback">
                             <?=(isset($errors["title"])) ? $errors["title"] : "Oops.. Make sure the title is between 10 and 50 caracters long." ?>
                         </div>
                     </div>
+                    
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="category" id="floating-category" minlength="3" maxlength="50">
-                            <label for="floating-category">Categories</label>
+                        <div class="keyword-box h-100">
+                            <ul class="m-0 h-100">
+                                <input type="text" class="form-control" spellcheck="false" placeholder="Categories">
+                                <input type="text" class="d-none" id="categories" name="category" spellcheck="false">
+                            </ul>
                         </div>
                     </div>
                 </div>
