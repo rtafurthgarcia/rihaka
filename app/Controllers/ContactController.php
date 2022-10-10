@@ -30,7 +30,7 @@ class ContactController extends AbstractController
     public function getContactPage(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {        
         return $this->_renderer->render($response, "Contact.php", [
-            "pageTitle" => "RIHAKA - FAQs"
+            "pageTitle" => "RIHAKA - Contact"
         ]);
     }
 }
