@@ -235,6 +235,10 @@ class Recording extends AbstractModel {
 		return $this;
 	}
 
+	function getUserName(): string {
+		return (new User())->getById($this->_userId)->getUserName();
+	}
+
 		/**
 	 * @return mixed
 	 */

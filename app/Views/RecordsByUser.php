@@ -6,7 +6,7 @@
             "user" => $user
         ]
         )?>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 col gx-3 ps-4 pe-0 py-4 py-md-0">
+        <div class="row col px-4 pb-4 mt-4 mt-md-0">
             <? if (count($recordings) > 0): ?>
                 <? foreach($recordings as &$recording): ?>
                     <?=$this->fetch('./Base/PlayerListItem.php', [
