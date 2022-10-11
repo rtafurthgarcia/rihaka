@@ -17,7 +17,7 @@
                     <? endif; ?>
                 <? endif; ?>
             <? endif; ?>
-            <? if ($_SESSION['username'] === $user->getUserName()): ?>
+            <? if ($_SESSION['id'] === $user->getPrimaryKey()): ?>
                 <? if (isset($_COOKIE['showHelpAccount']) && $_COOKIE['showHelpAccount']): ?>
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                         <i class="bi bi-stars"></i>
@@ -25,10 +25,10 @@
                         <button type="button" id="showHelpAccount" onclick="onHideHelp(this)" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <? endif; ?>
-                <div class="d-flex flex-row justify-content-between"> 
+                <div class="d-flex flex-row justify-content-between col-12 col-lg-9"> 
                     <h2>Account informations</h2>
-                    <? if ($_SESSION['username'] === $user->getUserName()): ?>
-                        <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload me-2"></i>Publish recording</a>
+                    <? if ($_SESSION['id'] === $user->getPrimaryKey()): ?>
+                        <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload mx-1"></i>Publish recording</a>
                     <? endif; ?>
                 </div>
                 <form id="account-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>

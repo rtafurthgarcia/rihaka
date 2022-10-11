@@ -38,6 +38,7 @@ class Router {
         $app->group('/recording/{videoId}', function (RouteCollectorProxy $group) {
             $group->get('', RecordingController::class . ':displayRecording'); 
             $group->post('', RecordingController::class . ':updateRecording');
+            $group->get('/delete', RecordingController::class . ':deleteRecording'); 
         });
         $app->group('/contact', function  (RouteCollectorProxy $group){
             $group->get('', ContactController::class . ':getContactPage');

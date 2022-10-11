@@ -193,4 +193,38 @@ class RecordingController extends AbstractController
         }
     }
 
+    public function deleteRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        $recording = new Recording();
+        try {
+            $recording->getBySecondaryId($args["videoId"]);
+        } catch (\Throwable $th) {
+            throw new HttpNotFoundException($request);
+        }
+    
+        if ($_SESSION["authenticated"] && $_SESSION['id'] === $recording->getUserId()) {
+            $errors = array();
+            $isSuccessful = true;
+
+            try {
+                $recording->delete();
+                unlink($recording->getVideoLink());
+            } catch (Exception $error) {
+                $errors["delete"] = $error->getMessage();
+                $isSuccessful = false;
+            }
+
+            return $this->_renderer->render($response, "Deleted.php", [
+                "pageTitle" => "RIHAKA - That one is no more ",
+                "hideSignup" => true,
+                "recording" => $recording,
+                "activeMenu" => 1,
+                "contributionsOnly" => false,
+                "successful" => $isSuccessful,
+                "errors" => $errors
+            ]);
+        } else {
+            throw new HttpForbiddenException($request);
+        }
+    }
+
 }

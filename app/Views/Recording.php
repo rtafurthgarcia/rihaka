@@ -24,7 +24,37 @@
                     <button type="button" id="showHelpUpload" onclick="onHideHelp(this)" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <? endif; ?>
-            <h2><?=(isset($recording)) ? "Edit an exisiting recording" : "Publish a new recording"?> </h2>
+            <div class="d-flex flex-row justify-content-between col-12 col-lg-9"> 
+                <? if (isset($recording)): ?>  
+                    <h2>Edit an exisiting recording</h2>
+                    <? if (isset($user) && $_SESSION['id'] === $user->getPrimaryKey()): ?>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-confirmation-modal">
+                            <i class="bi bi-trash me-2"></i>Delete recording
+                        </button>
+                        <div class="modal fade" id="delete-confirmation-modal" tabindex="-1" aria-labelledby="delete-confirmation-label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="delete-confirmation-label">Confirmation</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this one recording? This operation cannot be reversed. 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nope</button>
+                                    <a href="/recording/<?=$recording->getSecondaryId()?>/delete" class="btn btn-danger h-100 my-auto mx-1" role="button">
+                                        <i class="bi bi-trash me-2"></i>Yes, delete this recording
+                                    </a>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    <? endif; ?>                
+                <? else: ?>
+                    <h2>Publish a new recording</h2>
+                <? endif; ?>
+            </div>
             <form id="recording-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                 <input type="hidden" name="max_file_size" value="20971520">
                 <div class="row">
