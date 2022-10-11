@@ -55,8 +55,10 @@
                     <? if (isset($recording) && $recording->getVideoLink()) :?>
                         <?=$this->fetch('./Base/PlayerCard.php', [
                             "recording" => $recording,
-                            "hideEdit" => (isset($_SESSION['id'])) && ($recording->getUserId() === $_SESSION['id'])
+                            "hideEdit" => (isset($_SESSION['id'])) && ($recording->getUserId() === $_SESSION['id']),
+                            "hideDescAndTitle" => true
                         ])?>
+                        <input class="d-none" type="hidden" name="display-time" id="display-time" value="<?=\App\Core\ConverterHelper::secondsToTime($recording->getTimeToDisplay())?>">
                     <? else: ?>
                         <div class="mb-3 col-12 col-lg p-0 p-md me-0">
                             <label for="recording-file" class="form-label">UML Record (will be automatically converted)</label>

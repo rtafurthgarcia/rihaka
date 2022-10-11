@@ -15,6 +15,7 @@ class Recording extends AbstractModel {
     private $_description = null;
     private $_userId = null;
 	private $_length = null;
+	private $_timeToDisplay = null;
 	private $_calculatedRating = null;
     private $_isPrivate = null;
     private $_commentsAuthorized = null;
@@ -51,7 +52,8 @@ class Recording extends AbstractModel {
 			$this->_secondaryId = $record["sekundaerid"];
 			$this->_videoLink = $record["video"];
 			$this->_title = $record["titel"];
-			$this->_length = (float)$record["dauer"];
+			$this->_length = (int)$record["dauer"];
+			$this->_timeToDisplay = (int)$record["zuzeigendezeit"];
 			$this->_userId = $record["benutzerid"];
 			$this->_isPrivate = filter_var($record["istprivat"], FILTER_VALIDATE_BOOLEAN);
 			$this->_commentsAuthorized = filter_var($record["istkommentierbar"], FILTER_VALIDATE_BOOLEAN);
@@ -65,8 +67,148 @@ class Recording extends AbstractModel {
 
 		return $this;
 	}
+	
+    protected function _insert() {
+        $addSupporter = $this->_connection->prepare(
+            "INSERT INTO {$this->_tableName} (
+                sekundaerid, 
+                video, 
+                titel, 
+                beschreibung, 
+				dauer,
+				zuzeigendezeit,
+                benutzerid, 
+                istprivat, 
+                istkommentierbar, 
+                erstellungsdatum
+            ) 
+            VALUES (
+                :_secondaryId, 
+                :_videoLink, 
+                :_title,
+                :_description,
+				:_length,
+				:_timeToDisplay,
+                :_userId,
+                :_isPrivate,
+                :_commentsAuthorized,
+                CURRENT_TIMESTAMP
+            )"
+        );
+
+		$isPrivate = var_export($this->_isPrivate, true);
+		$commentsAuthorized = var_export($this->_commentsAuthorized, true);
+
+        $addSupporter->bindValue(":_secondaryId", $this->_secondaryId);
+        $addSupporter->bindValue(":_videoLink", $this->_videoLink);
+        $addSupporter->bindValue(":_title", strip_tags($this->_title));
+		$addSupporter->bindValue(":_description", strip_tags($this->_description));
+		$addSupporter->bindValue(":_length", $this->_length);
+		$addSupporter->bindValue(":_timeToDisplay", $this->_timeToDisplay);
+        $addSupporter->bindValue(":_userId", $this->_userId);
+        $addSupporter->bindValue(":_isPrivate", $isPrivate);
+		$addSupporter->bindValue(":_commentsAuthorized", $commentsAuthorized);
+
+        $execution_result = $addSupporter->execute();
+        if($execution_result) {
+            $this->_primaryKey = $this->_connection->lastInsertId();
+        }
+
+		$this->_saveCategories();
+    }
 
 	/**
+	 *
+	 * @return mixed
+	 */
+	function _update() {
+		$addSupporter = $this->_connection->prepare(
+            "UPDATE {$this->_tableName} SET
+                sekundaerid = :_secondaryId, 
+                video = :_videoLink, 
+                titel = :_title, 
+                beschreibung = :_description, 
+				dauer = :_length,
+				zuzeigendezeit = :_timeToDisplay,
+                benutzerid = :_userId, 
+                istprivat = :_isPrivate, 
+                istkommentierbar = :_commentsAuthorized
+            WHERE id = :_primaryKey"
+        );
+
+		$isPrivate = var_export($this->_isPrivate, true);
+		$commentsAuthorized = var_export($this->_commentsAuthorized, true);
+
+        $addSupporter->bindValue(":_secondaryId", $this->_secondaryId);
+        $addSupporter->bindValue(":_videoLink", $this->_videoLink);
+        $addSupporter->bindValue(":_title", strip_tags($this->_title));
+		$addSupporter->bindValue(":_description", strip_tags($this->_description));
+		$addSupporter->bindValue(":_length", $this->_length);
+		$addSupporter->bindValue(":_timeToDisplay", $this->_timeToDisplay);
+		$addSupporter->bindValue(":_userId", $this->_userId);
+        $addSupporter->bindValue(":_isPrivate", $isPrivate);
+        $addSupporter->bindValue(":_commentsAuthorized", $commentsAuthorized);
+        $addSupporter->bindValue(":_primaryKey", $this->_primaryKey);
+
+        $addSupporter->execute();
+
+		$this->_saveCategories();
+	}
+
+	private function _saveCategories() {
+		$currentlyExistingCategories = (new Category())->getAllCategoriesNames();
+
+		foreach($this->_categories as &$category) {
+			if(! isset($currentlyExistingCategories[$category->getName()])) {
+				$category->save();
+			} else {
+				$category->setPrimaryKey($currentlyExistingCategories[$category->getName()]);
+			}
+			
+			try {
+				(new RecordingCategory($this->getPrimaryKey(), $category->getPrimaryKey()))->save();
+			} catch (\Throwable $th) {
+				// Real lazy to check whenever this one combination already exists. Besides its prolly less computating-expensive 
+				// to let it throw an exception than to interrogate the database. 
+			}
+		}
+	}
+
+	function getCategories() {
+		return $this->_categories;
+	}
+
+	function getCategoriesAsString(): string {
+		$returnString = '';
+
+		for ($i = 0; $i <= count($this->_categories)-1; $i++) {
+			$returnString .= $this->_categories[$i]->getName();
+
+			if ($i ==! count($this->_categories)) {
+				$returnString .= ',';
+			}
+		}
+
+		return $returnString;
+	}
+	
+	/**
+	 * @param mixed $_categories 
+	 * @return Recording
+	 */
+	function setCategories(array $categories): self {
+		$this->_categories = array();
+
+		foreach($categories as &$categoryName) {
+			$newCategory = new Category();
+			$newCategory->setName($categoryName);
+			array_push($this->_categories, $newCategory);
+		}
+
+		return $this;
+	}
+
+		/**
 	 * @return mixed
 	 */
 	function getSecondaryId() {
@@ -187,103 +329,10 @@ class Recording extends AbstractModel {
 		return $this;
 	}
 	
-    protected function _insert() {
-        $addSupporter = $this->_connection->prepare(
-            "INSERT INTO {$this->_tableName} (
-                sekundaerid, 
-                video, 
-                titel, 
-                beschreibung, 
-                benutzerid, 
-                istprivat, 
-                istkommentierbar, 
-                erstellungsdatum
-            ) 
-            VALUES (
-                :_secondaryId, 
-                :_videoLink, 
-                :_title,
-                :_description,
-                :_userId,
-                :_isPrivate,
-                :_commentsAuthorized,
-                CURRENT_TIMESTAMP
-            )"
-        );
-
-		$isPrivate = var_export($this->_isPrivate, true);
-		$commentsAuthorized = var_export($this->_commentsAuthorized, true);
-
-        $addSupporter->bindValue(":_secondaryId", $this->_secondaryId);
-        $addSupporter->bindValue(":_videoLink", $this->_videoLink);
-        $addSupporter->bindValue(":_title", strip_tags($this->_title));
-		$addSupporter->bindValue(":_description", strip_tags($this->_description));
-        $addSupporter->bindValue(":_userId", $this->_userId);
-        $addSupporter->bindValue(":_isPrivate", $isPrivate);
-		$addSupporter->bindValue(":_commentsAuthorized", $commentsAuthorized);
-
-        $execution_result = $addSupporter->execute();
-        if($execution_result) {
-            $this->_primaryKey = $this->_connection->lastInsertId();
-        }
-
-		$this->_saveCategories();
-    }
-
-		/**
-	 *
-	 * @return mixed
-	 */
-	function _update() {
-		$addSupporter = $this->_connection->prepare(
-            "UPDATE {$this->_tableName} SET
-                sekundaerid = :_secondaryId, 
-                video = :_videoLink, 
-                titel = :_title, 
-                beschreibung = :_description, 
-                benutzerid = :_userId, 
-                istprivat = :_isPrivate, 
-                istkommentierbar = :_commentsAuthorized, 
-                erstellungsdatum = :_creationDate
-            WHERE id = :_primaryKey"
-        );
-
-		$isPrivate = var_export($this->_isPrivate, true);
-		$commentsAuthorized = var_export($this->_commentsAuthorized, true);
-
-        $addSupporter->bindValue(":_secondaryId", $this->_secondaryId);
-        $addSupporter->bindValue(":_videoLink", $this->_videoLink);
-        $addSupporter->bindValue(":_title", strip_tags($this->_title));
-		$addSupporter->bindValue(":_description", strip_tags($this->_description));
-		$addSupporter->bindValue(":_userId", $this->_userId);
-        $addSupporter->bindValue(":_isPrivate", $isPrivate);
-        $addSupporter->bindValue(":_commentsAuthorized", $commentsAuthorized);
-        $addSupporter->bindValue(":_creationDate", $this->_creationDate);
-        $addSupporter->bindValue(":_primaryKey", $this->_primaryKey);
-
-        $addSupporter->execute();
-
-		$this->_saveCategories();
-	}
-
-	private function _saveCategories() {
-		$currentlyExistingCategories = (new Category())->getAllCategoriesNames();
-
-		foreach($this->_categories as &$category) {
-			if(! isset($currentlyExistingCategories[$category->getName()])) {
-				$category->save();
-			} else {
-				$category->setPrimaryKey($currentlyExistingCategories[$category->getName()]);
-			}
-			
-			(new RecordingCategory($this->getPrimaryKey(), $category->getPrimaryKey()))->save();
-		}
-	}
-	
 	/**
 	 * @return mixed
 	 */
-	function getLength() {
+	function getLength(): int {
 		return $this->_length;
 	}
 	
@@ -298,7 +347,7 @@ class Recording extends AbstractModel {
 	/**
 	 * @return mixed
 	 */
-	function getCalculatedRating() {
+	function getCalculatedRating(): float {
 		return $this->_calculatedRating;
 	}
 	
@@ -306,43 +355,24 @@ class Recording extends AbstractModel {
 	 * @param mixed $_calculatedRating 
 	 * @return Recording
 	 */
-	function setCalculatedRating($calculatedRating): self {
+	function setCalculatedRating(int $calculatedRating): self {
 		$this->_calculatedRating = $calculatedRating;
 		return $this;
 	}
+
 	/**
 	 * @return mixed
 	 */
-	function getCategories() {
-		return $this->_categories;
-	}
-
-	function getCategoriesAsString(): string {
-		$returnString = '';
-
-		for ($i = 0; $i <= count($this->_categories)-1; $i++) {
-			$returnString .= $this->_categories[$i]->getName();
-
-			if ($i ==! count($this->_categories)) {
-				$returnString .= ',';
-			}
-		}
-
-		return $returnString;
+	function getTimeToDisplay(): int {
+		return $this->_timeToDisplay;
 	}
 	
 	/**
-	 * @param mixed $_categories 
+	 * @param mixed $_timeToDisplay 
 	 * @return Recording
 	 */
-	function setCategories(array $categories): self {
-
-		foreach($categories as &$categoryName) {
-			$newCategory = new Category();
-			$newCategory->setName($categoryName);
-			array_push($this->_categories, $newCategory);
-		}
-
+	function setTimeToDisplay(int $timeToDisplay): self {
+		$this->_timeToDisplay = $timeToDisplay;
 		return $this;
 	}
 }

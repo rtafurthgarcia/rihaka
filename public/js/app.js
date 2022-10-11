@@ -120,17 +120,37 @@ if (document.getElementById('demo')) {
     })
 }
 
+function formatTime(seconds) {
+    seconds = Math.floor(seconds);
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    let time = '';
+    if (m < 10) { time += '0' }
+    time += `${m}:`;
+    if (s < 10) { time += '0' }
+    time += `${s}`;
+  
+    return time;
+  }
+
 let players = document.querySelectorAll(".player")
 if (players) {
     players.forEach(playerElement => {
         const source = playerElement.querySelector("source").src
-        console.log(source)
+        let timeElement = document.querySelector("#display-time")
+        let timeToDisplay = timeElement.value
         
-        AsciinemaPlayer.create(source, playerElement, {
+        let player = AsciinemaPlayer.create(source, playerElement, {
             autoPlay: false, 
             loop: false,
             speed: 2,
-            fit: "height"
-        });
+            fit: "height",
+            poster: "npt:" + timeToDisplay,
+            startAt: timeToDisplay
+        })
+        
+        playerElement.querySelector(".bar").addEventListener('click', () => {
+            timeElement.value = formatTime(Math.floor(player.getCurrentTime()))
+        })
     })
 }

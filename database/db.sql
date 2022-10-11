@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS video
   video            VARCHAR(300)   NOT NULL UNIQUE,
   titel            VARCHAR(50)    NOT NULL,
   dauer            FLOAT          NOT NULL DEFAULT 15.0,
+  zuzeigendezeit   FLOAT          NOT NULL DEFAULT 0,
   beschreibung     VARCHAR(300)   NOT NULL DEFAULT '',
   benutzerId       INT            NOT NULL,
   istPrivat        BOOLEAN        NOT NULL DEFAULT FALSE,

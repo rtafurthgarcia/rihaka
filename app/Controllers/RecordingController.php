@@ -54,7 +54,6 @@ class RecordingController extends AbstractController
     } 
 
     public function uploadNewRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
-        
         $uploadedFileName = null;
 
         if ($_SESSION["authenticated"]) {
@@ -107,8 +106,9 @@ class RecordingController extends AbstractController
                         throw new ErrorException('Recording: not really worth it if less than 15 seconds tbh.');
                     }
                     
+                    $recording->setLength((int)$recording_json->duration);
+                    $recording->setTimeToDisplay(rand(0, (int)$recording_json->duration));
                     $recording->setVideoLink($convertedFileName);
-
                     $recording->setCategories(explode(',', strtolower($formData["categories"])));
 
                     $recording->save();
@@ -151,6 +151,45 @@ class RecordingController extends AbstractController
                 "activeMenu" => 1,
                 "contributionsOnly" => false
             ]);
+        }
+    }
+
+    public function updateRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        $recording = (new Recording())->getBySecondaryId($args["videoId"]);
+    
+        if ($_SESSION["authenticated"] && $_SESSION['id'] === $recording->getUserId()) {
+            $user = (new User())->getById($_SESSION['id']);
+
+            $formData = $request->getParsedBody();
+            $errors = array();
+            $isSuccessful = true;
+
+            try {
+                $recording->setTitle($formData["title"]);
+                $recording->setDescription($formData["description"]);
+                $recording->setCommentsAuthorized(isset($formData["commentsAuthorized"]));
+                $recording->setIsPrivate(isset($formData["isPrivate"]));
+                $recording->setCategories(explode(',', strtolower($formData["categories"])));
+    
+                $recording->setTimeToDisplay(ConverterHelper::timeToSeconds($formData["display-time"]));
+                $recording->save();
+            } catch (Exception $error) {
+                $errors["upload"] = $error->getMessage();
+                $isSuccessful = false;
+            }
+
+            return $this->_renderer->render($response, "Recording.php", [
+                "pageTitle" => "RIHAKA - edit recording",
+                "hideSignup" => true,
+                "user" => $user,
+                "recording" => $recording,
+                "activeMenu" => 1,
+                "contributionsOnly" => false,
+                "successful" => $isSuccessful,
+                "errors" => $errors
+            ]);
+        } else {
+            throw new HttpForbiddenException($request);
         }
     }
 
