@@ -10,7 +10,7 @@
             <? endif; ?>
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li class="d-flex flex-row">
-                        <a href="#" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 1) ? "active-menu": "" ?>">Recordings</a>
+                        <a href="/user/<?=$_SESSION['username']?>/recordings" class="link-dark d-inline-flex text-decoration-none rounded <?=($activeMenu === 1) ? "active-menu": "" ?>">Recordings</a>
                         <? if($_SESSION['authenticated']): ?>
                             <a href="/recording/new" class="btn btn-success h-100 my-auto mx-2" role="button"><i class="bi bi-cloud-upload"></i></a>
                         <? endif; ?>

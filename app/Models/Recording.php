@@ -6,6 +6,7 @@ use App\Core\AbstractModel;
 use DateTime;
 use ErrorException;
 use PDO;
+use Ramsey\Collection\Exception\NoSuchElementException;
 
 class Recording extends AbstractModel {
     
@@ -66,6 +67,29 @@ class Recording extends AbstractModel {
 		}
 
 		return $this;
+	}
+
+	function getRecordsByUserId($id): array {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT sekundaerid FROM {$this->_tableName} WHERE benutzerid = :_userId"
+        );
+		
+        $addSupporter->bindValue(":_userId", $id);
+        $addSupporter->execute();
+
+		$recordings = array();
+
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		if (count($rows)) {
+			foreach($rows as $record) {
+				$recording = (new Recording())->getBySecondaryId($record["sekundaerid"]);
+				array_push($recordings, $recording);
+			}
+		} else {
+			throw new NoSuchElementException("No recording linked to this user.", 1);
+		}
+
+		return $recordings;
 	}
 	
     protected function _insert() {

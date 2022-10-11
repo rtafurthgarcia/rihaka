@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\AbstractController;
 use App\Core\SessionHelper;
+use App\Models\Recording;
 use DateTime;
 use ErrorException;
 use Exception;
@@ -324,6 +325,28 @@ class UserController extends AbstractController
         } else {
             return $response->withHeader('Location', '/login')->withStatus(303);    
         }
+    } 
+
+    public function getRecordingsFromUser(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        $recordings = array();
+
+        try {
+            $user = (new User())->getByUsername($args["username"]);
+            $recordings = (new Recording())->getRecordsByUserId($user->getPrimaryKey());
+    
+            $formData = $request->getParsedBody();  
+        } catch (\Throwable $th) {
+            throw new HttpNotFoundException($request);
+        }
+
+        return $this->_renderer->render($response, "RecordsByUser.php", [
+            "pageTitle" => "RIHAKA - records by " . $user->getUserName(),
+            "hideSignup" => true,
+            "activeMenu" => 1,
+            "contributionsOnly" => !($user->getPrimaryKey() === $_SESSION['id']),
+            "user" => $user,
+            "recordings" => $recordings
+        ]);
     } 
 
     public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {

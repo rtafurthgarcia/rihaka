@@ -159,3 +159,20 @@ if (players) {
         })
     })
 }
+
+let lightPlayers = document.querySelectorAll(".player-light")
+if (lightPlayers) {
+    lightPlayers.forEach(playerElement => {
+        const source = playerElement.querySelector("source").src
+        let timeToDisplay = document.querySelector("time").value
+        
+        let player = AsciinemaPlayer.create(source, playerElement, {
+            autoPlay: false, 
+            loop: false,
+            speed: 2,
+            fit: "height",
+            poster: "npt:" + timeToDisplay,
+            startAt: timeToDisplay
+        })
+    })
+}

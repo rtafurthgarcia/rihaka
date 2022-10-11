@@ -17,6 +17,11 @@
     height: 480px;
 }
 
+.player-light {
+    background-color: #121314;
+    height: 240px;
+}
+
 .nav-link:hover {
     color: #9b9d9e;
 }
