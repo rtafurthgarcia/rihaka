@@ -6,14 +6,14 @@ CREATE TABLE IF NOT EXISTS benutzer
   benutzername     VARCHAR(30)  NOT NULL UNIQUE,
   passwort         VARCHAR(64)  NOT NULL,
   biografie        VARCHAR(300) NOT NULL DEFAULT '',
-  foto             VARCHAR(300) ,    
+  foto             VARCHAR(300) NOT NULL DEFAULT '',    
   istModerator     BOOLEAN      NOT NULL DEFAULT FALSE,
   email            VARCHAR(254) NOT NULL UNIQUE,
   aktivierungslink VARCHAR(64)  NOT NULL UNIQUE,
-  istAktiviert     BOOLEAN      DEFAULT FALSE,
+  istAktiviert     BOOLEAN      NOT NULL DEFAULT FALSE,
   erstellungsdatum TIMESTAMP    NOT NULL,
-  letzteverbindungsdatum        TIMESTAMP,
-  ipAddresse       INET,
+  letzteverbindungsdatum        TIMESTAMP NOT NULL,
+  ipAddresse       INET NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -48,10 +48,12 @@ CREATE TABLE IF NOT EXISTS video
   sekundaerId      VARCHAR(50)    NOT NULL UNIQUE,
   video            VARCHAR(300)   NOT NULL UNIQUE,
   titel            VARCHAR(50)    NOT NULL,
-  beschreibung     VARCHAR(300),
+  dauer            FLOAT          NOT NULL DEFAULT 15.0,
+  beschreibung     VARCHAR(300)   NOT NULL DEFAULT '',
   benutzerId       INT            NOT NULL,
   istPrivat        BOOLEAN        NOT NULL DEFAULT FALSE,
   istKommentierbar BOOLEAN        NOT NULL DEFAULT TRUE,
+  berechneteBewertung FLOAT       NOT NULL DEFAULT 0,
   erstellungsdatum TIMESTAMP      NOT NULL,
   PRIMARY KEY (id)
 );

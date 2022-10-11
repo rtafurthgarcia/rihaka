@@ -8,7 +8,8 @@ INSERT INTO benutzer (
     aktivierungslink,
     istAktiviert,
     erstellungsdatum,
-    letzteverbindungsdatum
+    letzteverbindungsdatum,
+    ipAddresse
 )
 VALUES (
     'RIHAKA',
@@ -20,7 +21,8 @@ VALUES (
     '',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    CURRENT_TIMESTAMP,
+    '127.0.0.1'
   );
 
 INSERT INTO video (
@@ -28,6 +30,7 @@ INSERT INTO video (
     video,
     titel,
     beschreibung,
+    dauer,
     benutzerid,
     istprivat,
     
@@ -39,6 +42,7 @@ VALUES (
     'real.cast',
     'Dude gets confused for real.',
     'Tries to change users password',
+    40.830768,
     1,
     false,
     false,
