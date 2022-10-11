@@ -122,8 +122,8 @@ CREATE INDEX IF NOT EXISTS benutzerId_bewertung_idx ON bewertung (benutzerId);
 CREATE INDEX IF NOT EXISTS videoId_bewertung_idx ON bewertung (videoId);
 
 CREATE UNIQUE INDEX IF NOT EXISTS sekundaerId_video_idx ON video (sekundaerId);
-CREATE UNIQUE INDEX IF NOT EXISTS beschreibung_video_idx ON video (beschreibung);
-CREATE UNIQUE INDEX IF NOT EXISTS titel_video_idx ON video (titel);
+CREATE INDEX IF NOT EXISTS beschreibung_video_idx ON video (beschreibung);
+CREATE INDEX IF NOT EXISTS titel_video_idx ON video (titel);
 
 CREATE INDEX IF NOT EXISTS benutzerId_video_idx ON video (benutzerId);
 CREATE INDEX IF NOT EXISTS erstellungsdatum_video_idx ON video (erstellungsdatum);

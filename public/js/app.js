@@ -66,6 +66,12 @@ let inputValues = document.querySelectorAll(".keyword-box input")[1]
 let MAX_TAGS = 5
 let tags = []
 
+if (input.value.length > 0) {
+    tags = input.value.split(',')
+    createTagElements()
+    input.value = ''
+}
+
 function createTagElements(){
     ul.querySelectorAll("li").forEach(li => li.remove())
     tags.slice().reverse().forEach(tag =>{

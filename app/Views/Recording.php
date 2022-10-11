@@ -45,18 +45,29 @@
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md">
                         <div class="keyword-box h-100">
                             <ul class="m-0 p-0 h-100">
-                                <input type="text" class="form-control form-control-lg p-0 ps-3" spellcheck="false" placeholder="Categories">
+                                <input type="text" class="form-control form-control-lg p-0 ps-3" spellcheck="false" placeholder="Categories" value="<?=(isset($recording)) ? $recording->getCategoriesAsString(): '' ?>">
                                 <input type="text" class="d-none" id="categories" name="categories" spellcheck="false">
+                                <!--<? if(isset($recording)) :?>
+                                    <? foreach ($recording->getCategories() as &$category): ?>
+                                        <li class="mx-1 my-auto"><?=$category->getName()?>
+                                            <i class="bi bi-x-lg" onclick="removeTagElement(this, <?=$category->getName()?>)"></i>
+                                        </li>
+                                    <? endforeach;?>
+                                <? endif; ?>-->
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-12 col-lg p-0 p-md me-0">
-                        <label for="recording-file" class="form-label">UML Record (will be automatically converted)</label>
-                        <input class="form-control" type="file" name="recording-file" id="recording-file" required>
-                    </div>
-                </div> 
+                <? if (isset($recording) && $recording->getVideoLink()) :?>
+                    <?=$this->fetch('./Base/PlayerCard.php', [])?>
+                <? else: ?>
+                    <div class="row">
+                        <div class="mb-3 col-12 col-lg p-0 p-md me-0">
+                            <label for="recording-file" class="form-label">UML Record (will be automatically converted)</label>
+                            <input class="form-control" type="file" name="recording-file" id="recording-file" required>
+                        </div>
+                    </div> 
+                <? endif; ?>
                 <div class="row mb-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" name="isPrivate" id="checkbox-is-private" <?=((isset($recording)) && $recording->getIsPrivate()) ? "checked" : ""?>>

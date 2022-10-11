@@ -109,35 +109,16 @@ class RecordingController extends AbstractController
                     
                     $recording->setVideoLink($convertedFileName);
 
+                    $recording->setCategories(explode(',', strtolower($formData["categories"])));
+
                     $recording->save();
                 }
             } catch (Exception $error) {
                 $errors["upload"] = $error->getMessage();
                 $isSuccessful = false;
             } finally {
-                unlink($uploadedFileName);
-            }
-
-            if ($isSuccessful) {
-                $newCategory = new Category();
-                $currentlyExistingCategories = $newCategory->getAllCategoriesNames();
-    
-                try {
-                    $categoriesToSet = explode(',', strtolower($formData["categories"]));
-                    foreach($categoriesToSet as &$categoryName) {
-                        if(isset($currentlyExistingCategories[$categoryName])) {
-                            (new RecordingCategory($recording->getPrimaryKey(), $currentlyExistingCategories[$categoryName]))->save();
-                        } else {
-                            $newCategory = new Category();
-                            $newCategory->setName($categoryName);
-                            $newCategory->save();
-    
-                            (new RecordingCategory($recording->getPrimaryKey(), $newCategory->getPrimaryKey()))->save();
-                        }
-                    }
-                } catch (Exception $error) {
-                    $errors["categories"] = $error->getMessage();
-                    $isSuccessful = false;
+                if (file_exists($uploadedFileName)) {
+                    unlink($uploadedFileName);
                 }
             }
 

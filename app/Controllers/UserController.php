@@ -282,7 +282,6 @@ class UserController extends AbstractController
     }
 
     public function changeUserPassword(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
-        
         if ($_SESSION["authenticated"]) {
             if ($_SESSION['username'] === $args['username']) {
                 $user = new User();

@@ -18,6 +18,8 @@ class Recording extends AbstractModel {
     private $_title = null;
     private $_description = null;
     private $_userId = null;
+	private $_length = null;
+	private $_calculatedRating = null;
     private $_isPrivate = null;
     private $_commentsAuthorized = null;
     private $_creationDate = null;
@@ -197,6 +199,18 @@ class Recording extends AbstractModel {
         if($execution_result) {
             $this->_primaryKey = $this->_connection->lastInsertId();
         }
+
+        $currentlyExistingCategories = (new Category())->getAllCategoriesNames();
+
+		foreach($this->_categories as &$category) {
+			if(! isset($currentlyExistingCategories[$category->getName()])) {
+				$category->save();
+			} else {
+				$category->setPrimaryKey($currentlyExistingCategories[$category->getName()]);
+			}
+			
+			(new RecordingCategory($this->getPrimaryKey(), $category->getPrimaryKey()))->save();
+		}
     }
 	
 	/**
@@ -204,5 +218,70 @@ class Recording extends AbstractModel {
 	 * @return mixed
 	 */
 	function _update() {
+	}
+	/**
+	 * @return mixed
+	 */
+	function getLength() {
+		return $this->_length;
+	}
+	
+	/**
+	 * @param mixed $_length 
+	 * @return Recording
+	 */
+	function setLength($length): self {
+		$this->_length = $length;
+		return $this;
+	}
+	/**
+	 * @return mixed
+	 */
+	function getCalculatedRating() {
+		return $this->_calculatedRating;
+	}
+	
+	/**
+	 * @param mixed $_calculatedRating 
+	 * @return Recording
+	 */
+	function setCalculatedRating($calculatedRating): self {
+		$this->_calculatedRating = $calculatedRating;
+		return $this;
+	}
+	/**
+	 * @return mixed
+	 */
+	function getCategories() {
+		return $this->_categories;
+	}
+
+	function getCategoriesAsString(): string {
+		$returnString = '';
+
+		for ($i = 0; $i <= count($this->_categories)-1; $i++) {
+			$returnString .= $this->_categories[$i]->getName();
+
+			if ($i ==! count($this->_categories)) {
+				$returnString .= ',';
+			}
+		}
+
+		return $returnString;
+	}
+	
+	/**
+	 * @param mixed $_categories 
+	 * @return Recording
+	 */
+	function setCategories(array $categories): self {
+
+		foreach($categories as &$categoryName) {
+			$newCategory = new Category();
+			$newCategory->setName($categoryName);
+			array_push($this->_categories, $newCategory);
+		}
+
+		return $this;
 	}
 }
