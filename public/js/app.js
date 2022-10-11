@@ -66,18 +66,12 @@ let inputValues = document.querySelectorAll(".keyword-box input")[1]
 let MAX_TAGS = 5
 let tags = []
 
-if (input.value.length > 0) {
-    tags = input.value.split(',')
-    createTagElements()
-    input.value = ''
-}
-
 function createTagElements(){
     ul.querySelectorAll("li").forEach(li => li.remove())
     tags.slice().reverse().forEach(tag =>{
         let liTag = `<li class="mx-1 my-auto">${tag} <i class="bi bi-x-lg" onclick="removeTagElement(this, '${tag}')"></i></li>`
         ul.insertAdjacentHTML("afterbegin", liTag)
-    });
+    })
 }
 
 function removeTagElement(element, tag){
@@ -106,4 +100,37 @@ function addTag(element){
     }
 }
 
-input.addEventListener("keyup", addTag)
+
+if (input) {
+    if (input.value.length > 0) {
+        tags = input.value.split(',')
+        createTagElements()
+        input.value = ''
+    }
+
+    input.addEventListener("keyup", addTag)
+}
+
+if (document.getElementById('demo')) {
+    AsciinemaPlayer.create('/videos/demo.cast', document.getElementById('demo'), {
+        autoPlay: true, 
+        loop: true,
+        speed: 2,
+        fit: "height"
+    })
+}
+
+let players = document.querySelectorAll(".player")
+if (players) {
+    players.forEach(playerElement => {
+        const source = playerElement.querySelector("source").src
+        console.log(source)
+        
+        AsciinemaPlayer.create(source, playerElement, {
+            autoPlay: false, 
+            loop: false,
+            speed: 2,
+            fit: "height"
+        });
+    })
+}

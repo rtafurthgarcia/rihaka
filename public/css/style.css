@@ -12,9 +12,9 @@
     font-size: 0.8rem;
 }
 
-#demo {
+#demo, .player {
     background-color: #121314;
-    height: 240px;
+    height: 480px;
 }
 
 .nav-link:hover {
