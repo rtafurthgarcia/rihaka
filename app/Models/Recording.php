@@ -3,13 +3,9 @@
 namespace App\Models;
 
 use App\Core\AbstractModel;
-use App\Core\SessionHelper;
 use DateTime;
 use ErrorException;
-use LengthException;
 use PDO;
-use Ramsey\Uuid\Uuid;
-use App\Core\NetworkHelper;
 
 class Recording extends AbstractModel {
     
@@ -37,6 +33,37 @@ class Recording extends AbstractModel {
 		$this->_isPrivate = false;
         $this->_commentsAuthorized = true;
         $this->_creationDate = New DateTime();
+	}
+
+	function getBySecondaryId($id): Recording {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT * FROM {$this->_tableName} WHERE sekundaerid = :_secondaryId"
+        );
+		
+        $addSupporter->bindValue(":_secondaryId", $id);
+        $addSupporter->execute();
+
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		if (count($rows)) {
+			$record = $rows[0];
+
+			$this->_primaryKey = (int)$record["id"];
+			$this->_secondaryId = $record["sekundaerid"];
+			$this->_videoLink = $record["video"];
+			$this->_title = $record["titel"];
+			$this->_length = (float)$record["dauer"];
+			$this->_userId = $record["benutzerid"];
+			$this->_isPrivate = filter_var($record["istprivat"], FILTER_VALIDATE_BOOLEAN);
+			$this->_commentsAuthorized = filter_var($record["istkommentierbar"], FILTER_VALIDATE_BOOLEAN);
+			$this->_calculatedRating = (float)$record["berechnetebewertung"];
+			$this->_creationDate = new DateTime($record["erstellungsdatum"]);
+
+			$this->_categories = (new Category)->getCategoriesByVideoId($this->_primaryKey);
+		} else {
+			throw new ErrorException("No recording with such primary key.", 1);
+		}
+
+		return $this;
 	}
 
 	/**
@@ -200,7 +227,47 @@ class Recording extends AbstractModel {
             $this->_primaryKey = $this->_connection->lastInsertId();
         }
 
-        $currentlyExistingCategories = (new Category())->getAllCategoriesNames();
+		$this->_saveCategories();
+    }
+
+		/**
+	 *
+	 * @return mixed
+	 */
+	function _update() {
+		$addSupporter = $this->_connection->prepare(
+            "UPDATE {$this->_tableName} SET
+                sekundaerid = :_secondaryId, 
+                video = :_videoLink, 
+                titel = :_title, 
+                beschreibung = :_description, 
+                benutzerid = :_userId, 
+                istprivat = :_isPrivate, 
+                istkommentierbar = :_commentsAuthorized, 
+                erstellungsdatum = :_creationDate
+            WHERE id = :_primaryKey"
+        );
+
+		$isPrivate = var_export($this->_isPrivate, true);
+		$commentsAuthorized = var_export($this->_commentsAuthorized, true);
+
+        $addSupporter->bindValue(":_secondaryId", $this->_secondaryId);
+        $addSupporter->bindValue(":_videoLink", $this->_videoLink);
+        $addSupporter->bindValue(":_title", strip_tags($this->_title));
+		$addSupporter->bindValue(":_description", strip_tags($this->_description));
+		$addSupporter->bindValue(":_userId", $this->_userId);
+        $addSupporter->bindValue(":_isPrivate", $isPrivate);
+        $addSupporter->bindValue(":_commentsAuthorized", $commentsAuthorized);
+        $addSupporter->bindValue(":_creationDate", $this->_creationDate);
+        $addSupporter->bindValue(":_primaryKey", $this->_primaryKey);
+
+        $addSupporter->execute();
+
+		$this->_saveCategories();
+	}
+
+	private function _saveCategories() {
+		$currentlyExistingCategories = (new Category())->getAllCategoriesNames();
 
 		foreach($this->_categories as &$category) {
 			if(! isset($currentlyExistingCategories[$category->getName()])) {
@@ -211,14 +278,8 @@ class Recording extends AbstractModel {
 			
 			(new RecordingCategory($this->getPrimaryKey(), $category->getPrimaryKey()))->save();
 		}
-    }
-	
-	/**
-	 *
-	 * @return mixed
-	 */
-	function _update() {
 	}
+	
 	/**
 	 * @return mixed
 	 */

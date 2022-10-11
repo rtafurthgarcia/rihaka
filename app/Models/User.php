@@ -40,7 +40,7 @@ class User extends AbstractModel {
         $this->_lastConnectionDate = New DateTime();
 	}
 
-	public function getById($primaryKey) {
+	public function getById($primaryKey): User {
 		$addSupporter = $this->_connection->prepare(
 			"SELECT * FROM {$this->_tableName} WHERE id = :_primaryKey"
         );
@@ -67,9 +67,11 @@ class User extends AbstractModel {
 		} else {
 			throw new ErrorException("No user with such primary key.", 1);
 		}
+
+		return $this;
 	}
 
-	public function getByUsername($username) {
+	public function getByUsername($username): User {
 		$addSupporter = $this->_connection->prepare(
 			"SELECT * FROM {$this->_tableName} WHERE benutzername = :_userName"
         );
@@ -96,6 +98,8 @@ class User extends AbstractModel {
 		} else {
 			throw new ErrorException("No user with such username.", 1);
 		}
+
+		return $this;
 	}
 
 	public function login($identifier, $password) {

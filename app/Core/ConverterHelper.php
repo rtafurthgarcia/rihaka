@@ -12,4 +12,10 @@ class ConverterHelper {
 
         return $newFilePath;
     }
+
+    function convertSecondsToMinutesSeconds($seconds): string {
+        $min = intval($seconds / 60);
+        return $min . ':' . str_pad(($seconds % 60), 2, '0', STR_PAD_LEFT);
+    }
+
 }

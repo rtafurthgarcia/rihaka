@@ -24,7 +24,7 @@
                     <button type="button" id="showHelpUpload" onclick="onHideHelp(this)" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <? endif; ?>
-            <h2>Publish a new recording</h2>
+            <h2><?=(isset($recording)) ? "Edit an exisiting recording" : "Publish a new recording"?> </h2>
             <form id="recording-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                 <input type="hidden" name="max_file_size" value="20971520">
                 <div class="row">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <? if (isset($recording) && $recording->getVideoLink()) :?>
-                    <?=$this->fetch('./Base/PlayerCard.php', [])?>
+                    <?=$this->fetch('./Base/PlayerCard.php', ["recording" => $recording])?>
                 <? else: ?>
                     <div class="row">
                         <div class="mb-3 col-12 col-lg p-0 p-md me-0">

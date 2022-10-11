@@ -136,4 +136,24 @@ class RecordingController extends AbstractController
             throw new HttpForbiddenException($request);
         }
     } 
+
+    public function displayRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        $uploadedFileName = null;
+
+        if ($_SESSION["authenticated"]) {
+            $user = (new User())->getById($_SESSION['id']);
+
+            $recording = (new Recording())->getBySecondaryId($args["videoId"]);
+
+            return $this->_renderer->render($response, "Recording.php", [
+                "pageTitle" => "RIHAKA - edit recording",
+                "hideSignup" => true,
+                "user" => $user,
+                "recording" => $recording,
+                "activeMenu" => 1,
+                "contributionsOnly" => false
+            ]);
+        }
+    }
+
 }

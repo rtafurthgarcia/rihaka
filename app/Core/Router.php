@@ -35,6 +35,10 @@ class Router {
             $group->get('', RecordingController::class . ':getNewContentPage'); 
             $group->post('', RecordingController::class . ':uploadNewRecording'); 
         });
+        $app->group('/recording/{videoId}', function (RouteCollectorProxy $group) {
+            $group->get('', RecordingController::class . ':displayRecording'); 
+            $group->post('', RecordingController::class . ':updateRecording');
+        });
         $app->group('/contact', function  (RouteCollectorProxy $group){
             $group->get('', ContactController::class . ':getContactPage');
         });
