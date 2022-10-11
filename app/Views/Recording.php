@@ -28,12 +28,6 @@
             <form id="recording-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                 <input type="hidden" name="max_file_size" value="20971520">
                 <div class="row">
-                    <div class="form-floating mb-3 col-12 p-0 p-md">
-                        <textarea maxlength="300" class="form-control" OnKeyDown='return onKeyDownBiography();' id="description" name="description" style="height: 100%"><?=(isset($recording)) ? $recording->getDescription() : ""?></textarea>
-                        <label for="description">Description</label>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md me-0 me-md-3">
                         <input type="text" class="form-control <?=(isset($errors["title"])) ? "is-invalid" : "" ?>" name="title" id="floating-title" minlength="10" maxlength="50" value="<?=(isset($recording)) ? $recording->getTitle(): ""?>" required>
                         <label for="floating-title">Title</label>
@@ -47,27 +41,29 @@
                             <ul class="m-0 p-0 h-100">
                                 <input type="text" class="form-control form-control-lg p-0 ps-3" spellcheck="false" placeholder="Categories" value="<?=(isset($recording)) ? $recording->getCategoriesAsString(): '' ?>">
                                 <input type="text" class="d-none" id="categories" name="categories" spellcheck="false">
-                                <!--<? if(isset($recording)) :?>
-                                    <? foreach ($recording->getCategories() as &$category): ?>
-                                        <li class="mx-1 my-auto"><?=$category->getName()?>
-                                            <i class="bi bi-x-lg" onclick="removeTagElement(this, <?=$category->getName()?>)"></i>
-                                        </li>
-                                    <? endforeach;?>
-                                <? endif; ?>-->
                             </ul>
                         </div>
                     </div>
                 </div>
-                <? if (isset($recording) && $recording->getVideoLink()) :?>
-                    <?=$this->fetch('./Base/PlayerCard.php', ["recording" => $recording])?>
-                <? else: ?>
-                    <div class="row">
+                <div class="row">
+                    <div class="form-floating mb-3 col-12 p-0 p-md">
+                        <textarea maxlength="300" class="form-control" OnKeyDown='return onKeyDownBiography();' id="description" name="description" style="height: 100%"><?=(isset($recording)) ? $recording->getDescription() : ""?></textarea>
+                        <label for="description">Description</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <? if (isset($recording) && $recording->getVideoLink()) :?>
+                        <?=$this->fetch('./Base/PlayerCard.php', [
+                            "recording" => $recording,
+                            "hideEdit" => (isset($_SESSION['id'])) && ($recording->getUserId() === $_SESSION['id'])
+                        ])?>
+                    <? else: ?>
                         <div class="mb-3 col-12 col-lg p-0 p-md me-0">
                             <label for="recording-file" class="form-label">UML Record (will be automatically converted)</label>
                             <input class="form-control" type="file" name="recording-file" id="recording-file" required>
                         </div>
-                    </div> 
-                <? endif; ?>
+                    <? endif; ?>
+                </div> 
                 <div class="row mb-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" name="isPrivate" id="checkbox-is-private" <?=((isset($recording)) && $recording->getIsPrivate()) ? "checked" : ""?>>

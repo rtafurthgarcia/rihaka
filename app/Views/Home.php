@@ -53,13 +53,3 @@
         </div>
     </div>
 </div>
-
-<script src="/js/asciinema-player.min.js"></script>
-<script>
-    AsciinemaPlayer.create('/videos/demo.cast', document.getElementById('demo'), {
-        autoPlay: true, 
-        loop: true,
-        speed: 2,
-        fit: "height"
-    });
-</script>

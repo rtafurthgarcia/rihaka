@@ -138,8 +138,6 @@ class RecordingController extends AbstractController
     } 
 
     public function displayRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
-        $uploadedFileName = null;
-
         if ($_SESSION["authenticated"]) {
             $user = (new User())->getById($_SESSION['id']);
 
