@@ -9,8 +9,8 @@ use PDO;
 
 class RecordingCategory extends AbstractModel {
 
-private $_videoId = null;
-private $_categoryId = null;
+	private $_videoId = null;
+	private $_categoryId = null;
 
 	/**
 	 *
@@ -33,7 +33,7 @@ private $_categoryId = null;
 
         $addSupporter->execute();
 	}
-	
+
 	/**
 	 *
 	 * @return mixed
@@ -44,10 +44,72 @@ private $_categoryId = null;
 	 * @param $_videoId mixed 
 	 * @param $_categoryId mixed 
 	 */
-	function __construct($_videoId, $_categoryId) {
+	function __construct() {
         parent::__construct("videokategorie");
+	}
 
-	    $this->_videoId = $_videoId;
-	    $this->_categoryId = $_categoryId;
+	function getCategoriesByVideoId($videoId): Array {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT id, name, beschreibung FROM {$this->_tableName}
+			 INNER JOIN kategorie ON id = kategorieId
+			 WHERE videoid = :_videoId"
+        );
+		
+        $addSupporter->bindValue(":_videoId", $videoId);
+        $addSupporter->execute();
+
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		$categories = array();
+
+		foreach($rows as &$record) {
+			$category = new Category();
+			$category->setPrimaryKey($record['id']);
+			$category->setName($record['name']);
+			$category->setDescription($record['beschreibung']);
+
+			array_push($categories, $category);
+		}
+
+		return $categories;
+	}
+
+	function deleteAllFrom($videoId) {
+		$addSupporter = $this->_connection->prepare(
+			"DELETE FROM {$this->_tableName}
+			 WHERE videoid = :_videoId"
+        );
+		
+        $addSupporter->bindValue(":_videoId", $videoId);
+        $addSupporter->execute();
+	}
+	/**
+	 * @return mixed
+	 */
+	function getVideoId() {
+		return $this->_videoId;
+	}
+	
+	/**
+	 * @param mixed $_videoId 
+	 * @return RecordingCategory
+	 */
+	function setVideoId($videoId): self {
+		$this->_videoId = $videoId;
+		return $this;
+	}
+	/**
+	 * @return mixed
+	 */
+	function getCategoryId() {
+		return $this->_categoryId;
+	}
+	
+	/**
+	 * @param mixed $_categoryId 
+	 * @return RecordingCategory
+	 */
+	function setCategoryId($categoryId): self {
+		$this->_categoryId = $categoryId;
+		return $this;
 	}
 }

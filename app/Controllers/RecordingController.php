@@ -206,8 +206,8 @@ class RecordingController extends AbstractController
             $isSuccessful = true;
 
             try {
-                $recording->delete();
                 unlink($recording->getVideoLink());
+                $recording->delete();
             } catch (Exception $error) {
                 $errors["delete"] = $error->getMessage();
                 $isSuccessful = false;

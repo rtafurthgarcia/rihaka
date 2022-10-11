@@ -1,4 +1,6 @@
-const MAX_LENGTH_BIOGRAPHY = 300;
+const MAX_LENGTH_BIOGRAPHY = 300
+const MAX_TAGS = 3
+let tags = []
 
 function onPasswordChange() {
     const password = document.querySelector('input[name=password]')
@@ -63,15 +65,18 @@ const ul = document.querySelector(".keyword-box ul")
 const input = document.querySelectorAll(".keyword-box input")[0]
 let inputValues = document.querySelectorAll(".keyword-box input")[1]
 
-let MAX_TAGS = 5
-let tags = []
-
 function createTagElements(){
     ul.querySelectorAll("li").forEach(li => li.remove())
     tags.slice().reverse().forEach(tag =>{
         let liTag = `<li class="mx-1 my-auto">${tag} <i class="bi bi-x-lg" onclick="removeTagElement(this, '${tag}')"></i></li>`
         ul.insertAdjacentHTML("afterbegin", liTag)
     })
+
+    const inputElement = document.querySelector(".keyword-box input")
+    inputElement.placeholder = `Categories (${tags.length}/${MAX_TAGS})`
+    if (tags.length === MAX_TAGS) {
+        inputElement.placeholder = `Maximum reached`
+    }
 }
 
 function removeTagElement(element, tag){
@@ -81,7 +86,8 @@ function removeTagElement(element, tag){
 }
 
 function addTag(element){
-    if(element.keyCode === 32 && tags.length < MAX_TAGS){
+    // if space or tab entered, add a new category tag
+    if((element.keyCode === 32 || element.keyCode === 9) && tags.length < MAX_TAGS){
         let tag = element.target.value.replace(/\s+/g, ' ')
         if(tag.length > 1 && !tags.includes(tag)){
             if(tags.length < 20){
@@ -89,7 +95,6 @@ function addTag(element){
                     tags.push(tag.trim())
                     createTagElements()
                     inputValues.value = tags.toString()
-                    console.log(inputValues)
                 });
             }
         }

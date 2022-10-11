@@ -60,7 +60,7 @@ class Recording extends AbstractModel {
 			$this->_calculatedRating = (float)$record["berechnetebewertung"];
 			$this->_creationDate = new DateTime($record["erstellungsdatum"]);
 
-			$this->_categories = (new Category)->getCategoriesByVideoId($this->_primaryKey);
+			$this->_categories = (new RecordingCategory())->getCategoriesByVideoId($this->_primaryKey);
 		} else {
 			throw new ErrorException("No recording with such primary key.", 1);
 		}
@@ -156,22 +156,21 @@ class Recording extends AbstractModel {
 	}
 
 	private function _saveCategories() {
-		$currentlyExistingCategories = (new Category())->getAllCategoriesNames();
+		$categoriesPresentInDB = (new Category())->getAllCategoriesNames();
 
+		// Purge all categories linked to this record to recreate them later on
+		(new RecordingCategory)->deleteAllFrom($this->_primaryKey);
+
+		// Find each category that has to be inserted first
 		foreach($this->_categories as &$category) {
-			if(! isset($currentlyExistingCategories[$category->getName()])) {
+			if(! isset($categoriesPresentInDB[$category->getName()])) {
 				$category->save();
 			} else {
-				$category->setPrimaryKey($currentlyExistingCategories[$category->getName()]);
+				$category->getById($categoriesPresentInDB[$category->getName()]);
 			}
-			
-			try {
-				(new RecordingCategory($this->getPrimaryKey(), $category->getPrimaryKey()))->save();
-			} catch (\Throwable $th) {
-				// Real lazy to check whenever this one combination already exists. Besides its prolly less computating-expensive 
-				// to let it throw an exception than to interrogate the database. 
-			}
-		}
+
+			(new RecordingCategory())->setVideoId($this->_primaryKey)->setCategoryId($category->getPrimaryKey())->save();
+		}	
 	}
 
 	function getCategories() {
@@ -181,10 +180,14 @@ class Recording extends AbstractModel {
 	function getCategoriesAsString(): string {
 		$returnString = '';
 
-		for ($i = 0; $i <= count($this->_categories)-1; $i++) {
+		if (count($this->_categories) === 0) {
+			return $returnString;
+		}
+
+		for ($i = 0; $i <= count($this->_categories) -1; $i++) {
 			$returnString .= $this->_categories[$i]->getName();
 
-			if ($i ==! count($this->_categories)) {
+			if ($i < count($this->_categories) -1) {
 				$returnString .= ',';
 			}
 		}

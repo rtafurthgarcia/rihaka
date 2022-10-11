@@ -55,7 +55,7 @@
                     <h2>Publish a new recording</h2>
                 <? endif; ?>
             </div>
-            <form id="recording-form" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
+            <form id="recording-form" action="/recording/<?=(isset($recording)) ? $recording->getSecondaryId() : "new" ?>" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                 <input type="hidden" name="max_file_size" value="20971520">
                 <div class="row">
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md me-0 me-md-3">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="row">
                     <div class="form-floating mb-3 col-12 p-0 p-md">
-                        <textarea maxlength="300" class="form-control" OnKeyDown='return onKeyDownBiography();' id="description" name="description" style="height: 100%"><?=(isset($recording)) ? $recording->getDescription() : ""?></textarea>
+                        <textarea maxlength="300" class="form-control" id="description" name="description" style="height: 100%"><?=(isset($recording)) ? $recording->getDescription() : ""?></textarea>
                         <label for="description">Description</label>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="row justify-content-between">
                     <div class="col-12 px-0">
-                        <a href="/recording/<?=$_SESSION['username']?>" class="btn btn-secondary float-end" role="button">Cancel</a>
+                        <a href="/user/<?=$_SESSION['username']?>" class="btn btn-secondary float-end" role="button">Cancel</a>
                         <button id="submit-button" type="submit" class="btn btn-success mb-3">Publish</button>
                     </div>
                 </div>

@@ -87,6 +87,29 @@ class Category extends AbstractModel {
 		return $this;
 	}
 
+	public function getById($id): Category {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT * FROM {$this->_tableName} WHERE id = :_primaryKey"
+        );
+
+		$addSupporter->bindValue(":_primaryKey", $id);
+		
+        $addSupporter->execute();
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+
+		if (count($rows)) {
+			$record = $rows[0];
+
+			$this->_primaryKey = $record["id"];
+			$this->_name = $record["name"];
+			$this->_description =$record["beschreibung"];
+		} else {
+			throw new ErrorException("No category with such name.", 3);
+		}
+
+		return $this;
+	}
+
 	/**
 	 *
 	 * @return mixed
@@ -118,32 +141,6 @@ class Category extends AbstractModel {
 	 */
 	protected function _update() {
 	}
-
-	function getCategoriesByVideoId($videoId): Array {
-		$addSupporter = $this->_connection->prepare(
-			"SELECT id, name, beschreibung FROM videokategorie
-			 INNER JOIN kategorie ON id = kategorieId
-			 WHERE videoid = :_videoId"
-        );
-		
-        $addSupporter->bindValue(":_videoId", $videoId);
-        $addSupporter->execute();
-
-		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
-		$categories = array();
-
-		foreach($rows as &$record) {
-			$category = new Category();
-			$category->setPrimaryKey($record['id']);
-			$category->setName($record['name']);
-			$category->setDescription($record['beschreibung']);
-
-			array_push($categories, $category);
-		}
-
-		return $categories;
-	}
-
 
 	/**
 	 * @return mixed
