@@ -8,6 +8,10 @@ use ErrorException;
 use PDO;
 use Ramsey\Collection\Exception\NoSuchElementException;
 
+/**
+ * Is the Active Record Object linked to the "video" table in the database.  
+ * 
+ */
 class Recording extends AbstractModel {
     
     private $_secondaryId = null;
@@ -23,8 +27,9 @@ class Recording extends AbstractModel {
     private $_creationDate = null;
 	private $_categories = array(); 
 
-	/**
-	 */
+	// Useful for pagination
+	public const MAX_RECORDINGS_PER_PAGE = 6;
+
 	function __construct() {
         parent::__construct("video");
 
@@ -37,6 +42,11 @@ class Recording extends AbstractModel {
         $this->_creationDate = New DateTime();
 	}
 
+	/**
+	 * Returns a recording based on its secondary ID, its ressource
+	 * @param mixed $id: secondary ID of the recording
+	 * @return Recording object 
+	 */
 	function getBySecondaryId($id): Recording {
 		$addSupporter = $this->_connection->prepare(
 			"SELECT * FROM {$this->_tableName} WHERE sekundaerid = :_secondaryId"
@@ -69,12 +79,24 @@ class Recording extends AbstractModel {
 		return $this;
 	}
 
-	function getRecordsByUserId($id): array {
+	/**
+	 * Get all records from a specific user based on a range. Ordered by latest created recordings. 
+	 * @param mixed $id: User ID
+	 * @param int $start: Start of the range
+	 * @param int $limit: How much has to be returned
+	 * @return array An array of Recordings
+	 */
+	function getRecordingsByUserId($id, int $start, int $limit): array {
 		$addSupporter = $this->_connection->prepare(
-			"SELECT sekundaerid FROM {$this->_tableName} WHERE benutzerid = :_userId"
+			"SELECT sekundaerid FROM {$this->_tableName} 
+			WHERE benutzerid = :_userId
+			ORDER BY erstellungsdatum DESC
+			LIMIT :_limit OFFSET :_offset"
         );
 		
         $addSupporter->bindValue(":_userId", $id);
+		$addSupporter->bindValue(":_limit", $limit);
+		$addSupporter->bindValue(":_offset", $start);
         $addSupporter->execute();
 
 		$recordings = array();
@@ -86,6 +108,28 @@ class Recording extends AbstractModel {
 		}
 
 		return $recordings;
+	}
+
+    /**
+	 * Returns the amounts of recordings created by a specific user. 
+	 * Useful for pagination. 
+	 * @param mixed $id : User ID 
+	 * @return int Number of recordings created by this one user
+	 */
+	function getNumberRecordingsByUserId($id): int {
+		$addSupporter = $this->_connection->prepare(
+			"SELECT COUNT(sekundaerid) AS total FROM {$this->_tableName} WHERE benutzerid = :_userId"
+        );
+		
+        $addSupporter->bindValue(":_userId", $id);
+        $addSupporter->execute();
+
+		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		if (count($rows) > 0) {
+			return (int) $rows[0]['total'];
+		} else {
+			return 0;
+		}
 	}
 
 	function getAllRecords(): array {
@@ -225,10 +269,16 @@ class Recording extends AbstractModel {
 		}	
 	}
 
-	function getCategories() {
+	function getCategories(): array {
 		return $this->_categories;
 	}
 
+	/**
+	 * Get all categories as a single string. 
+	 * Useful for when you want to quickly define an input value in your form. 
+	 * 
+	 * @return string: Categories separated by a ','
+	 */
 	function getCategoriesAsString(): string {
 		$returnString = '';
 
@@ -247,10 +297,6 @@ class Recording extends AbstractModel {
 		return $returnString;
 	}
 	
-	/**
-	 * @param mixed $_categories 
-	 * @return Recording
-	 */
 	function setCategories(array $categories): self {
 		$this->_categories = array();
 
@@ -263,173 +309,106 @@ class Recording extends AbstractModel {
 		return $this;
 	}
 
+	// From now on, its basically only setters and getters
 	function getUserName(): string {
 		return (new User())->getById($this->_userId)->getUserName();
 	}
 
-		/**
-	 * @return mixed
-	 */
 	function getSecondaryId() {
 		return $this->_secondaryId;
 	}
 	
-	/**
-	 * @param mixed $_secondaryId 
-	 * @return Recording
-	 */
 	function setSecondaryId($secondaryId): self {
 		$this->_secondaryId = $secondaryId;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getVideoLink() {
 		return $this->_videoLink;
 	}
-	
-	/**
-	 * @param mixed $_videoLink 
-	 * @return Recording
-	 */
+
 	function setVideoLink($videoLink): self {
 		$this->_videoLink = $videoLink;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getTitle() {
 		return $this->_title;
 	}
 	
-	/**
-	 * @param mixed $_title 
-	 * @return Recording
-	 */
 	function setTitle($title): self {
 		$this->_title = $title;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getDescription() {
 		return $this->_description;
 	}
 	
-	/**
-	 * @param mixed $_description 
-	 * @return Recording
-	 */
+
 	function setDescription($description): self {
 		$this->_description = $description;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getUserId() {
 		return $this->_userId;
 	}
 	
-	/**
-	 * @param mixed $_userId 
-	 * @return Recording
-	 */
 	function setUserId($userId): self {
 		$this->_userId = $userId;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getIsPrivate() {
 		return $this->_isPrivate;
 	}
 	
-	/**
-	 * @param mixed $_isPrivate 
-	 * @return Recording
-	 */
 	function setIsPrivate($isPrivate): self {
 		$this->_isPrivate = $isPrivate;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getCommentsAuthorized() {
 		return $this->_commentsAuthorized;
 	}
 	
-	/**
-	 * @param mixed $_commentsAuthorized 
-	 * @return Recording
-	 */
 	function setCommentsAuthorized($commentsAuthorized): self {
 		$this->_commentsAuthorized = $commentsAuthorized;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getCreationDate() {
 		return $this->_creationDate;
 	}
 	
-	/**
-	 * @param mixed $_creationDate 
-	 * @return Recording
-	 */
 	function setCreationDate($creationDate): self {
 		$this->_creationDate = $creationDate;
 		return $this;
 	}
 	
-	/**
-	 * @return mixed
-	 */
 	function getLength(): int {
 		return $this->_length;
 	}
 	
-	/**
-	 * @param mixed $_length 
-	 * @return Recording
-	 */
 	function setLength($length): self {
 		$this->_length = $length;
 		return $this;
 	}
-	/**
-	 * @return mixed
-	 */
+
 	function getCalculatedRating(): float {
 		return $this->_calculatedRating;
 	}
-	
-	/**
-	 * @param mixed $_calculatedRating 
-	 * @return Recording
-	 */
+
 	function setCalculatedRating(int $calculatedRating): self {
 		$this->_calculatedRating = $calculatedRating;
 		return $this;
 	}
 
-	/**
-	 * @return mixed
-	 */
 	function getTimeToDisplay(): int {
 		return $this->_timeToDisplay;
 	}
 	
-	/**
-	 * @param mixed $_timeToDisplay 
-	 * @return Recording
-	 */
 	function setTimeToDisplay(int $timeToDisplay): self {
 		$this->_timeToDisplay = $timeToDisplay;
 		return $this;

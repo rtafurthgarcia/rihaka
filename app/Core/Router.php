@@ -34,6 +34,7 @@ class Router {
             $group->get('/security', UserController::class . ':getUserAccountSecurity');
             $group->post('/security', UserController::class . ':changeUserPassword');
             $group->get('/recordings', UserController::class . ':getRecordingsFromUser');
+            $group->get('/recordings/{page}', UserController::class . ':getRecordingsFromUser');
         });
         $app->group('/recording/new', function (RouteCollectorProxy $group) {
             $group->get('', RecordingController::class . ':getNewContentPage'); 

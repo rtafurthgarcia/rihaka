@@ -22,6 +22,23 @@
                     It seems this one user hasnt shared anything yet.
                 </div>
             <? endif; ?>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="<?='/user/' . $user->getUserName() . '/recordings' ?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <? foreach($range as $i): ?>
+                        <li class="page-item"><a class="page-link" href="<?='/user/' . $user->getUserName() . '/recordings/' . strval($i)?>"><?=strval($i)?></a></li>
+                    <? endforeach; ?>
+                    <li class="page-item">
+                        <a class="page-link" href="<?='/user/' . $user->getUserName() . '/recordings/' . strval($farthestPage)?>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

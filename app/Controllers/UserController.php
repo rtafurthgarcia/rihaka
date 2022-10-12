@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\AbstractController;
+use App\Core\PaginationHelper;
 use App\Core\SessionHelper;
 use App\Models\Recording;
 use DateTime;
@@ -22,6 +23,8 @@ use Slim\Exception\HttpUnauthorizedException;
 
 class UserController extends AbstractController
 {
+    public const MAX_PAGES = 3;
+
     public function __construct()
     {
         parent::__construct([
@@ -332,20 +335,31 @@ class UserController extends AbstractController
 
         try {
             $user = (new User())->getByUsername($args["username"]);
-            $recordings = (new Recording())->getRecordsByUserId($user->getPrimaryKey());
-    
-            $formData = $request->getParsedBody();  
+            $recording = new Recording();
+            $numberOfRecordings = $recording->getNumberRecordingsByUserId($user->getPrimaryKey());
+
+            $page = (isset($args["page"]) ? (int) $args["page"] : 1);
+        
+            $start = ($page - 1) * Recording::MAX_RECORDINGS_PER_PAGE;
+            $recordings = $recording->getRecordingsByUserId($user->getPrimaryKey(), $start, Recording::MAX_RECORDINGS_PER_PAGE);
+
+            $range = PaginationHelper::getRangeOfPages($page, $numberOfRecordings, Recording::MAX_RECORDINGS_PER_PAGE, self::MAX_PAGES);
+            $farthestPage = ceil($numberOfRecordings / Recording::MAX_RECORDINGS_PER_PAGE);
+
         } catch (\Throwable $th) {
             throw new HttpNotFoundException($request);
         }
 
-        return $this->_renderer->render($response, "RecordsByUser.php", [
+        return $this->_renderer->render($response, "RecordingsByUser.php", [
             "pageTitle" => "RIHAKA - records by " . $user->getUserName(),
             "hideSignup" => true,
             "activeMenu" => 1,
             "contributionsOnly" => !($user->getPrimaryKey() === $_SESSION['id']),
             "user" => $user,
-            "recordings" => $recordings
+            "recordings" => $recordings,
+            "page" => $page,
+            "range" => $range,
+            "farthestPage" => $farthestPage
         ]);
     } 
 
