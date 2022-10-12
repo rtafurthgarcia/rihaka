@@ -18,7 +18,7 @@ use Slim\Routing\RouteCollectorProxy;
 class Router {
     public static function defineRoutes(App &$app) {
         $app->get('/', HomeController::class . ':home');
-        $app->get('/explore', ExploreController::class . ':explore');
+        
         $app->get('/impressum', ImpressumController::class . ':getImpressumInformation');
         $app->get('/faqs', FAQsController::class . ':getFAQs');
         $app->get('/privacypolicy', PrivacyPolicyController::class . ':getPrivacyPolicy');
@@ -52,6 +52,9 @@ class Router {
             $group->get('', SetupController::class . ':getSetup');
             $group->get('/docker', SetupController::class . ':getDockerSetup');
         });
-        
+        $app->group('/explore', function  (RouteCollectorProxy $group){
+            $group->get('', ExploreController::class . ':explore');
+            $group->get('{videoId}', ExploreController::class . ':displayExploreRecording');
+        });
     } 
 }

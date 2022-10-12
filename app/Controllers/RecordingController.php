@@ -154,6 +154,21 @@ class RecordingController extends AbstractController
         }
     }
 
+    public function displayExploreRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+        
+            $recording = (new Recording())->getBySecondaryId($args["videoId"]);
+
+            return $this->_renderer->render($response, "Recording.php", [
+                "pageTitle" => "RIHAKA - edit recording",
+                "hideSignup" => true,
+                "user" => false,
+                "recording" => $recording,
+                "activeMenu" => 1,
+                "contributionsOnly" => false
+            ]);
+    }
+    
+
     public function updateRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         $recording = (new Recording())->getBySecondaryId($args["videoId"]);
     
