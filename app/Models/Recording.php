@@ -87,6 +87,38 @@ class Recording extends AbstractModel {
 
 		return $recordings;
 	}
+
+	function getAllRecords(): array {
+		$allSupporter = $this->_connection->prepare(
+			"SELECT * FROM {$this->_tableName}"
+		);
+
+		$recordings = array ();
+
+
+		$allSupporter->execute();
+		$rows = $allSupporter->fetchAll(PDO::FETCH_DEFAULT);
+		foreach($rows as $record){
+
+			$this->_primaryKey = (int)$record["id"];
+			$this->_secondaryId = $record["sekundaerid"];
+			$this->_videoLink = $record["video"];
+			$this->_title = $record["titel"];
+			$this->_length = (int)$record["dauer"];
+			$this->_timeToDisplay = (int)$record["zuzeigendezeit"];
+			$this->_userId = $record["benutzerid"];
+			$this->_isPrivate = filter_var($record["istprivat"], FILTER_VALIDATE_BOOLEAN);
+			$this->_commentsAuthorized = filter_var($record["istkommentierbar"], FILTER_VALIDATE_BOOLEAN);
+			$this->_calculatedRating = (float)$record["berechnetebewertung"];
+			$this->_creationDate = new DateTime($record["erstellungsdatum"]);
+
+			array_push($recordings, $this);
+		}
+
+		
+
+		return $recordings;
+	}
 	
     protected function _insert() {
         $addSupporter = $this->_connection->prepare(
