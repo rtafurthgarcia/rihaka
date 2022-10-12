@@ -6,6 +6,7 @@ use Slim\App;
 
 use App\Controllers\HomeController;
 use App\Controllers\ExploreController;
+use App\Controllers\SetupController;
 use App\Controllers\ImpressumController;
 use App\Controllers\FAQsController; 
 use App\Controllers\PrivacyPolicyController;
@@ -46,5 +47,10 @@ class Router {
         $app->group('/contact', function  (RouteCollectorProxy $group){
             $group->get('', ContactController::class . ':getContactPage');
         });
+        $app->group('/setup', function  (RouteCollectorProxy $group){
+            $group->get('', SetupController::class . ':getSetup');
+            $group->get('/docker', SetupController::class . ':getDockerSetup');
+        });
+        
     } 
 }

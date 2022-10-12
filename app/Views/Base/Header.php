@@ -10,7 +10,7 @@
                     <li class="nav-item"><a href="/" class="nav-link px-2 text-white fs-1-md <?=($activePage === 1) ? "active-page": "" ?>">Home</a></li>
                     <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md <?=($activePage === 2) ? "active-page": "" ?>">Categories</a></li>
                     <li class="nav-item"><a href="/explore" class="nav-link px-2 text-white fs-1-md <?=($activePage === 3) ? "active-page": "" ?>">Explore</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md <?=($activePage === 4) ? "active-page": "" ?>">Setup</a></li>
+                    <li class="nav-item"><a href="/setup" class="nav-link px-2 text-white fs-1-md <?=($activePage === 4) ? "active-page": "" ?>">Setup</a></li>
                 </ul>
                 <div class="ms-auto text-end col-8 col-md-6 gap-2 row justify-content-end">
                     <? if (!$hideLogin): ?>

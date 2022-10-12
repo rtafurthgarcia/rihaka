@@ -10,11 +10,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-use App\Core\NetworkHelper;
-use Ramsey\Uuid\Uuid;
-use SessionHandlerInterface;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpUnauthorizedException;
+use App\Models\Recording;
 
 class ExploreController extends AbstractController
 {
