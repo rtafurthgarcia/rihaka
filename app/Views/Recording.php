@@ -55,7 +55,7 @@
                     <h2>Publish a new recording</h2>
                 <? endif; ?>
             </div>
-            <form id="recording-form" action="/recording/<?=(isset($recording)) ? $recording->getSecondaryId() : "new" ?>" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
+            <form id="recording-form" action="/recording/<?=(isset($recording) && $recording->getPrimaryKey()) ? $recording->getSecondaryId() : "new" ?>" onsubmit="onFormSubmitted(this, event)" method="post" enctype="multipart/form-data" class="needs-validation container col-12 col-lg-9 text-start p-3 m-0" novalidate>
                 <input type="hidden" name="max_file_size" value="20971520">
                 <div class="row">
                     <div class="form-floating mb-3 col-12 col-lg p-0 p-md me-0 me-md-3">

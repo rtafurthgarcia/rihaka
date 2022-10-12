@@ -80,13 +80,9 @@ class Recording extends AbstractModel {
 		$recordings = array();
 
 		$rows = $addSupporter->fetchAll(PDO::FETCH_DEFAULT);
-		if (count($rows)) {
-			foreach($rows as $record) {
-				$recording = (new Recording())->getBySecondaryId($record["sekundaerid"]);
-				array_push($recordings, $recording);
-			}
-		} else {
-			throw new NoSuchElementException("No recording linked to this user.", 1);
+		foreach($rows as $record) {
+			$recording = (new Recording())->getBySecondaryId($record["sekundaerid"]);
+			array_push($recordings, $recording);
 		}
 
 		return $recordings;
