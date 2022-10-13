@@ -17,8 +17,9 @@ Good old `git clone git@github.com:rtafurthgarcia/rihaka.git` into your regular 
 
 ## 3. Adapt your database .env file
 You need to rename the `config/Database.example.env` to `config/Database.env`
+aswell as `config/App.example.env` to ``config/App.env`
 
-This one file contains all thats necessary to connect RIHAKA to its PostgreSQL database. You may change those credentials if you want to. Docker's gonna setup itself also through this one `.env` file so you won't have to duplicate those settings anywhere.
+Those one files contain all thats necessary to connect RIHAKA to its PostgreSQL database. You may change those credentials if you want to. Docker's gonna setup itself also through this one `.env` file so you won't have to duplicate those settings anywhere.
 
 It may look inconvenient but it's likely we gonna keep the same sorta file for future deployments. 
 
