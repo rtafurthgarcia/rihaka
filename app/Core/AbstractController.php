@@ -4,6 +4,11 @@ namespace App\Core;
 
 use Slim\Views\PhpRenderer;
 
+/**
+  * Parent controller from which all your controllers will inherit. 
+  * 
+  * Contains a basic renderer set with basic templates variables and a template directory. 
+  */
 abstract class AbstractController {
     protected $_renderer;
 
