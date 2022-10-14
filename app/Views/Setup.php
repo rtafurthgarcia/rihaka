@@ -23,7 +23,7 @@
         <div class="h-100 p-5 bg-light border rounded-3">
           <h2>The old School way</h2>
           <p>Here you will install everything on a physical or virtual Machine, which will be your honepot. You need a debian based machine before you can start with this Manual. </p>
-          <a href="#" class="btn btn-outline-secondary" role="button">old School</a>
+          <a href="/setup/oldSchool" class="btn btn-outline-secondary" role="button">old School</a>
         </div>
       </div>
     </div>

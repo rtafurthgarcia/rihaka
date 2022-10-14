@@ -55,6 +55,7 @@ class Router {
         $app->group('/setup', function  (RouteCollectorProxy $group){
             $group->get('', SetupController::class . ':getSetup');
             $group->get('/docker', SetupController::class . ':getDockerSetup');
+            $group->get('/oldSchool', SetupController::class . ':getOldSchoolSetup');
         });
         $app->group('/explore', function  (RouteCollectorProxy $group){
             $group->get('', ExploreController::class . ':explore');

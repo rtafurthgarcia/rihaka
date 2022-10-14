@@ -36,4 +36,11 @@ class SetupController extends AbstractController
             "pageTitle" => "RIHAKA - Docker Setup"
         ]);
     }
+
+    public function getOldSchoolSetup(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {        
+        return $this->_renderer->render($response, "OldSchoolSetup.php", [
+            "pageTitle" => "RIHAKA - Docker Setup"
+        ]);
+    }
 }
