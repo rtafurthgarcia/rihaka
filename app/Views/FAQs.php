@@ -1,3 +1,13 @@
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="display-5 fw-bold">FAQ</h1>
+        <p class="lead text-muted">FAQs? the questions we have already answered ;)!</p>
+
+      </div>
+    </div>
+  </section>
+
 <div class="container px-4 py-4 py-md-5">
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">

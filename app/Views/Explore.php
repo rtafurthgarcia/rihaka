@@ -1,3 +1,15 @@
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="display-5 fw-bold">Explore</h1>
+        <p class="lead text-muted">Explore and discover new videos which are brand new released!</p>
+
+      </div>
+    </div>
+  </section>
+  
+  <hr class="hr hr-blurry" />
+
 <div class="container px-4 py-4 py-md-5">
 <div class="container pt-3">
     <div class="row align-items-start">

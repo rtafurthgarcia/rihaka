@@ -1,3 +1,13 @@
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="display-5 fw-bold">Contact</h1>
+        <p class="lead text-muted">Do not hesitate to contact us!</p>
+
+      </div>
+    </div>
+  </section>
+
 <div class="container pt-3">
 
     <div class="row align-items-start">
