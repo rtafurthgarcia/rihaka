@@ -8,6 +8,8 @@
     </div>
   </section>
 
+  <hr class="hr hr-blurry" />
+
 <div class="container pt-3">
 
     <div class="row align-items-start">

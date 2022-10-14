@@ -8,6 +8,8 @@
     </div>
   </section>
 
+  <hr class="hr hr-blurry" />
+
 <div class="container px-4 py-4 py-md-5">
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">

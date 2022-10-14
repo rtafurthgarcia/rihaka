@@ -10,5 +10,6 @@
         <li class="nav-item"><a href="/impressum" class="nav-link px-2 text-muted">Impressum</a></li>
         <li class="nav-item"><a href="/privacypolicy" class="nav-link px-2 text-muted">Privacy policy</a></li>
         <li class="nav-item"><a href="/faqs" class="nav-link px-2 text-muted">FAQs</a></li>
+        <li class="nav-item"><a href="/jobs" class="nav-link px-2 text-muted">Jobs</a></li>
     </ul>
 </footer>
