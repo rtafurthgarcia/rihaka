@@ -8,7 +8,7 @@
             
             <h2 class="display-5 fw-bold">Setup your own Honeypot</h2>
             
-            <p>Ther are two twifferent ways to do it.</br> Please use your scenario and you will get a step by step Instruction to build your own Honeypot. </p>
+            <p>We will show you how you could setup your own Honeypot with the solution from cowrie.</br><a href="https://cowrie.readthedocs.io/en/latest/index.html">Cowrie Docs</a></br>There are two twifferent ways to do it.</br> Please use your scenario and you will get a step by step Instruction to build your own Honeypot. </p>
         </div>
     </div>
     <div class="row align-items-md-stretch">
