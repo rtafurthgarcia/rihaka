@@ -8,7 +8,7 @@
             <div class="collapse navbar-collapse row align-items-start mt-3 mt-md-0" id="navmenu">
                 <ul class="navbar-nav col-4 col-md-6">
                     <li class="nav-item"><a href="/" class="nav-link px-2 text-white fs-1-md <?=($activePage === 1) ? "active-page": "" ?>">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white fs-1-md <?=($activePage === 2) ? "active-page": "" ?>">Categories</a></li>
+                    <li class="nav-item"><a href="/categories" class="nav-link px-2 text-white fs-1-md <?=($activePage === 2) ? "active-page": "" ?>">Categories</a></li>
                     <li class="nav-item"><a href="/explore" class="nav-link px-2 text-white fs-1-md <?=($activePage === 3) ? "active-page": "" ?>">Explore</a></li>
                     <li class="nav-item"><a href="/setup" class="nav-link px-2 text-white fs-1-md <?=($activePage === 4) ? "active-page": "" ?>">Setup</a></li>
                 </ul>

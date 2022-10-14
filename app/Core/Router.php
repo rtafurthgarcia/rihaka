@@ -12,13 +12,15 @@ use App\Controllers\FAQsController;
 use App\Controllers\PrivacyPolicyController;
 use App\Controllers\ContactController;
 use App\Controllers\UserController;
+use App\Controllers\CategoriesController;
 use App\Controllers\RecordingController;
 use Slim\Routing\RouteCollectorProxy;
 
 class Router {
     public static function defineRoutes(App &$app) {
         $app->get('/', HomeController::class . ':home');
-        
+
+        $app->get('/categories', CategoriesController::class . ':getCategories');
         $app->get('/impressum', ImpressumController::class . ':getImpressumInformation');
         $app->get('/faqs', FAQsController::class . ':getFAQs');
         $app->get('/privacypolicy', PrivacyPolicyController::class . ':getPrivacyPolicy');
