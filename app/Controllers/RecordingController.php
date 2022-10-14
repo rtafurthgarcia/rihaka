@@ -4,11 +4,7 @@ namespace App\Controllers;
 
 use App\Core\AbstractController;
 use App\Core\ConverterHelper;
-use App\Core\SessionHelper;
-use App\Models\Category;
 use App\Models\Recording;
-use App\Models\RecordingCategory;
-use DateTime;
 use ErrorException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -16,13 +12,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 use App\Models\User;
 
-use App\Core\NetworkHelper;
 use Ramsey\Uuid\Uuid;
-use SessionHandler;
-use SessionHandlerInterface;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpUnauthorizedException;
 
 class RecordingController extends AbstractController
 {
@@ -138,19 +130,32 @@ class RecordingController extends AbstractController
     } 
 
     public function displayRecording(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
-        if ($_SESSION["authenticated"]) {
-            $user = (new User())->getById($_SESSION['id']);
 
+        try {
             $recording = (new Recording())->getBySecondaryId($args["videoId"]);
-
-            return $this->_renderer->render($response, "Recording.php", [
-                "pageTitle" => "RIHAKA - edit recording",
-                "hideSignup" => true,
-                "user" => $user,
-                "recording" => $recording,
-                "activeMenu" => 1,
-                "contributionsOnly" => false
-            ]);
+    
+            if ($_SESSION["authenticated"] && $recording->getUserId() === $_SESSION['id']) {
+                $user = (new User())->getById($_SESSION['id']);
+    
+                return $this->_renderer->render($response, "Recording.php", [
+                    "pageTitle" => "RIHAKA - edit recording",
+                    "hideSignup" => true,
+                    "user" => $user,
+                    "recording" => $recording,
+                    "activeMenu" => 1,
+                    "contributionsOnly" => false
+                ]);
+            } else {
+                return $this->_renderer->render($response, "RecordingFullPage.php", [
+                    "pageTitle" => "RIHAKA - " . $recording->getTitle(),
+                    "hideSignup" => true,
+                    "recording" => $recording,
+                    "activeMenu" => 1,
+                    "contributionsOnly" => false
+                ]);
+            }
+        } catch (Exception $error) {
+            throw new HttpNotFoundException($request, 1);
         }
     }
 

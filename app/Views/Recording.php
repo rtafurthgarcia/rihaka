@@ -86,7 +86,7 @@
                         <?=$this->fetch('./Base/PlayerCard.php', [
                             "recording" => $recording,
                             "hideEdit" => (isset($_SESSION['id'])) && ($recording->getUserId() === $_SESSION['id']),
-                            "hideDescAndTitle" => true
+                            "lightVersion" => true
                         ])?>
                         <input class="d-none" type="hidden" name="display-time" id="display-time" value="<?=\App\Core\ConverterHelper::secondsToTime($recording->getTimeToDisplay())?>">
                     <? else: ?>

@@ -63,6 +63,7 @@ class Recording extends AbstractModel {
 			$this->_secondaryId = $record["sekundaerid"];
 			$this->_videoLink = $record["video"];
 			$this->_title = $record["titel"];
+			$this->_description = $record["beschreibung"];
 			$this->_length = (int)$record["dauer"];
 			$this->_timeToDisplay = (int)$record["zuzeigendezeit"];
 			$this->_userId = $record["benutzerid"];
@@ -148,6 +149,7 @@ class Recording extends AbstractModel {
 			$this->_secondaryId = $record["sekundaerid"];
 			$this->_videoLink = $record["video"];
 			$this->_title = $record["titel"];
+			$this->_description = $record["beschreibung"];
 			$this->_length = (int)$record["dauer"];
 			$this->_timeToDisplay = (int)$record["zuzeigendezeit"];
 			$this->_userId = $record["benutzerid"];
