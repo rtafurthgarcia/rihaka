@@ -20,7 +20,7 @@
         </div>
         <h2>Management and Sales Assistant</h2>
         <p>Are you our new positive-minded, humorous and storm-tested Management & Sales Assistant? If you are looking for a challenge in a family environment, you are exactly the right person for this job.</p>
-        <a href="#" class="icon-link">
+        <a href="mailto: harun.mustafa@hftm.ch" class="icon-link">
           Online application
           <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
         </a>
@@ -32,7 +32,7 @@
         </div>
         <h2>Software Developer .NET (m/w)</h2>
         <p>Are you a .NET developer with heart and soul and give everything to inspire your customers with state-of-the-art software solutions? Are you a team player with a distinctly structured work technique and have you already successfully developed solutions on .NET? Then RIHAKA is the right place for you.</p>
-        <a href="#" class="icon-link">
+        <a href="mailto: harun.mustafa@hftm.ch" class="icon-link">
         Online application
           <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
         </a>
@@ -44,7 +44,7 @@
         </div>
         <h2>IT Consultant (m/w)</h2>
         <p>Are you excited about digital business models and do you know how to cleverly design them with added value for our customers? Are you an IT all-rounder and do you hit top form with the customer when you can shine with your professional and technical knowledge?</p>
-        <a href="#" class="icon-link">
+        <a href="mailto: harun.mustafa@hftm.ch" class="icon-link">
         Online application
           <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
         </a>
